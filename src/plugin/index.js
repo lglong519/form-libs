@@ -1,5 +1,9 @@
+import api from '@/api';
+
 export default {
 	install (Vue, options) {
-		console.log(options);
+		Object.entries(api).forEach(item => {
+			[, Vue.prototype[item[0]]] = item;
+		});
 	}
 };
