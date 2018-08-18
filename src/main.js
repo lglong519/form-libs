@@ -3,11 +3,13 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
+import plugin from './plugin';
 
+Vue.use(plugin);
 Vue.config.productionTip = false;
 
 new Vue({
-	el: '#app',
+	el: '#formLibs',
 	router,
 	components: { App },
 	template: '<App/>'
