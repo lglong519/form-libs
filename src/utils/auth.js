@@ -5,8 +5,8 @@ export function getToken () {
 	return Cookies.get(LOCAL_SESSION);
 }
 
-export function setToken (token) {
-	return Cookies.set(LOCAL_SESSION, token);
+export function setToken (token, expireAt) {
+	return Cookies.set(LOCAL_SESSION, token, { expires: new Date(expireAt) });
 }
 
 export function removeToken () {

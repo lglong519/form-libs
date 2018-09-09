@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from '@/store';
 import { getToken } from '@/utils/auth';
-import { SESSION_KEY, REQUST, MODE } from '@/.config';
+import { SESSION_KEY, REQUST, MODE, LOCAL_SESSION } from '@/.config';
 
 // create an axios instance
 const service = axios.create({
@@ -13,11 +13,12 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		// Do something before request is sent
-		if (store.getters.accessToken) {
+		if (store.getters[LOCAL_SESSION]) {
 			// 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
 			config.headers[SESSION_KEY] = getToken();
 		}
 		config.headers['x-requested-with'] = 'XMLHttpRequest';
+		config.headers['x-serve'] = 'service';
 		return config;
 	},
 	error => {
