@@ -2,6 +2,9 @@ import axios from 'axios';
 import store from '@/store';
 import { getToken } from '@/utils/auth';
 import { SESSION_KEY, REQUST, MODE, LOCAL_SESSION } from '@/.config';
+import { Message, MessageBox } from 'element-ui';
+import _ from 'lodash';
+const debug = require('debug')('app:request');
 
 // create an axios instance
 const service = axios.create({
@@ -23,14 +26,17 @@ service.interceptors.request.use(
 	},
 	error => {
 		// Do something with request error
-		console.error(error); // for debug
+		debug(error); // for debug
 		Promise.reject(error);
 	}
 );
 
 // respone interceptor
 service.interceptors.response.use(
-	response => response,
+	response => {
+		debug('response', response);
+		return response;
+	},
 	/**
    * 下面的注释为通过在response里，自定义code来标示请求状态
    * 当code返回如下情况则说明权限有问题，登出并返回到登录页
@@ -48,7 +54,6 @@ service.interceptors.response.use(
 	//     // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
 	//     if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
 	//       // 请自行在引入 MessageBox
-	//       // import { Message, MessageBox } from 'element-ui'
 	//       MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
 	//         confirmButtonText: '重新登录',
 	//         cancelButtonText: '取消',
@@ -65,14 +70,12 @@ service.interceptors.response.use(
 	//   }
 	// },
 	error => {
-		console.error(`err${error}`); // for debug
-		/*
+		debug(error); // for debug
 		Message({
-			message: error.message,
+			message: _.get(error, 'response.data.message') || error.message,
 			type: 'error',
 			duration: 5 * 1000
 		});
-		*/
 		return Promise.reject(error);
 	}
 );

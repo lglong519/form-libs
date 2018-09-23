@@ -1,6 +1,6 @@
 {
   "name": "form-libs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "form test",
   "author": "lglong519 <769141564@qq.com>",
   "private": true,
@@ -17,8 +17,10 @@
     "axios": "^0.18.0",
     "element-ui": "^2.4.6",
     "js-cookie": "^2.2.0",
+    "normalize.css": "^8.0.0",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
