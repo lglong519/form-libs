@@ -78,10 +78,6 @@ module.exports = {
 			{
 				test: /\.config$/,
 				loader: 'json-loader'
-			},
-			{
-				test: /\.scss$/,
-				loaders: ['style', 'css', 'sass']
 			}
 		]
 	},

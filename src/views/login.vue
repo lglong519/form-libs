@@ -46,8 +46,17 @@ export default {
 					{ required: true, message: '请输入密码', trigger: 'blur' },
 					{ min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
 				],
-			}
+			},
+			redirect: null
 		};
+	},
+	watch: {
+		$route: {
+			handler (route) {
+				this.redirect = route.query && route.query.redirect;
+			},
+			immediate: true
+		}
 	},
 	computed: {
 		...mapState(['account'])
@@ -63,18 +72,18 @@ export default {
 			this.$refs.form.validate(valid => {
 				if (valid) {
 					this.loading = true;
-					if (this.rememberMe) {
-						this.$store.commit('SET_ACCOUNT', this.login);
-					} else {
-						this.$store.commit('DEL_ACCOUNT');
-					}
+					this.$store.commit('SET_ACCOUNT', this.rememberMe ? this.login : '');
 					this.post(
 						'services/access-tokens',
 						this.form
 					).then(res => {
+						const self = this;
 						this.$message({
 							message: '登录成功',
-							type: 'success'
+							type: 'success',
+							onClose () {
+								self.$router.push({ path: self.redirect || '/' });
+							}
 						});
 						this.loading = false;
 						setToken(res[LOCAL_SESSION], res.expireAt);
