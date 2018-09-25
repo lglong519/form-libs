@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '@/store';
+import router from '@/router';
 import { getToken } from '@/utils/auth';
 import { SESSION_KEY, REQUST, MODE, LOCAL_SESSION } from '@/.config';
 import { Message, MessageBox } from 'element-ui';
@@ -16,7 +16,7 @@ const service = axios.create({
 service.interceptors.request.use(
 	config => {
 		// Do something before request is sent
-		if (store.getters[LOCAL_SESSION]) {
+		if (getToken()) {
 			// 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
 			config.headers[SESSION_KEY] = getToken();
 		}
@@ -71,10 +71,17 @@ service.interceptors.response.use(
 	// },
 	error => {
 		debug(error); // for debug
+		console.log();
+
 		Message({
 			message: _.get(error, 'response.data.message') || error.message,
 			type: 'error',
-			duration: 5 * 1000
+			duration: 5 * 1000,
+			onClose () {
+				if (error.response.status === 401) {
+					console.log(router.app.$route.path);
+				}
+			}
 		});
 		return Promise.reject(error);
 	}

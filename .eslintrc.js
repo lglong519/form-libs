@@ -1,4 +1,9 @@
 module.exports = {
+	parserOptions: {
+		'ecmaFeatures': {
+			'jsx': true
+		}
+	},
 	globals: {
 		expect: false,
 	},

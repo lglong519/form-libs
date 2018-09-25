@@ -9,6 +9,7 @@ import Layout from '@/views/layout/Layout';
 export default new Router({
 	mode: 'history',
 	routes: [
+		{ path: '/404', component: () => import('@/views/404') },
 		{
 			path: '/',
 			component: Layout,
@@ -26,16 +27,17 @@ export default new Router({
 			component: login
 		},
 		{
-			path: '/form',
+			path: '/access',
 			component: Layout,
 			children: [
 				{
-					path: 'index',
-					name: 'Form',
-					component: () => import('@/views/form/index'),
-					meta: { title: 'Form', icon: 'form' }
+					path: '',
+					name: 'Access',
+					component: () => import('@/views/access/index'),
+					meta: { title: 'Access', icon: 'table' }
 				}
 			]
 		},
+		{ path: '*', redirect: '/404' }
 	]
 });

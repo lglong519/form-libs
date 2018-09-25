@@ -5,11 +5,12 @@
       :default-active="$route.path"
       :collapse="isCollapse"
       mode="vertical"
-      background-color="#304156"
+      background-color="#3C516B"
       text-color="#bfcbd9"
       active-text-color="#409EFF"
     >
-      <sidebar-item v-for="route in routes" :key="route.name" :item="route" :base-path="route.path"/>
+		<div class="sidebar-logo">{{isCollapse?'M':'MoFunc'}}</div>
+		<sidebar-item v-for="route in routes" :key="route.name" :item="route" :base-path="route.path"/>
     </el-menu>
   </el-scrollbar>
 </template>
@@ -33,3 +34,13 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+.sidebar-logo{
+	height: 50px;
+	line-height: 50px;
+	font-size: 28px;
+	text-align: center;
+	background-color: #6082AB;
+	color: #fff
+}
+</style>
