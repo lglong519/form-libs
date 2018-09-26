@@ -70,17 +70,22 @@ service.interceptors.response.use(
 	//   }
 	// },
 	error => {
-		debug(error); // for debug
-		console.log();
-
+		debug(error);
+		let duration = 5000;
+		let redirect;
+		let message;
+		if (error.response.status === 401) {
+			message = '未登录';
+			duration = 3000;
+			redirect = { path: '/login', query: { redirect: router.app.$route.path } };
+		}
 		Message({
-			message: _.get(error, 'response.data.message') || error.message,
+			message: message || _.get(error, 'response.data.message') || error.message,
 			type: 'error',
-			duration: 5 * 1000,
+			duration,
 			onClose () {
-				if (error.response.status === 401) {
-					console.log(router.app.$route.path);
-				}
+				redirect && router.push(redirect);
+
 			}
 		});
 		return Promise.reject(error);

@@ -1,6 +1,6 @@
 {
   "name": "form-libs",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "form test",
   "author": "lglong519 <769141564@qq.com>",
   "private": true,
@@ -19,6 +19,7 @@
     "element-ui": "^2.4.6",
     "font-awesome": "^4.7.0",
     "js-cookie": "^2.2.0",
+    "moment": "^2.22.2",
     "normalize.css": "^8.0.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

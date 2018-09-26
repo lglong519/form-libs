@@ -1,4 +1,6 @@
+import Vue from 'vue';
 import api from '@/api';
+import moment from 'moment';
 
 export default {
 	install (Vue, options) {
@@ -7,3 +9,7 @@ export default {
 		});
 	}
 };
+
+Vue.filter('dateTime', (value, format = 'YYYY-MM-DD HH:mm:SS') => {
+	return moment(value).format(format);
+});
