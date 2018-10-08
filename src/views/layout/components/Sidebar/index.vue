@@ -9,7 +9,9 @@
       text-color="#bfcbd9"
       active-text-color="#409EFF"
     >
-		<div class="sidebar-logo">{{isCollapse?'M':'MoFunc'}}</div>
+		<div class="sidebar-logo">
+			<router-link to='/'>{{isCollapse?'M':'MoFunc'}}</router-link>
+		</div>
 		<sidebar-item v-for="route in routes" :key="route.name" :item="route" :base-path="route.path"/>
     </el-menu>
   </el-scrollbar>

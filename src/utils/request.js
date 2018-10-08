@@ -71,12 +71,12 @@ service.interceptors.response.use(
 	// },
 	error => {
 		debug(error);
-		let duration = 5000;
+		let duration = 3000;
 		let redirect;
 		let message;
 		if (error.response.status === 401) {
 			message = '未登录';
-			duration = 3000;
+			duration = 2000;
 			redirect = { path: '/login', query: { redirect: router.app.$route.path } };
 		}
 		Message({
