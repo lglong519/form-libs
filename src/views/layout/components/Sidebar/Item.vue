@@ -17,8 +17,8 @@ export default {
 		const vnodes = [];
 
 		if (icon) {
-			let iconClass = `fa fa-${icon}`;
-			vnodes.push(<i style="margin-right:10px;" class={iconClass}></i>);
+			let iconClass = `sidebar-icon fa fa-${icon}`;
+			vnodes.push(<i class={iconClass}></i>);
 		}
 
 		if (title) {
@@ -28,3 +28,9 @@ export default {
 	}
 };
 </script>
+<style lang="scss" scoped>
+.sidebar-icon {
+  margin-right: 10px;
+  color: #fff;
+}
+</style>
