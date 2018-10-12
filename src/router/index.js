@@ -38,6 +38,18 @@ export default new Router({
 				}
 			]
 		},
+		{
+			path: '/packages',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					name: 'Packages',
+					component: () => import('@/views/packages/index'),
+					meta: { title: 'Packages', icon: 'codepen' }
+				}
+			]
+		},
 		{ path: '*', redirect: '/404' }
 	]
 });
