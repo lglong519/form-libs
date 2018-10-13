@@ -77,6 +77,20 @@ a:hover {
   padding: 20px;
 }
 
+ @media only screen and (max-width:768px){
+	.app-container {
+		padding: 0;
+	}
+	.el-pagination{
+		white-space:initial;
+		text-align: right;
+	}
+	.el-dialog{
+		width: 80%;
+	}
+ }
+
+
 .row-mg{
 	margin-top: 10px;
 }

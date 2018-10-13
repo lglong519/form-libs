@@ -14,15 +14,21 @@
 					</el-form-item>
 				</el-form>
 				<div>
-					<el-tooltip class="item" effect="light" content="刷新" placement="left-start">
+					<el-tooltip class="hidden-xs-only" effect="light" content="刷新" placement="left-start">
 						<el-button icon="el-icon-refresh" size="small" circle @click="refresh"></el-button>
 					</el-tooltip>
+					<el-button class="hidden-sm-and-up" icon="el-icon-refresh" size="small" circle @click="refresh"></el-button>
 				</div>
 			</el-row>
 
 			<el-table :data="packages" :row-class-name="tableRowClassName" v-loading="tableLoading">
 				<el-table-column prop="name" label="name"></el-table-column>
-				<el-table-column prop="var" label="var"></el-table-column>
+				<el-table-column prop="var" label="var">
+					<template slot-scope="scope">
+						{{scope.row.var}}
+						<span @click="copyToClipboard(scope.row.var)"><el-tag size="mini" type="warning">复制</el-tag></span>
+					</template>
+				</el-table-column>
 				<el-table-column prop="link" label="doc">
 					<template slot-scope="scope">
 						<a :href="scope.row.link" target="_blank">
@@ -38,10 +44,14 @@
 						</el-switch>
 					</template>
 				</el-table-column>
-				<el-table-column>
+				<el-table-column width="60" label="action">
 					<template slot-scope="scope">
 						<el-button icon="el-icon-edit" size="mini" plain @click="toggleEdit(scope.row)"></el-button>
-						<el-button type="danger" icon="el-icon-delete" size="mini" plain></el-button>
+					</template>
+				</el-table-column>
+				<el-table-column width="60">
+					<template slot-scope="scope">
+						<el-button type="danger" icon="el-icon-delete" size="mini" plain @click="remove(scope.row)"></el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -74,151 +84,190 @@
 </template>
 
 <style>
-.el-table .warning-row {
-  background: oldlace;
-}
+	.el-table .warning-row {
+	  background: oldlace;
+	}
 
-.el-table .success-row {
-  background: #f0f9eb;
-}
+	.el-table .success-row {
+	  background: #f0f9eb;
+	}
 </style>
 
 <script>
-import { validateURL } from '@/utils/validate';
-
-function editPackage () {
-	return {
-		name: null,
-		var: null,
-		link: null,
-		isActive: true
+	import { validateURL } from '@/utils/validate';
+	const packages = {
+		lodash: require('lodash'),
+		moment: require('moment'),
+		joi: require('joi'),
+		jquery: require('jquery'),
 	};
-}
-export default {
-	data () {
-		function validLink (rule, value, callback) {
-			if (!value) {
-				callback(new Error('请输入链接'));
-			} else if (!validateURL(value)) {
-				callback(new Error('链接格式不对'));
-			} else {
-				callback();
-			}
-		}
+
+	function editPackage () {
 		return {
-			packages: [],
-			pagination: {
-				total: 0,
-				currentPage: 1,
-				pageSizes: [10, 20, 30, 50, 100],
-				pageSize: 10,
-			},
-			searchVal: null,
-			editPackage: editPackage(),
-			dialog: {
-				visible: false,
-				title: null
-			},
-			editRules: {
-				name: [
-					{ required: true, message: '请输入包名', trigger: 'blur' }
-				],
-				var: [
-					{ required: true, message: '请输入变量名', trigger: 'blur' }
-				],
-				link: [
-					{ required: true, message: '请输入链接', trigger: 'blur' },
-					{ validator: validLink, trigger: 'blur' }
-				],
-				isActive: [
-					{ type: 'boolean', message: '必须为布尔值' }
-				],
-			},
-			tableLoading: false
+			name: null,
+			var: null,
+			link: 'http://mofunc.com/',
+			isActive: true,
 		};
-	},
-	methods: {
-		tableRowClassName ({ row, rowIndex }) {
-			if (rowIndex === 1) {
-				return 'warning-row';
-			} else if (rowIndex === 3) {
-				return 'success-row';
-			}
-			return '';
-		},
-		loadPackages () {
-			this.packages.forEach(elem => {
-				elem && this.switchPackage(elem);
-			});
-		},
-		switchPackage (data) {
-			if (data.isActive) {
-				try {
-					window[data.var] = require(data.name);
-				} catch (e) {
-					this.$message({
-						message: `Cannot find module '${data.name}'`,
-						type: 'error',
-					});
+	}
+	export default {
+		data () {
+			function validLink (rule, value, callback) {
+				if (!value) {
+					callback(new Error('请输入链接'));
+				} else if (!validateURL(value)) {
+					callback(new Error('链接格式不对'));
+				} else {
+					callback();
 				}
-			} else {
-				window[data.var] = null;
 			}
+			return {
+				packages: [],
+				pagination: {
+					total: 0,
+					currentPage: 1,
+					pageSizes: [10, 20, 30, 50, 100],
+					pageSize: 10,
+				},
+				searchVal: null,
+				editPackage: editPackage(),
+				dialog: {
+					visible: false,
+					title: null
+				},
+				editRules: {
+					name: [
+						{ required: true, message: '请输入包名', trigger: 'blur' }
+					],
+					var: [
+						{ required: true, message: '请输入变量名', trigger: 'blur' }
+					],
+					link: [
+						{ required: true, message: '请输入链接', trigger: 'blur' },
+						{ validator: validLink, trigger: 'blur' }
+					],
+					isActive: [
+						{ type: 'boolean', message: '必须为布尔值' }
+					],
+				},
+				tableLoading: false
+			};
 		},
-		pageSizeChange (e) {
-			this.pagination.pageSize = e;
-			this.queryPackages();
-		},
-		pageChange (e) {
-			this.pagination.currentPage = e;
-			this.queryPackages();
-		},
-		queryPackages (searchVal = '') {
-			this.tableLoading = true;
-			if (this.searchVal) {
-				searchVal = `{"name":{"$regex":"${this.searchVal}","$options":"$i"}}`;
-			}
-			return this.query(`services/packages?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
-				this.pagination.total = Number(res.headers['x-total-count']);
-				this.packages = res.data;
-				this.tableLoading = false;
-			});
-		},
-		toggleEdit (data) {
-			if (data._id) {
-				this.dialog.title = '修改';
-				this.editPackage = data;
-			} else {
-				this.dialog.title = '新建';
-			}
-			this.dialog.visible = true;
-		},
-		submit () {
-			this.$refs.editPackage.validate(async valid => {
-				if (valid) {
-					if (this.editPackage._id) {
-						await this.patch(`services/packages/${this.editPackage._id}`, this.editPackage);
-					} else {
-						await this.post('services/packages', this.editPackage);
+		methods: {
+			tableRowClassName ({ row, rowIndex }) {
+				if (rowIndex === 1) {
+					return 'warning-row';
+				} else if (rowIndex === 3) {
+					return 'success-row';
+				}
+				return '';
+			},
+			loadPackages () {
+				this.packages.forEach(elem => {
+					elem && this.switchPackage(elem);
+				});
+			},
+			switchPackage (data) {
+				if (data.isActive) {
+					if (!window[data.var]) {
+						if (!packages[data.name]) {
+							this.$message({
+								message: `Cannot find module '${data.name}'`,
+								type: 'error'
+							});
+						} else {
+							window[data.var] = packages[data.name];
+						}
 					}
-					await this.queryPackages();
-					this.dialog.visible = false;
-					this.editPackage = editPackage();
+				} else {
+					window[data.var] = null;
 				}
-			});
+			},
+			pageSizeChange (e) {
+				this.pagination.pageSize = e;
+				this.queryPackages();
+			},
+			pageChange (e) {
+				this.pagination.currentPage = e;
+				this.queryPackages();
+			},
+			queryPackages (searchVal = '') {
+				this.tableLoading = true;
+				if (this.searchVal) {
+					searchVal = `{"name":{"$regex":"${this.searchVal}","$options":"$i"}}`;
+				}
+				return this.query(`services/packages?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
+					this.pagination.total = Number(res.headers['x-total-count']);
+					this.packages = res.data;
+					this.tableLoading = false;
+				});
+			},
+			toggleEdit (data) {
+				if (data._id) {
+					this.dialog.title = '修改';
+					this.editPackage = data;
+				} else {
+					this.dialog.title = '新建';
+				}
+				this.dialog.visible = true;
+			},
+			submit () {
+				this.$refs.editPackage.validate(async valid => {
+					if (valid) {
+						if (this.editPackage._id) {
+							await this.patch(`services/packages/${this.editPackage._id}`, this.editPackage);
+						} else {
+							await this.post('services/packages', this.editPackage);
+						}
+						await this.queryPackages();
+						this.dialog.visible = false;
+						this.editPackage = editPackage();
+					}
+				});
+			},
+			cancel () {
+				this.dialog.visible = false;
+				this.editPackage = editPackage();
+			},
+			async refresh () {
+				await this.queryPackages();
+				this.loadPackages();
+			},
+			remove (data) {
+				this.$confirm(`此操作将永久删除:${data.name}, 是否继续?`, '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(async () => {
+					await this.del(`services/packages/${data._id}`);
+					this.$notify.success({
+						message: '删除成功',
+					});
+					this.refresh();
+				}).catch(action => {
+					this.$notify({
+						type: action === 'cancel' ? 'info' : 'error',
+						message: action === 'cancel' ? '已取消删除' : '删除失败',
+					});
+				});
+
+			},
+			copyToClipboard (text) {
+				let _tmpInput = document.createElement('input');
+				_tmpInput.value = text;
+				document.body.appendChild(_tmpInput);
+				_tmpInput.select();
+				document.execCommand('Copy');
+				document.body.removeChild(_tmpInput);
+				this.$message({
+					message: '已复制到剪切版',
+					type: 'success'
+				});
+			}
 		},
-		cancel () {
-			this.dialog.visible = false;
-			this.editPackage = editPackage();
-		},
-		async refresh () {
+		async mounted () {
 			await this.queryPackages();
 			this.loadPackages();
 		}
-	},
-	async mounted () {
-		await this.queryPackages();
-		this.loadPackages();
-	}
-};
+	};
 </script>

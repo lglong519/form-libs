@@ -11,6 +11,7 @@ import debug from 'debug';
 
 import 'normalize.css/normalize.css';
 import 'element-ui/lib/theme-chalk/index.css';
+import 'element-ui/lib/theme-chalk/display.css';
 // import './assets/theme-686F98/index.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './styles/index.scss';

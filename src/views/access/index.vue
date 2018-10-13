@@ -10,14 +10,15 @@
 									<el-option :label="item" :value="item"></el-option>
 								</template>
 							</el-select>
-							<el-button slot="append" icon="el-icon-search" @click="queryAccesses"></el-button>
+							<el-button slot="append" type="primary" icon="el-icon-search" plain @click="queryAccesses"></el-button>
 						</el-input>
 					</el-form-item>
 				</el-form>
 				<div>
-					<el-tooltip class="item" effect="light" content="刷新" placement="left-start">
+					<el-tooltip class="hidden-xs-only" effect="light" content="刷新" placement="left-start">
 						<el-button icon="el-icon-refresh" size="small" circle @click="refresh"></el-button>
 					</el-tooltip>
+					<el-button class="hidden-sm-and-up" icon="el-icon-refresh" size="small" circle @click="refresh"></el-button>
 				</div>
 			</el-row>
 			<el-table :default-sort="{prop: 'updatedAt', order: 'descending'}" :data="tableData" stripe style="width: 100%" v-loading="tableLoading">
@@ -42,14 +43,13 @@
 </template>
 
 <style>
-.el-select .el-input {
-    width: 100px;
-  }
-  .input-with-select .el-input-group__prepend {
-    background-color: #fff;
-  }
+	.el-select .el-input {
+	  width: 100px;
+	}
+	.input-with-select .el-input-group__prepend {
+	  background-color: #fff;
+	}
 </style>
-
 
 <script>
   export default {
@@ -76,7 +76,8 @@
 			this.pagination.currentPage = e;
 			this.queryAccesses();
 		},
-		queryAccesses (searchVal = '') {
+		queryAccesses () {
+			let searchVal = '';
 			this.tableLoading = true;
 			if (this.searchVal || this.searchVal === 0) {
 				if (this.searchProp) {

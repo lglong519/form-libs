@@ -25,7 +25,7 @@
 <script>
 import { setToken } from '@/utils/auth';
 import { LOCAL_SESSION } from '@/.config';
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
 	data () {
@@ -59,11 +59,11 @@ export default {
 		}
 	},
 	computed: {
-		...mapState(['account'])
+		...mapGetters(['account'])
 	},
 	mounted () {
 		if (this.account) {
-			this.login = this.account;
+			this.form.login = this.account;
 			this.rememberMe = true;
 		}
 	},
@@ -72,7 +72,7 @@ export default {
 			this.$refs.form.validate(valid => {
 				if (valid) {
 					this.loading = true;
-					this.$store.commit('SET_ACCOUNT', this.rememberMe ? this.login : '');
+					this.$store.commit('SET_ACCOUNT', this.rememberMe ? this.form.login : '');
 					this.post(
 						'services/access-tokens',
 						this.form
