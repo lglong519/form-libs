@@ -50,6 +50,29 @@ export default new Router({
 				}
 			]
 		},
+		{
+			path: '/sports',
+			name: 'Sports',
+			component: Layout,
+			meta: {
+				title: 'Sports',
+				icon: 'futbol-o'
+			},
+			children: [
+				{
+					path: '/sports/squats',
+					name: 'Squats',
+					component: () => import('@/views/sports/index'),
+					meta: { title: 'Squats', icon: 'hand-paper-o' }
+				},
+				{
+					path: '/sports/press-ups',
+					name: 'PressUps',
+					component: () => import('@/views/sports/index'),
+					meta: { title: 'PressUps', icon: 'child' }
+				}
+			]
+		},
 		{ path: '*', redirect: '/404' }
 	]
 });

@@ -10,7 +10,7 @@
 									<el-option :label="item" :value="item"></el-option>
 								</template>
 							</el-select>
-							<el-button slot="append" type="primary" icon="el-icon-search" plain @click="queryAccesses"></el-button>
+							<el-button slot="append" type="primary" icon="el-icon-search" plain @click="search"></el-button>
 						</el-input>
 					</el-form-item>
 				</el-form>
@@ -92,6 +92,17 @@
 		},
 		refresh () {
 			this.queryAccesses();
+		},
+		search () {
+			if (this.searchProp && this.searchVal) {
+				this.queryAccesses();
+			} else {
+				this.$message({
+					message: !this.searchProp ? '请选择查询字段' : '请输入内容',
+					type: 'error',
+				});
+			}
+
 		}
 	},
 	mounted () {

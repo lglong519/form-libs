@@ -7,7 +7,7 @@
 						<el-input placeholder="请输入内容" v-model="searchVal" clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="success" icon="el-icon-search" plain @click="refresh">搜索</el-button>
+						<el-button type="success" icon="el-icon-search" plain @click="search">搜索</el-button>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" icon="el-icon-edit" plain @click="toggleEdit">添加</el-button>
@@ -44,7 +44,7 @@
 						</el-switch>
 					</template>
 				</el-table-column>
-				<el-table-column width="60" label="action">
+				<el-table-column width="70" label="action">
 					<template slot-scope="scope">
 						<el-button icon="el-icon-edit" size="mini" plain @click="toggleEdit(scope.row)"></el-button>
 					</template>
@@ -191,7 +191,8 @@
 				this.pagination.currentPage = e;
 				this.queryPackages();
 			},
-			queryPackages (searchVal = '') {
+			queryPackages () {
+				let searchVal = '';
 				this.tableLoading = true;
 				if (this.searchVal) {
 					searchVal = `{"name":{"$regex":"${this.searchVal}","$options":"$i"}}`;
@@ -205,7 +206,7 @@
 			toggleEdit (data) {
 				if (data._id) {
 					this.dialog.title = '修改';
-					this.editPackage = data;
+					this.editPackage = JSON.parse(JSON.stringify(data));
 				} else {
 					this.dialog.title = '新建';
 				}
@@ -263,6 +264,17 @@
 					message: '已复制到剪切版',
 					type: 'success'
 				});
+			},
+			search () {
+				if (this.searchVal) {
+					this.refresh();
+				} else {
+					this.$message({
+						message: '请输入内容',
+						type: 'error',
+					});
+				}
+
 			}
 		},
 		async mounted () {
