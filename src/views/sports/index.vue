@@ -4,11 +4,11 @@
 			<el-row type="flex" justify="space-between">
 				<el-form :inline="true">
 					<el-form-item prop="from">
-						<el-date-picker type="datetime" placeholder="选择日期" v-model="searchForm.from" style="width: 100%;"></el-date-picker>
+						<el-date-picker type="datetime" placeholder="开始日期" v-model="searchForm.from" style="width: 100%;"></el-date-picker>
 					</el-form-item>
-					<el-form-item>-</el-form-item>
+					<el-form-item class="hidden-xs-only">-</el-form-item>
 					<el-form-item prop="to">
-						<el-date-picker type="datetime" placeholder="选择日期" v-model="searchForm.to" style="width: 100%;"></el-date-picker>
+						<el-date-picker type="datetime" placeholder="截至日期" v-model="searchForm.to" style="width: 100%;"></el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="success" icon="el-icon-search" plain @click="search">搜索</el-button>
@@ -43,9 +43,9 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-row type="flex" class="row-mg" justify="end">
+			<div class="pagination-container">
 				<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
-			</el-row>
+			</div>
 		</el-card>
 		<!-- edit dialog -->
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
@@ -53,7 +53,7 @@
 				<el-form-item label="count" prop="count">
 					<el-input v-model.number="editForm.count" placeholder="请输入数量"></el-input>
 				</el-form-item>
-				<el-form-item label="参考日期" required prop="referenceDate">
+				<el-form-item label="参考日期" prop="referenceDate">
 					<el-date-picker type="datetime" placeholder="选择日期" v-model="editForm.referenceDate" style="width: 100%;"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="实际日期" prop="createdAt">
@@ -82,7 +82,7 @@
 	function editForm () {
 		return {
 			count: null,
-			referenceDate: Date.now(),
+			referenceDate: null,
 			createdAt: null,
 		};
 	}
@@ -112,7 +112,7 @@
 						{ type: 'number', message: '必须为数字值' }
 					],
 					referenceDate: [
-						{ type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+						{ type: 'date', message: '请选择日期', trigger: 'change' }
 					],
 					createdAt: [
 						{ type: 'date', message: '请选择日期', trigger: 'change' }

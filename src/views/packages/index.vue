@@ -55,9 +55,9 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-row type="flex" class="row-mg" justify="end">
+			<div class="pagination-container">
 				<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
-			</el-row>
+			</div>
 		</el-card>
 		<!-- edit dialog -->
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">

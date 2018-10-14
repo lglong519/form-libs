@@ -2,7 +2,7 @@
 	<div class="app-container">
 		<el-card>
 			<el-row type="flex" justify="space-between">
-				<el-form :inline="false" style="width:400px">
+				<el-form>
 					<el-form-item>
 						<el-input placeholder="请输入内容" v-model="searchVal" class="input-with-select">
 							<el-select v-model="searchProp" slot="prepend" placeholder="请选择">
@@ -35,9 +35,9 @@
 				</el-table-column>
 			</el-table>
 
-			<el-row type="flex" class="row-mg" justify="end" align="middle">
-				<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
-			</el-row>
+			<div class="pagination-container">
+				<el-pagination layout="total, sizes, prev, pager, next, jumper" :pager-count="5" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
+			</div>
 		</el-card>
 	</div>
 </template>

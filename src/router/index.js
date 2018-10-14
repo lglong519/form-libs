@@ -52,6 +52,7 @@ export default new Router({
 		},
 		{
 			path: '/sports',
+			redirect: '/sports/squats',
 			name: 'Sports',
 			component: Layout,
 			meta: {
