@@ -4,19 +4,18 @@
     <breadcrumb />
     <el-dropdown class="avatar-container" trigger="hover">
       <div class="avatar-wrapper">
-        <img :src="avatar" class="user-avatar">
+        <img :src="myProfile.image||avatar" class="user-avatar">
       </div>
       <el-dropdown-menu slot="dropdown" class="user-dropdown">
-        <router-link class="inlineBlock" to="/">
           <el-dropdown-item>
-            Index
+			<span style="display:block;" @click="openSetting=!openSetting">设置</span>
           </el-dropdown-item>
-        </router-link>
         <el-dropdown-item divided>
           <span style="display:block;" @click="logout">退出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+	<edit-profile :openSetting.sync="openSetting"></edit-profile>
   </el-menu>
 </template>
 
@@ -24,20 +23,24 @@
 import { mapGetters } from 'vuex';
 import Breadcrumb from '@/components/Breadcrumb';
 import Hamburger from '@/components/Hamburger';
+import EditProfile from '@/components/EditProfile';
 
 export default {
 	data () {
 		return {
-			avatar: require('@/assets/logo.png')
+			avatar: require('@/assets/logo.png'),
+			openSetting: false,
 		};
 	},
 	components: {
 		Breadcrumb,
-		Hamburger
+		Hamburger,
+		EditProfile,
 	},
 	computed: {
 		...mapGetters([
 			'sidebar',
+			'myProfile'
 		])
 	},
 	methods: {

@@ -19,5 +19,8 @@ export default {
 	},
 	TOGGLE_DEVICE: (state, device) => {
 		state.device = device;
+	},
+	GET_PROFILE (state, myProfile) {
+		state.myProfile = myProfile;
 	}
 };

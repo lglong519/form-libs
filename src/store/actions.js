@@ -1,3 +1,5 @@
+import api from '@/api';
+
 export default {
 	ToggleSideBar: ({ commit }) => {
 		commit('TOGGLE_SIDEBAR');
@@ -7,5 +9,10 @@ export default {
 	},
 	ToggleDevice ({ commit }, device) {
 		commit('TOGGLE_DEVICE', device);
+	},
+	GetProfile ({ commit }) {
+		api.get('services/me').then(result => {
+			commit('GET_PROFILE', result);
+		});
 	}
 };

@@ -4,5 +4,6 @@ export default {
 		opened: !!localStorage.getItem('sidebarStatus'),
 		withoutAnimation: false
 	},
-	device: 'desktop'
+	device: 'desktop',
+	myProfile: {}
 };

@@ -10,7 +10,9 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password">
-					<el-input placeholder="请输入密码" type="password" v-model="form.password" @keyup.enter.native="signin">
+					<el-input placeholder="请输入密码" :type="pwd.type" v-model="form.password" @keyup.enter.native="signin">
+						<i class="fa el-input__icon" style="color:#8CC4FF" :class="pwd.icon" slot="suffix" @click="togglePwd">
+						</i>
 						<template slot="prepend">密码:</template>
 					</el-input>
 				</el-form-item>
@@ -47,7 +49,12 @@ export default {
 					{ min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
 				],
 			},
-			redirect: null
+			redirect: null,
+			pwd: {
+				view: false,
+				icon: 'fa-eye-slash',
+				type: 'password'
+			}
 		};
 	},
 	watch: {
@@ -87,25 +94,36 @@ export default {
 						});
 						this.loading = false;
 						setToken(res[LOCAL_SESSION], res.expireAt);
+						this.$store.dispatch('GetProfile');
 					}).catch(() => {
 						this.loading = false;
 					});
 				}
 			});
+		},
+		togglePwd () {
+			this.pwd.view = !this.pwd.view;
+			if (this.pwd.view) {
+				this.pwd.icon = 'fa-eye';
+				this.pwd.type = 'text';
+			} else {
+				this.pwd.icon = 'fa-eye-slash';
+				this.pwd.type = 'password';
+			}
 		}
-	}
+	},
 };
 </script>
 <style lang="scss" scoped>
-.box-card {
-  margin: 100px auto;
-  max-width: 500px;
-}
-@media screen and (max-width: 500px) {
-	.box-card{
-		margin-top: 0;
-		width: 100%;
+	.box-card {
+	  margin: 100px auto;
+	  max-width: 500px;
 	}
-}
+	@media screen and (max-width: 500px) {
+	  .box-card {
+	    margin-top: 0;
+	    width: 100%;
+	  }
+	}
 </style>
 

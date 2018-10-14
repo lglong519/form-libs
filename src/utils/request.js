@@ -1,5 +1,6 @@
 import axios from 'axios';
 import router from '@/router';
+import store from '@/store';
 import { getToken } from '@/utils/auth';
 import { SESSION_KEY, REQUST, MODE, LOCAL_SESSION } from '@/.config';
 import { Message, MessageBox } from 'element-ui';
@@ -75,6 +76,7 @@ service.interceptors.response.use(
 		let redirect;
 		let message;
 		if (error.response.status === 401) {
+			store.commit('GET_PROFILE', {});
 			message = '未登录';
 			duration = 2000;
 			redirect = { path: '/login', query: { redirect: router.app.$route.path } };
