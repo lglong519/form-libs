@@ -1,22 +1,27 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">
-    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
-    <breadcrumb />
-    <el-dropdown class="avatar-container" trigger="click">
-      <div class="avatar-wrapper">
-        <img :src="myProfile.image||avatar" class="user-avatar">
-      </div>
-      <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <el-dropdown-item>
-			<span style="display:block;" @click="openSetting=!openSetting">设置</span>
-          </el-dropdown-item>
-        <el-dropdown-item divided>
-          <span style="display:block;" @click="logout">退出</span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
-	<edit-profile :openSetting.sync="openSetting"></edit-profile>
-  </el-menu>
+	<el-menu class="navbar" mode="horizontal">
+		<hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
+		<breadcrumb />
+		<div class="float-right">
+			<span class="left-time">
+				<el-tag size="mini" :type="leftTime<60000?'danger':''">{{calcTime}}</el-tag>
+			</span>
+			<el-dropdown class="avatar-container" trigger="click">
+				<div class="avatar-wrapper">
+					<img :src="myProfile.image||avatar" class="user-avatar">
+				</div>
+				<el-dropdown-menu slot="dropdown" class="user-dropdown">
+					<el-dropdown-item>
+						<span style="display:block;" @click="openSetting=!openSetting">设置</span>
+					</el-dropdown-item>
+					<el-dropdown-item divided>
+						<span style="display:block;" @click="logout">退出</span>
+					</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+		</div>
+		<edit-profile :openSetting.sync="openSetting"></edit-profile>
+	</el-menu>
 </template>
 
 <script>
@@ -24,6 +29,7 @@ import { mapGetters } from 'vuex';
 import Breadcrumb from '@/components/Breadcrumb';
 import Hamburger from '@/components/Hamburger';
 import EditProfile from '@/components/EditProfile';
+import processLeftTime from '@/utils/processLeftTime';
 
 export default {
 	data () {
@@ -41,7 +47,19 @@ export default {
 		...mapGetters([
 			'sidebar',
 			'myProfile',
-		])
+			'leftTime'
+		]),
+		calcTime () {
+			let m = new Date(this.leftTime).getMinutes();
+			let s = new Date(this.leftTime).getSeconds();
+			m < 10 && (m = `0${m}`);
+			s < 10 && (s = `0${s}`);
+			if (this.leftTime > 1000 * 60 * 60) {
+				let h = new Date(this.leftTime).getHours() - 8;
+				return `0${h}:${m}:${s}`;
+			}
+			return `${m}:${s}`;
+		}
 	},
 	methods: {
 		toggleSideBar () {
@@ -61,6 +79,9 @@ export default {
 				});
 			});
 		}
+	},
+	mounted () {
+		processLeftTime(this.$store);
 	}
 };
 </script>
@@ -82,11 +103,18 @@ export default {
     top: 16px;
     color: red;
   }
+  .float-right {
+	float: right;
+	height: 50px;
+	display: flex;
+	.left-time{
+		margin-right: 10px;
+	}
+  }
   .avatar-container {
     height: 50px;
     display: inline-block;
-    position: absolute;
-    right: 20px;
+    margin-right: 20px;
     .avatar-wrapper {
       cursor: pointer;
       margin-top: 5px;
@@ -95,12 +123,6 @@ export default {
         width: 40px;
         height: 40px;
         border-radius: 10px;
-      }
-      .el-icon-caret-bottom {
-        position: absolute;
-        right: -20px;
-        top: 25px;
-        font-size: 12px;
       }
     }
   }

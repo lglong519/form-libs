@@ -1,5 +1,6 @@
 import api from '@/api';
 import router from '@/router';
+import { removeToken } from '@/utils/auth';
 
 export default {
 	ToggleSideBar: ({ commit }) => {
@@ -19,6 +20,7 @@ export default {
 	LogOut ({ commit }) {
 		api.del('services/access-tokens').then(() => {
 			commit('GET_PROFILE', {});
+			removeToken();
 			router.push({ path: '/login', query: { redirect: router.app.$route.path } });
 		});
 	}

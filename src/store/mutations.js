@@ -22,5 +22,11 @@ export default {
 	},
 	GET_PROFILE (state, myProfile) {
 		state.myProfile = myProfile;
-	}
+	},
+	SET_LEFTTIME (state, leftTime) {
+		state.leftTime = leftTime;
+	},
+	SET_TIMER (state, timer) {
+		state.timer = timer;
+	},
 };

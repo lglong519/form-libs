@@ -1,9 +1,13 @@
-export default {
+const state = {
 	account: localStorage.getItem('account'),
 	sidebar: {
 		opened: !!localStorage.getItem('sidebarStatus'),
 		withoutAnimation: false
 	},
 	device: 'desktop',
-	myProfile: {}
+	myProfile: {},
+	leftTime: 0,
+	timer: null,
 };
+
+export default state;

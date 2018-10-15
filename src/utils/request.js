@@ -1,8 +1,8 @@
 import axios from 'axios';
 import router from '@/router';
 import store from '@/store';
-import { getToken } from '@/utils/auth';
-import { SESSION_KEY, REQUST, MODE, LOCAL_SESSION } from '@/.config';
+import { getToken, expireToken } from '@/utils/auth';
+import { SESSION_KEY, REQUST, MODE, SESSION_EXPIRE_TIME } from '@/.config';
 import { Message, MessageBox } from 'element-ui';
 import _ from 'lodash';
 const debug = require('debug')('app:request');
@@ -36,6 +36,9 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 	response => {
 		debug('response', response);
+		if (!_.get(response, 'data.accessToken')) {
+			expireToken(Date.now() + SESSION_EXPIRE_TIME);
+		}
 		return response;
 	},
 	/**

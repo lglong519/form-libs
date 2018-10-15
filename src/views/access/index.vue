@@ -6,9 +6,7 @@
 					<el-form-item>
 						<el-input placeholder="请输入内容" v-model="searchVal" class="input-with-select">
 							<el-select v-model="searchProp" slot="prepend" placeholder="请选择">
-								<template v-for="item,i in ['action','client','host','ip','referer']">
-									<el-option :label="item" :value="item"></el-option>
-								</template>
+								<el-option v-for="item in searchProps" :key="item" :label="item" :value="item"></el-option>
 							</el-select>
 							<el-button slot="append" type="primary" icon="el-icon-search" plain @click="search"></el-button>
 						</el-input>
@@ -65,6 +63,7 @@
 			searchVal: null,
 			tableLoading: false,
 			searchProp: null,
+			searchProps: ['action', 'client', 'host', 'ip', 'referer'],
   		};
 	},
 	methods: {
