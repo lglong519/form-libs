@@ -8,6 +8,12 @@ const state = {
 	myProfile: {},
 	leftTime: 0,
 	timer: null,
+	/*
+	tagsView: {
+		visitedViews: [],
+		cachedViews: [],
+	}
+	*/
 };
 
 export default state;

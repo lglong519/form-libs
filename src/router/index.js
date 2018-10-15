@@ -14,11 +14,12 @@ export default new Router({
 			path: '/',
 			component: Layout,
 			redirect: '/index',
-			name: 'Index',
 			hidden: true,
 			children: [{
 				path: 'index',
-				component: () => import('@/views/index/index')
+				name: 'index',
+				component: () => import('@/views/index/index'),
+				meta: { title: 'Index' }
 			}]
 		},
 		{

@@ -4,7 +4,9 @@
 		<breadcrumb />
 		<div class="float-right">
 			<span class="left-time">
-				<el-tag size="mini" :type="leftTime<60000?'danger':''">{{calcTime}}</el-tag>
+				<el-tooltip effect="dark" content="会话过期时间" placement="bottom">
+					<el-tag size="mini" :type="leftTime<60000?'danger':''">{{calcTime}}</el-tag>
+				 </el-tooltip>
 			</span>
 			<el-dropdown class="avatar-container" trigger="click">
 				<div class="avatar-wrapper">
