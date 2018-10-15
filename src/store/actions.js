@@ -1,4 +1,5 @@
 import api from '@/api';
+import router from '@/router';
 
 export default {
 	ToggleSideBar: ({ commit }) => {
@@ -13,6 +14,12 @@ export default {
 	GetProfile ({ commit }) {
 		api.get('services/me').then(result => {
 			commit('GET_PROFILE', result);
+		});
+	},
+	LogOut ({ commit }) {
+		api.del('services/access-tokens').then(() => {
+			commit('GET_PROFILE', {});
+			router.push({ path: '/login', query: { redirect: router.app.$route.path } });
 		});
 	}
 };

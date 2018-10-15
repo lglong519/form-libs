@@ -2,7 +2,7 @@
   <el-menu class="navbar" mode="horizontal">
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
     <breadcrumb />
-    <el-dropdown class="avatar-container" trigger="hover">
+    <el-dropdown class="avatar-container" trigger="click">
       <div class="avatar-wrapper">
         <img :src="myProfile.image||avatar" class="user-avatar">
       </div>
@@ -40,7 +40,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'sidebar',
-			'myProfile'
+			'myProfile',
 		])
 	},
 	methods: {
@@ -48,8 +48,17 @@ export default {
 			this.$store.dispatch('ToggleSideBar');
 		},
 		logout () {
-			this.$store.dispatch('LogOut').then(() => {
-				location.reload(); // 为了重新实例化vue-router对象 避免bug
+			this.$confirm('退出登录?', '', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			}).then(() => {
+				this.$store.dispatch('LogOut');
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消'
+				});
 			});
 		}
 	}

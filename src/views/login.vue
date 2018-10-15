@@ -5,7 +5,7 @@
 			<br>
 			<el-form :model="form" :rules="rules" ref="form">
 				<el-form-item prop="login">
-					<el-input placeholder="请输入帐号" type="text" v-model="form.login" @keyup.enter.native="signin">
+					<el-input placeholder="请输入帐号" type="text" v-model="form.login" @keyup.enter.native="signin" clearable>
 						<template slot="prepend">帐号:</template>
 					</el-input>
 				</el-form-item>
