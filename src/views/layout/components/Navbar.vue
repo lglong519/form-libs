@@ -4,9 +4,9 @@
 		<breadcrumb />
 		<div class="float-right">
 			<span class="left-time">
-				<el-tooltip effect="dark" content="会话过期时间" placement="bottom">
-					<el-tag size="mini" :type="leftTime<60000?'danger':''">{{calcTime}}</el-tag>
-				 </el-tooltip>
+				<el-tooltip effect="dark" :content="leftTime>0?'会话过期时间':'登录已过期'" placement="bottom">
+					<el-tag size="mini" :type="leftTime<60000?'danger':''" :class="leftTime<60000?'blink':''">{{calcTime}}</el-tag>
+				</el-tooltip>
 			</span>
 			<el-dropdown class="avatar-container" trigger="click">
 				<div class="avatar-wrapper">
@@ -89,45 +89,58 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.navbar {
-  height: 50px;
-  line-height: 50px;
-  border-radius: 0px !important;
-  .hamburger-container {
-    line-height: 58px;
-    height: 50px;
-    float: left;
-    padding: 0 10px;
-  }
-  .screenfull {
-    position: absolute;
-    right: 90px;
-    top: 16px;
-    color: red;
-  }
-  .float-right {
-	float: right;
-	height: 50px;
-	display: flex;
-	.left-time{
-		margin-right: 10px;
+	.navbar {
+	  height: 50px;
+	  line-height: 50px;
+	  border-radius: 0px !important;
+	  .hamburger-container {
+	    line-height: 58px;
+	    height: 50px;
+	    float: left;
+	    padding: 0 10px;
+	  }
+	  .screenfull {
+	    position: absolute;
+	    right: 90px;
+	    top: 16px;
+	    color: red;
+	  }
+	  .float-right {
+	    float: right;
+	    height: 50px;
+	    display: flex;
+	    .left-time {
+	      margin-right: 10px;
+	    }
+	  }
+	  .avatar-container {
+	    height: 50px;
+	    display: inline-block;
+	    margin-right: 20px;
+	    .avatar-wrapper {
+	      cursor: pointer;
+	      margin-top: 5px;
+	      position: relative;
+	      .user-avatar {
+	        width: 40px;
+	        height: 40px;
+	        border-radius: 10px;
+	      }
+	    }
+	  }
 	}
-  }
-  .avatar-container {
-    height: 50px;
-    display: inline-block;
-    margin-right: 20px;
-    .avatar-wrapper {
-      cursor: pointer;
-      margin-top: 5px;
-      position: relative;
-      .user-avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-      }
-    }
-  }
-}
+	@keyframes blink {
+	  0% {
+	    opacity: 1;
+	  }
+	  100% {
+	    opacity: 0;
+	  }
+	}
+
+	/* 定义blink*/
+	.blink {
+	  animation: blink 1s linear infinite;
+	}
 </style>
 
