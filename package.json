@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.4.8",
     "font-awesome": "^4.7.0",
     "joi": "^13.7.0",
@@ -26,6 +27,7 @@
     "normalize.css": "^8.0.0",
     "nprogress": "^0.2.0",
     "vue": "^2.5.2",
+    "vue-count-to": "^1.0.13",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },

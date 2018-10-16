@@ -158,7 +158,7 @@
 					] };
 					searchVal = JSON.stringify(query);
 				}
-				return this.query(`services/${this.source}?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
+				return this.query(`services/${this.source}?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}&sort=-createdAt`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
 					this.tableDatas = res.data;
 					this.tableLoading = false;
