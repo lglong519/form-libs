@@ -33,4 +33,7 @@ export default {
   margin-right: 10px;
   color: #fff;
 }
+.sidebar--collapse .sidebar-icon{
+	margin-left:8px;
+}
 </style>

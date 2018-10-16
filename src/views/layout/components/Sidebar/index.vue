@@ -12,7 +12,7 @@
 		<div class="sidebar-logo">
 			<router-link to='/'>{{isCollapse?'M':'MoFunc'}}</router-link>
 		</div>
-		<sidebar-item v-for="route in routes" :key="route.name" :item="route" :base-path="route.path"/>
+		<sidebar-item v-for="route in routes" :key="route.name" :item="route" :base-path="route.path" :class="isCollapse?'sidebar--collapse':''"/>
     </el-menu>
   </el-scrollbar>
 </template>

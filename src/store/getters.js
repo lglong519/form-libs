@@ -6,3 +6,5 @@ export const leftTime = state => state.leftTime;
 export const timer = state => state.timer;
 export const visitedViews = state => state.tagsView.visitedViews;
 export const cachedViews = state => state.tagsView.cachedViews;
+export const isLogin = state => state.checkLogin.isLogin;
+export const user = state => state.checkLogin.user;

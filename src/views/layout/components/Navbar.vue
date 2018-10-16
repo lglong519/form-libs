@@ -82,7 +82,7 @@ export default {
 			});
 		}
 	},
-	mounted () {
+	created () {
 		processLeftTime(this.$store);
 	}
 };

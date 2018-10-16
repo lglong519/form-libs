@@ -13,7 +13,7 @@ export default {
 		commit('TOGGLE_DEVICE', device);
 	},
 	GetProfile ({ commit }) {
-		api.get('services/me').then(result => {
+		return api.get('services/me').then(result => {
 			commit('GET_PROFILE', result);
 		});
 	},
