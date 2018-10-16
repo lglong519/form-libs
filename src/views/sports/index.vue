@@ -82,8 +82,8 @@
 	function editForm () {
 		return {
 			count: null,
-			referenceDate: null,
-			createdAt: null,
+			referenceDate: undefined,
+			createdAt: undefined,
 		};
 	}
 	export default {
@@ -209,6 +209,14 @@
 			$route () {
 				this.source = this.$route.path.split('/').pop();
 				this.queryDatas();
+			},
+			editForm () {
+				if (typeof this.editForm.createdAt == 'string') {
+					this.editForm.createdAt = new Date(this.editForm.createdAt);
+				}
+				if (typeof this.editForm.referenceDate == 'string') {
+					this.editForm.referenceDate = new Date(this.editForm.referenceDate);
+				}
 			}
 		},
 		created () {

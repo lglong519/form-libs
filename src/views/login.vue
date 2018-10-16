@@ -80,8 +80,16 @@ export default {
 					cancelButtonText: '重新登录',
 					type: 'success',
 				}).then(() => {
+					// 避免 浏览器前进后退 <- ->导致的页面错误
+					if (!this.$route.path.includes('login')) {
+						return;
+					}
 					this.$router.push({ path: this.redirect || '/' });
 				}).catch(action => {
+					// 避免 浏览器前进后退 <- ->导致的页面错误
+					if (!this.$route.path.includes('login')) {
+						return;
+					}
 					if (action === 'cancel') {
 						this.$message({
 							type: 'warning',
