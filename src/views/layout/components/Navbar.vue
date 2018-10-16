@@ -5,7 +5,7 @@
 		<div class="float-right">
 			<span class="left-time">
 				<el-tooltip effect="dark" :content="leftTime>0?'会话过期时间':'登录已过期'" placement="bottom">
-					<el-tag size="mini" :type="leftTime<60000?'danger':''" :class="leftTime<60000?'blink':''">{{calcTime}}</el-tag>
+					<el-tag size="mini" :type="leftType" :class="leftTime<60000?'blink':''">{{calcTime}}</el-tag>
 				</el-tooltip>
 			</span>
 			<el-dropdown class="avatar-container" trigger="click">
@@ -61,6 +61,18 @@ export default {
 				return `0${h}:${m}:${s}`;
 			}
 			return `${m}:${s}`;
+		},
+		leftType () {
+			if (this.leftTime > 600000) {
+				return 'success';
+			}
+			if (this.leftTime < 60000) {
+				return 'danger';
+			}
+			if (this.leftTime < 180000) {
+				return 'warning';
+			}
+			return '';
 		}
 	},
 	methods: {

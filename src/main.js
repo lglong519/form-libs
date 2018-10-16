@@ -8,6 +8,7 @@ import store from './store';
 import plugin from './plugin';
 import ElementUI from 'element-ui';
 import debug from 'debug';
+import './utils/nprogress';
 
 import 'normalize.css/normalize.css';
 import 'element-ui/lib/theme-chalk/index.css';
