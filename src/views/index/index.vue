@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="s-weather-wrapper" style="height:32px;display:flex;align-items:center"></div>
+		<weather-info />
 		<div class="dashboard-editor-container">
 			<github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
 			<panel-group @handleSetLineChartData="handleSetLineChartData"/>
@@ -16,6 +16,7 @@
 import GithubCorner from '@/components/GithubCorner';
 import PanelGroup from './components/PanelGroup';
 import LineChart from './components/LineChart';
+import WeatherInfo from './components/WeatherInfo';
 
 export default {
 	name: 'Index',
@@ -23,6 +24,7 @@ export default {
 		GithubCorner,
 		PanelGroup,
 		LineChart,
+		WeatherInfo,
 	},
 	data () {
 		return {

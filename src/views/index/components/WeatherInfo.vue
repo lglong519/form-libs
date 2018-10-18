@@ -1,0 +1,97 @@
+<template>
+	<el-row type="flex" align="middle" class="s-weather-wrapper">
+		<span @click="selectCity">{{city}}</span>： {{week}}
+		<i class="spacer"></i>
+		{{lunar}}
+		<i class="spacer"></i>
+		<img :src="img">
+		<i class="spacer"></i>
+		{{temp}}
+		<i class="spacer"></i>
+		<el-tag size="mini" :type="quality">{{level}}</el-tag>
+		<i class="spacer"></i>
+		{{pm25}}
+	</el-row>
+</template>
+
+<style lang="scss" scoped>
+.s-weather-wrapper {
+  height: 32px;
+  padding: 0 10px;
+  color: #666;
+  font-size: 12px;
+  img {
+    width: 18px;
+    height: 18px;
+  }
+  .spacer{
+    margin-right: 8px;
+  }
+  span{
+	  cursor: pointer;
+  }
+}
+</style>
+
+<script>
+	import _ from 'lodash';
+	export default {
+		data () {
+			return {
+				weather: 30,
+				quality: ''
+			};
+		},
+		computed: {
+			city () {
+				return _.get(this.weather, 'data.weather.content.city');
+			},
+			week () {
+				return _.get(this.weather, 'data.weather.content.week');
+			},
+			temp () {
+				return _.get(this.weather, 'data.weather.content.today.temp');
+			},
+			img () {
+				return 'https://ss2.bdstatic.com/kfoZeXSm1A5BphGlnYG/icon/weather/aladdin/png_18/a2.png';
+				// return _.get(this.weather, 'data.weather.content.today.img[1]');
+			},
+			pm25 () {
+				return _.get(this.weather, 'data.weather.content.today.pm25');
+			},
+			lunar () {
+				return _.get(this.weather, 'data.weather.content.calendar.lunar');
+			},
+			level () {
+				if (this.pm25 <= 35) {
+					this.quality = 'success';
+					return '优';
+				}
+				if (this.pm25 <= 75) {
+					this.quality = '';
+					return '良';
+				}
+				if (this.pm25 <= 115) {
+					this.quality = 'warning';
+					return '轻';
+				}
+				if (this.pm25 <= 150) {
+					this.quality = 'danger';
+					return '中';
+				}
+				this.quality = 'danger';
+				return '重';
+			}
+		},
+		methods: {
+			selectCity () {
+	
+			}
+		},
+		async created () {
+			this.weather = await this.get('services/weather/东莞');
+		}
+	};
+</script>
+
+

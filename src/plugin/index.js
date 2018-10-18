@@ -11,5 +11,9 @@ export default {
 };
 
 Vue.filter('dateTime', (value, format = 'YYYY-MM-DD HH:mm:SS') => {
+	// 纯数字的 string 类型的 timestamp 会报错
+	if (typeof value == 'string' && (/^\d+$/g).test(value)) {
+		value *= 1;
+	}
 	return moment(value).format(format);
 });
