@@ -21,7 +21,6 @@
   color: #666;
   font-size: 12px;
   img {
-    width: 18px;
     height: 18px;
   }
   .spacer{
@@ -38,7 +37,7 @@
 	export default {
 		data () {
 			return {
-				weather: 30,
+				weather: JSON.parse(localStorage.getItem('weather')),
 				quality: ''
 			};
 		},
@@ -85,11 +84,12 @@
 		},
 		methods: {
 			selectCity () {
-	
+
 			}
 		},
 		async created () {
 			this.weather = await this.get('services/weather/东莞');
+			localStorage.setItem('weather', JSON.stringify(this.weather));
 		}
 	};
 </script>

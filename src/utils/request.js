@@ -10,7 +10,7 @@ const debug = require('debug')('app:request');
 // create an axios instance
 const service = axios.create({
 	baseURL: REQUST[MODE].BASE_URL, // api的base_url
-	timeout: 20000 // request timeout
+	timeout: 300000 // request timeout
 });
 
 // request interceptor

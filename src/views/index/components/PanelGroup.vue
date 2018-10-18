@@ -1,29 +1,29 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+      <div class="card-panel" @click="handleSetLineChartData('accesses')">
         <div class="card-panel-icon-wrapper icon-people">
 		  <i class="fa fa-odnoklassniki"></i>
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">Accesses</div>
-          <count-to :start-val="0" :end-val="3120" :duration="duration()" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="panelData.accesses" :duration="duration()" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
+      <div class="card-panel" @click="handleSetLineChartData('exercise')">
         <div class="card-panel-icon-wrapper icon-message">
 		  <i class="fa fa-soccer-ball-o"></i>
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">Exercise</div>
-          <count-to :start-val="0" :end-val="9213" :duration="duration()" class="card-panel-num"/>
+          <count-to :start-val="0" :end-val="panelData.pressUps+panelData.squats" :duration="duration()" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
+      <div class="card-panel" @click="handleSetLineChartData('expenses')">
         <div class="card-panel-icon-wrapper icon-money">
 		  <i class="fa fa-rmb"></i>
         </div>
@@ -34,13 +34,13 @@
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+      <div class="card-panel" @click="handleSetLineChartData('commits')">
         <div class="card-panel-icon-wrapper icon-shopping">
-		  <i class="fa fa-bed"></i>
+		  <i class="fa fa-github-square"></i>
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Sleep</div>
-          <count-to :start-val="0" :end-val="672" :duration="duration()" class="card-panel-num"/>
+          <div class="card-panel-text">Commits</div>
+          <count-to :start-val="0" :end-val="gitData.commits.total" :duration="duration()" class="card-panel-num"/>
         </div>
       </div>
     </el-col>
@@ -51,6 +51,14 @@
 import CountTo from 'vue-count-to';
 
 export default {
+	props: {
+		panelData: {
+			type: Object
+		},
+		gitData: {
+			type: Object
+		}
+	},
 	components: {
 		CountTo
 	},

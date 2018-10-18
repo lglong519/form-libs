@@ -1,8 +1,8 @@
 <template>
   <a href="https://github.com/lglong519" target="_blank" class="github-corner" aria-label="View My Github">
     <svg
-      width="80"
-      height="80"
+      :width="size"
+      :height="size"
       viewBox="0 0 250 250"
       style="fill:rgb(60, 81, 107); color:#fff;"
       aria-hidden="true">
@@ -49,3 +49,15 @@
   }
 }
 </style>
+<script>
+export default {
+	computed: {
+		size () {
+			if (this.$store.getters.device == 'mobile') {
+				return 45;
+			}
+			return 80;
+		}
+	}
+};
+</script>

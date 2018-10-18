@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}"/>
+  <div :class="className" :style="{height:realHeight,width:width}"/>
 </template>
 
 <script>
@@ -35,10 +35,20 @@ export default {
 			chart: null
 		};
 	},
+	computed: {
+		realHeight () {
+			if (this.$store.getters.device == 'mobile') {
+				return '250px';
+			}
+			return this.height;
+		}
+	},
 	watch: {
 		chartData: {
 			deep: true,
 			handler (val) {
+				this.chart.dispose();
+				this.chart = echarts.init(this.$el, 'macarons');
 				this.setOptions(val);
 			}
 		}
@@ -78,7 +88,51 @@ export default {
 				this.__resizeHandler();
 			}
 		},
-		setOptions ({ expectedData, actualData } = {}) {
+		setOptions (chartData) {
+			let legend = Object.keys(chartData);
+			let padding = [];
+			let series = legend.map((item, i) => {
+				padding.push((i + 1) * 5);
+				if (i % 2 == 0) {
+					return {
+						name: item,
+						smooth: true,
+						type: 'line',
+						itemStyle: {
+							normal: {
+								color: '#FF005A',
+								lineStyle: {
+									color: '#FF005A',
+									width: 2
+								}
+							}
+						},
+						data: chartData[item],
+						animationDuration: 2800,
+						animationEasing: 'cubicInOut'
+					};
+				}
+				return {
+					name: item,
+					smooth: true,
+					type: 'line',
+					itemStyle: {
+						normal: {
+							color: '#3888fa',
+							lineStyle: {
+								color: '#3888fa',
+								width: 2
+							},
+							areaStyle: {
+								color: '#f3f8ff'
+							}
+						}
+					},
+					data: chartData[item],
+					animationDuration: 2800,
+					animationEasing: 'quadraticOut'
+				};
+			});
 			this.chart.setOption({
 				xAxis: {
 					data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -99,7 +153,7 @@ export default {
 					axisPointer: {
 						type: 'cross'
 					},
-					padding: [5, 10]
+					padding
 				},
 				yAxis: {
 					axisTick: {
@@ -107,45 +161,9 @@ export default {
 					}
 				},
 				legend: {
-					data: ['expected', 'actual']
+					data: legend
 				},
-				series: [{
-					name: 'expected',
-					itemStyle: {
-						normal: {
-							color: '#FF005A',
-							lineStyle: {
-								color: '#FF005A',
-								width: 2
-							}
-						}
-					},
-					smooth: true,
-					type: 'line',
-					data: expectedData,
-					animationDuration: 2800,
-					animationEasing: 'cubicInOut'
-				},
-				{
-					name: 'actual',
-					smooth: true,
-					type: 'line',
-					itemStyle: {
-						normal: {
-							color: '#3888fa',
-							lineStyle: {
-								color: '#3888fa',
-								width: 2
-							},
-							areaStyle: {
-								color: '#f3f8ff'
-							}
-						}
-					},
-					data: actualData,
-					animationDuration: 2800,
-					animationEasing: 'quadraticOut'
-				}]
+				series
 			});
 		},
 		initChart () {
