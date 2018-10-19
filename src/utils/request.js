@@ -78,7 +78,7 @@ service.interceptors.response.use(
 		let duration = 3000;
 		let redirect;
 		let message;
-		if (error.response.status === 401) {
+		if (_.get(error, 'response.status') === 401) {
 			store.commit('GET_PROFILE', {});
 			message = '未登录';
 			duration = 2000;

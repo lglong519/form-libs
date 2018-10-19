@@ -69,6 +69,7 @@ export default {
 		}
 	},
 	async created () {
+		this.lineChartData.commits.contributions = this.gitData.commits.week;
 		await this.aggregation();
 		this.lineChartData.commits.contributions = this.gitData.commits.week;
 	}

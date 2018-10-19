@@ -15,21 +15,23 @@
 </template>
 
 <style lang="scss" scoped>
-.s-weather-wrapper {
-  height: 32px;
-  padding: 0 10px;
-  color: #666;
-  font-size: 12px;
-  img {
-    height: 18px;
-  }
-  .spacer{
-    margin-right: 8px;
-  }
-  span{
-	  cursor: pointer;
-  }
-}
+	.s-weather-wrapper {
+	  height: 32px;
+	  padding: 0 10px;
+	  color: #666;
+	  font-size: 12px;
+	  img {
+	    margin-right: -5px;
+	    height: 20px;
+	    filter: contrast(50%);
+	  }
+	  .spacer {
+	    margin-right: 8px;
+	  }
+	  span {
+	    cursor: pointer;
+	  }
+	}
 </style>
 
 <script>
@@ -52,8 +54,7 @@
 				return _.get(this.weather, 'data.weather.content.today.temp');
 			},
 			img () {
-				return 'https://ss2.bdstatic.com/kfoZeXSm1A5BphGlnYG/icon/weather/aladdin/png_18/a2.png';
-				// return _.get(this.weather, 'data.weather.content.today.img[1]');
+				return _.get(this.weather, 'data.weather.content.today.img[0]');
 			},
 			pm25 () {
 				return _.get(this.weather, 'data.weather.content.today.pm25');
