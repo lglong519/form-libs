@@ -53,26 +53,38 @@ export default new Router({
 			]
 		},
 		{
-			path: '/sports',
-			redirect: '/sports/squats',
-			name: 'Sports',
+			path: '/exercise',
+			redirect: '/exercise/squats',
+			name: 'Exercise',
 			component: Layout,
 			meta: {
-				title: 'Sports',
-				icon: 'futbol-o'
+				title: 'Exercise',
+				icon: 'futbol-o',
 			},
 			children: [
 				{
-					path: '/sports/squats',
+					path: '/exercise/squats',
 					name: 'Squats',
-					component: () => import('@/views/sports/index'),
+					component: () => import('@/views/exercise/index'),
 					meta: { title: 'Squats', icon: 'child' }
 				},
 				{
-					path: '/sports/press-ups',
+					path: '/exercise/press-ups',
 					name: 'PressUps',
-					component: () => import('@/views/sports/index'),
+					component: () => import('@/views/exercise/index'),
 					meta: { title: 'PressUps', icon: 'hand-paper-o' }
+				}
+			]
+		},
+		{
+			path: '/expenses',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					name: 'Expenses',
+					component: () => import('@/views/expenses/index'),
+					meta: { title: 'Expenses', icon: 'yen' }
 				}
 			]
 		},
@@ -82,7 +94,7 @@ export default new Router({
 			children: [
 				{
 					path: REQUST[MODE].YUN_DOMAIN,
-					meta: { title: 'Space', icon: 'cloud' }
+					meta: { title: 'Space', icon: 'upload', type: 'el' }
 				}
 			]
 		},

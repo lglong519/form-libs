@@ -61,9 +61,6 @@ export default {
 		},
 		async aggregation () {
 			this.panelData = await this.get('services/aggregation');
-			if (Date.now() - this.gitData.entryDate < 900000) {
-				return;
-			}
 			this.gitData = await this.get('services/aggregation/git/lglong519');
 			localStorage.setItem('gitData', JSON.stringify(this.gitData));
 		}

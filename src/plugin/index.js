@@ -17,3 +17,7 @@ Vue.filter('dateTime', (value, format = 'YYYY-MM-DD HH:mm:SS') => {
 	}
 	return moment(value).format(format);
 });
+
+Vue.filter('currency', (value, symbol = '￥') => {
+	return symbol + (value / 100).toFixed(2);
+});

@@ -63,7 +63,7 @@
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
 			<el-form :model="editPackage" :rules="editRules" ref="editPackage">
 				<el-form-item label="name" prop="name">
-					<el-input v-model="editPackage.name" placeholder="请输入包名"></el-input>
+					<el-input v-model="editPackage.name" placeholder="请输入包名" autofocus="true"></el-input>
 				</el-form-item>
 				<el-form-item label="var" prop="var">
 					<el-input v-model="editPackage.var" placeholder="请输入变量名"></el-input>
@@ -95,11 +95,13 @@
 
 <script>
 	import { validateURL } from '@/utils/validate';
+	import DateTime from '@/utils/dateTime';
 	const packages = {
 		lodash: require('lodash'),
 		moment: require('moment'),
 		joi: require('joi'),
 		jquery: require('jquery'),
+		dateTime: DateTime,
 	};
 
 	function editPackage () {
