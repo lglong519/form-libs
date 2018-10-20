@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import login from '@/views/login';
+import { REQUST, MODE } from '@/.config';
 
 Vue.use(Router);
 
@@ -72,6 +73,36 @@ export default new Router({
 					name: 'PressUps',
 					component: () => import('@/views/sports/index'),
 					meta: { title: 'PressUps', icon: 'hand-paper-o' }
+				}
+			]
+		},
+		{
+			path: 'Space',
+			component: Layout,
+			children: [
+				{
+					path: REQUST[MODE].YUN_DOMAIN,
+					meta: { title: 'Space', icon: 'cloud' }
+				}
+			]
+		},
+		{
+			path: 'Mongo',
+			component: Layout,
+			children: [
+				{
+					path: REQUST[MODE].MONGO_DOMAIN,
+					meta: { title: 'Mongo', icon: 'database' }
+				}
+			]
+		},
+		{
+			path: 'MoFunc.com',
+			component: Layout,
+			children: [
+				{
+					path: REQUST[MODE].MAIN_DOMAIN,
+					meta: { title: 'MoFunc.com', icon: 'link' }
 				}
 			]
 		},

@@ -36,7 +36,7 @@ import processLeftTime from '@/utils/processLeftTime';
 export default {
 	data () {
 		return {
-			avatar: require('@/assets/logo.png'),
+			avatar: require('@/assets/avatar.svg'),
 			openSetting: false,
 		};
 	},
