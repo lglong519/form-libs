@@ -30,16 +30,16 @@ export default {
 		return {
 			lineChartData: {
 				accesses: {
-					expectedData: [100, 120, 161, 134, 105, 160, 165],
-					actualData: [120, 82, 91, 154, 162, 140, 145]
+					accesses: [],
+					auditlogs: []
 				},
 				exercise: {
-					expectedData: [200, 192, 120, 144, 160, 130, 140],
-					actualData: [180, 160, 151, 106, 145, 150, 130]
+					squats: [],
+					pressUps: []
 				},
 				expenses: {
-					expectedData: [80, 100, 121, 104, 105, 90, 100],
-					actualData: [120, 90, 100, 138, 142, 130, 130]
+					food: [],
+					general: []
 				},
 				commits: {
 					contributions: [],
@@ -61,14 +61,29 @@ export default {
 		},
 		async aggregation () {
 			this.panelData = await this.get('services/aggregation');
+			this.lineChartData.accesses = {
+				accesses: this.panelData.accesses.week,
+				auditlogs: this.panelData.auditlogs.week
+			};
+			this.lineChartData.expenses = {
+				food: this.panelData.expenses.food.week.map(item => item / 100),
+				general: this.panelData.expenses.general.week.map(item => item / 100),
+			};
+			this.lineChartData.exercise = {
+				squats: this.panelData.exercise.squats.week,
+				pressUps: this.panelData.exercise.pressUps.week
+			};
+		},
+		async getGit () {
+			this.lineChartData.commits.contributions = this.gitData.commits.week;
 			this.gitData = await this.get('services/aggregation/git/lglong519');
 			localStorage.setItem('gitData', JSON.stringify(this.gitData));
+			this.lineChartData.commits.contributions = this.gitData.commits.week;
 		}
 	},
 	async created () {
-		this.lineChartData.commits.contributions = this.gitData.commits.week;
-		await this.aggregation();
-		this.lineChartData.commits.contributions = this.gitData.commits.week;
+		this.aggregation();
+		this.getGit();
 	}
 };
 </script>

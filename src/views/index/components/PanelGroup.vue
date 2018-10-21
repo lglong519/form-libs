@@ -7,7 +7,7 @@
 				</div>
 				<div class="card-panel-description">
 					<div class="card-panel-text">Accesses</div>
-					<count-to :start-val="0" :end-val="panelData.accesses" :duration="duration()" class="card-panel-num" />
+					<count-to :start-val="0" :end-val="accesses" :duration="duration()" class="card-panel-num" />
 				</div>
 			</div>
 		</el-col>
@@ -18,7 +18,7 @@
 				</div>
 				<div class="card-panel-description">
 					<div class="card-panel-text">Exercise</div>
-					<count-to :start-val="0" :end-val="panelData.pressUps+panelData.squats" :duration="duration()" class="card-panel-num" />
+					<count-to :start-val="0" :end-val="exercise" :duration="duration()" class="card-panel-num" />
 				</div>
 			</div>
 		</el-col>
@@ -29,7 +29,7 @@
 				</div>
 				<div class="card-panel-description">
 					<div class="card-panel-text">Expenses</div>
-					<count-to :start-val="0" :end-val="5280" :duration="duration()" class="card-panel-num" />
+					<count-to :start-val="0" :end-val="expenses/100" :duration="duration()" class="card-panel-num" />
 				</div>
 			</div>
 		</el-col>
@@ -49,7 +49,7 @@
 
 <script>
 import CountTo from 'vue-count-to';
-
+import * as _ from 'lodash';
 export default {
 	data () {
 		return {
@@ -59,7 +59,16 @@ export default {
 	computed: {
 		device () {
 			return this.$store.getters.device;
-		}
+		},
+		accesses () {
+			return _.get(this.panelData, 'accesses.total') || 0;
+		},
+		exercise () {
+			return _.get(this.panelData, 'exercise.total') || 0;
+		},
+		expenses () {
+			return _.get(this.panelData, 'expenses.total') || 0;
+		},
 	},
 	watch: {
 		device () {

@@ -57,6 +57,9 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
+				<el-form-item label="备注" prop="note">
+					<el-input type="textarea" v-model="editExpense.note" placeholder="请输入内容"></el-input>
+				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="cancel">取 消</el-button>

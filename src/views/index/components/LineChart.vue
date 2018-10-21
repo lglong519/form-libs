@@ -32,6 +32,7 @@ export default {
 	},
 	data () {
 		return {
+			week: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
 			chart: null
 		};
 	},
@@ -135,7 +136,7 @@ export default {
 			});
 			this.chart.setOption({
 				xAxis: {
-					data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+					data: this.week,
 					boundaryGap: false,
 					axisTick: {
 						show: false
@@ -167,6 +168,9 @@ export default {
 			});
 		},
 		initChart () {
+			for (let i = 0; i < new Date().getDay(); i++) {
+				this.week.push(this.week.shift());
+			}
 			this.chart = echarts.init(this.$el, 'macarons');
 			this.setOptions(this.chartData);
 		}
