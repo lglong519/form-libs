@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import login from '@/views/login';
 import { REQUST, MODE } from '@/.config';
+let mode = localStorage.getItem('mode');
+mode || (mode = MODE);
 
 Vue.use(Router);
 
@@ -93,7 +95,7 @@ export default new Router({
 			component: Layout,
 			children: [
 				{
-					path: REQUST[MODE].YUN_DOMAIN,
+					path: REQUST[mode].YUN_DOMAIN,
 					meta: { title: 'Space', icon: 'upload', type: 'el' }
 				}
 			]
@@ -103,7 +105,7 @@ export default new Router({
 			component: Layout,
 			children: [
 				{
-					path: REQUST[MODE].MONGO_DOMAIN,
+					path: REQUST[mode].MONGO_DOMAIN,
 					meta: { title: 'Mongo', icon: 'database' }
 				}
 			]
@@ -113,7 +115,7 @@ export default new Router({
 			component: Layout,
 			children: [
 				{
-					path: REQUST[MODE].MAIN_DOMAIN,
+					path: REQUST[mode].MAIN_DOMAIN,
 					meta: { title: 'MoFunc.com', icon: 'link' }
 				}
 			]

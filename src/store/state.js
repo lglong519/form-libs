@@ -1,3 +1,5 @@
+import { MODE } from '@/.config';
+
 const state = {
 	account: localStorage.getItem('account'),
 	sidebar: {
@@ -8,6 +10,7 @@ const state = {
 	myProfile: {},
 	leftTime: 0,
 	timer: null,
+	mode: localStorage.getItem('mode') || MODE
 	/*
 	tagsView: {
 		visitedViews: [],

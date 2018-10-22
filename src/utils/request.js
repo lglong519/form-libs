@@ -6,10 +6,12 @@ import { SESSION_KEY, REQUST, MODE, SESSION_EXPIRE_TIME } from '@/.config';
 import { Message, MessageBox } from 'element-ui';
 import _ from 'lodash';
 const debug = require('debug')('app:request');
+let mode = localStorage.getItem('mode');
+mode || (mode = MODE);
 
 // create an axios instance
 const service = axios.create({
-	baseURL: REQUST[MODE].BASE_URL, // api的base_url
+	baseURL: REQUST[mode].BASE_URL, // api的base_url
 	timeout: 300000 // request timeout
 });
 

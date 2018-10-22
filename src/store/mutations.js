@@ -29,4 +29,8 @@ export default {
 	SET_TIMER (state, timer) {
 		state.timer = timer;
 	},
+	SET_MODE (state, mode) {
+		state.mode = mode;
+		localStorage.setItem('mode', mode);
+	},
 };
