@@ -7,7 +7,8 @@ mode || (mode = MODE);
 
 Vue.use(Router);
 
-import Layout from '@/views/layout/Layout';
+// import Layout from '@/views/layout/Layout';
+const Layout = resolve => require(['@/views/layout/Layout'], resolve);
 
 export default new Router({
 	mode: 'history',
@@ -21,7 +22,8 @@ export default new Router({
 			children: [{
 				path: 'index',
 				name: 'index',
-				component: () => import('@/views/index/index'),
+				// component: () => import('@/views/index/index'),
+				component: resolve => require(['@/views/index/index'], resolve),
 				meta: { title: 'Index' }
 			}]
 		},
@@ -37,7 +39,8 @@ export default new Router({
 				{
 					path: '',
 					name: 'Access',
-					component: () => import('@/views/access/index'),
+					// component: () => import('@/views/access/index'),
+					component: resolve => require(['@/views/access/index'], resolve),
 					meta: { title: 'Access', icon: 'table' }
 				}
 			]
@@ -49,7 +52,8 @@ export default new Router({
 				{
 					path: '',
 					name: 'Packages',
-					component: () => import('@/views/packages/index'),
+					// component: () => import('@/views/packages/index'),
+					component: resolve => require(['@/views/packages/index'], resolve),
 					meta: { title: 'Packages', icon: 'codepen' }
 				}
 			]
@@ -67,13 +71,15 @@ export default new Router({
 				{
 					path: '/exercise/squats',
 					name: 'Squats',
-					component: () => import('@/views/exercise/index'),
+					// component: () => import('@/views/exercise/index'),
+					component: resolve => require(['@/views/exercise/index'], resolve),
 					meta: { title: 'Squats', icon: 'child' }
 				},
 				{
 					path: '/exercise/press-ups',
 					name: 'PressUps',
-					component: () => import('@/views/exercise/index'),
+					// component: () => import('@/views/exercise/index'),
+					component: resolve => require(['@/views/exercise/index'], resolve),
 					meta: { title: 'PressUps', icon: 'hand-paper-o' }
 				}
 			]
@@ -85,7 +91,9 @@ export default new Router({
 				{
 					path: '',
 					name: 'Expenses',
-					component: () => import('@/views/expenses/index'),
+					// component: () => import('@/views/expenses/index'),
+					component: resolve => require(['@/views/expenses/index'], resolve),
+
 					meta: { title: 'Expenses', icon: 'yen' }
 				}
 			]
