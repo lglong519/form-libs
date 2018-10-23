@@ -9,6 +9,7 @@ Vue.use(Router);
 
 // import Layout from '@/views/layout/Layout';
 const Layout = resolve => require(['@/views/layout/Layout'], resolve);
+const CFOP = resolve => require(['@/views/cfop/index'], resolve);
 
 export default new Router({
 	mode: 'history',
@@ -96,6 +97,36 @@ export default new Router({
 
 					meta: { title: 'Expenses', icon: 'yen' }
 				}
+			]
+		},
+		{
+			path: '/cfop',
+			redirect: '/cfop/f2ls',
+			name: 'CFOP',
+			component: Layout,
+			meta: {
+				title: 'CFOP',
+				icon: 'cube',
+			},
+			children: [
+				{
+					path: '/cfop/f2ls',
+					name: 'F2L',
+					component: CFOP,
+					meta: { title: 'F2L', icon: 'plus-square-o' }
+				},
+				{
+					path: '/cfop/olls',
+					name: 'OLL',
+					component: CFOP,
+					meta: { title: 'OLL', icon: 'delicious' }
+				},
+				{
+					path: '/cfop/plls',
+					name: 'PLL',
+					component: CFOP,
+					meta: { title: 'PLL', icon: 'th-large' }
+				},
 			]
 		},
 		{
