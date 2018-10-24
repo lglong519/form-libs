@@ -22,7 +22,7 @@
 			</el-row>
 
 			<!-- content -->
-			<el-table :data="tableDatas" row-key="order" :row-class-name="tableRowClassName" v-loading="tableLoading" :default-sort="{prop: 'order', order: 'ascending'}" border>
+			<el-table :data="tableDatas" :row-class-name="tableRowClassName" v-loading="tableLoading" :default-sort="{prop: 'order', order: 'ascending'}" border>
 				<el-table-column prop="order" class="order" label="#" width="55" align="center" sortable>
 				</el-table-column>
 				<el-table-column prop="number" label="No" width="65" align="center" sortable></el-table-column>
@@ -50,44 +50,16 @@
 			</el-table>
 			<div class="pagination-container">
 				<div class="multi-edit">
-					<el-button type="warning" size="small" disabled plain>拖拽排序</el-button>
+					<el-button type="warning" size="small" @click="toReorder" plain>重新排序</el-button>
 				</div>
 				<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
 			</div>
 		</el-card>
-		<!-- edit dialog -->
-		<!--
-		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
-			<el-form :model="editForm" :rules="editRules" ref="editform">
-				<el-form-item label="count" prop="count">
-					<el-input v-model.number="editForm.count" placeholder="请输入数量" autofocus="true"></el-input>
-				</el-form-item>
-				<el-form-item label="参考日期" prop="referenceDate">
-					<el-date-picker type="datetime" placeholder="选择日期" v-model="editForm.referenceDate" style="width: 100%;"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="实际日期" prop="createdAt">
-					<el-date-picker type="datetime" placeholder="选择日期" v-model="editForm.createdAt" style="width: 100%;"></el-date-picker>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="cancel">取 消</el-button>
-				<el-button type="primary" @click="submit">确 定</el-button>
-			</div>
-		</el-dialog>
-		 -->
 	</div>
 </template>
 
 
 <style lang="scss" scoped>
-	.el-table .warning-row {
-	  background: oldlace;
-	}
-
-	.el-table .success-row {
-	  background: #f0f9eb;
-	}
-
 	.ico {
 	  width: 35px;
 	}
@@ -106,13 +78,6 @@
 </style>
 
 <script>
-	function editForm () {
-		return {
-			count: null,
-			referenceDate: undefined,
-			createdAt: undefined,
-		};
-	}
 	export default {
 		data () {
 			return {
@@ -125,23 +90,7 @@
 					pageSize: 10,
 				},
 				searchVal: null,
-				editForm: editForm(),
-				dialog: {
-					visible: false,
-					title: null
-				},
-				editRules: {
-					count: [
-						{ required: true, message: '请输入数量', trigger: 'blur' },
-						{ type: 'number', message: '必须为数字值' }
-					],
-					referenceDate: [
-						{ type: 'date', message: '请选择日期', trigger: 'change' }
-					],
-					createdAt: [
-						{ type: 'date', message: '请选择日期', trigger: 'change' }
-					],
-				},
+				dialogVisible: false,
 				tableLoading: false
 			};
 		},
@@ -174,33 +123,7 @@
 					this.tableLoading = false;
 				});
 			},
-			toggleEdit (data) {
-				if (data._id) {
-					this.dialog.title = '修改';
-					this.editForm = JSON.parse(JSON.stringify(data));
-				} else {
-					this.dialog.title = '新建';
-				}
-				this.dialog.visible = true;
-			},
-			submit () {
-				this.$refs.editform.validate(async valid => {
-					if (valid) {
-						if (this.editForm._id) {
-							await this.patch(`cfop/${this.source}/${this.editForm._id}`, this.editForm);
-						} else {
-							await this.post(`cfop/${this.source}`, this.editForm);
-						}
-						await this.queryDatas();
-						this.dialog.visible = false;
-						this.editForm = editForm();
-					}
-				});
-			},
-			cancel () {
-				this.dialog.visible = false;
-				this.editForm = editForm();
-			},
+			toggleEdit () {},
 			refresh () {
 				this.queryDatas();
 			},
@@ -214,19 +137,14 @@
 					});
 				}
 			},
+			toReorder () {
+				this.$router.push({ path: `/cfop/${this.source}/reorder` });
+			},
 		},
 		watch: {
 			$route () {
 				this.source = this.$route.path.split('/').pop();
 				this.queryDatas();
-			},
-			editForm () {
-				if (typeof this.editForm.createdAt == 'string') {
-					this.editForm.createdAt = new Date(this.editForm.createdAt);
-				}
-				if (typeof this.editForm.referenceDate == 'string') {
-					this.editForm.referenceDate = new Date(this.editForm.referenceDate);
-				}
 			}
 		},
 		created () {

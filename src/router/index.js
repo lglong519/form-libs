@@ -10,6 +10,7 @@ Vue.use(Router);
 // import Layout from '@/views/layout/Layout';
 const Layout = resolve => require(['@/views/layout/Layout'], resolve);
 const CFOP = resolve => require(['@/views/cfop/index'], resolve);
+const Sort = resolve => require(['@/views/cfop/sort'], resolve);
 
 export default new Router({
 	mode: 'history',
@@ -113,7 +114,7 @@ export default new Router({
 					path: '/cfop/f2ls',
 					name: 'F2L',
 					component: CFOP,
-					meta: { title: 'F2L', icon: 'plus-square-o' }
+					meta: { title: 'F2L', icon: 'plus-square-o' },
 				},
 				{
 					path: '/cfop/olls',
@@ -127,6 +128,39 @@ export default new Router({
 					component: CFOP,
 					meta: { title: 'PLL', icon: 'th-large' }
 				},
+			]
+		},
+		{
+			hidden: true,
+			path: '/cfop/f2ls/reorder',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					component: Sort,
+				}
+			]
+		},
+		{
+			hidden: true,
+			path: '/cfop/olls/reorder',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					component: Sort,
+				}
+			]
+		},
+		{
+			hidden: true,
+			path: '/cfop/plls/reorder',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					component: Sort,
+				}
 			]
 		},
 		{
