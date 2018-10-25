@@ -71,9 +71,10 @@
 		},
 		methods: {
 			tableRowClassName ({ row, rowIndex }) {
-				if (rowIndex === 1) {
+				if ((rowIndex + 3) % 4 == 0) {
 					return 'warning-row';
-				} else if (rowIndex === 3) {
+				}
+				if ((rowIndex + 1) % 4 == 0) {
 					return 'success-row';
 				}
 				return '';
@@ -101,6 +102,8 @@
 						dataTransfer.setData('Text', '');
 					},
 					onEnd: e => {
+						console.log(e.oldIndex, e.newIndex);
+
 						const splice = this.tableDatas.splice(e.oldIndex, 1)[0];
 						this.tableDatas.splice(e.newIndex, 0, splice);
 					}

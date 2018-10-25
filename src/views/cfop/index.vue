@@ -96,9 +96,10 @@
 		},
 		methods: {
 			tableRowClassName ({ row, rowIndex }) {
-				if (rowIndex === 1) {
+				if ((rowIndex + 3) % 4 == 0) {
 					return 'warning-row';
-				} else if (rowIndex === 3) {
+				}
+				if ((rowIndex + 1) % 4 == 0) {
 					return 'success-row';
 				}
 				return '';

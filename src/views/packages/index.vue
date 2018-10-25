@@ -83,16 +83,6 @@
 	</div>
 </template>
 
-<style>
-	.el-table .warning-row {
-	  background: oldlace;
-	}
-
-	.el-table .success-row {
-	  background: #f0f9eb;
-	}
-</style>
-
 <script>
 	import { validateURL } from '@/utils/validate';
 	import DateTime from '@/utils/dateTime';
@@ -157,9 +147,10 @@
 		},
 		methods: {
 			tableRowClassName ({ row, rowIndex }) {
-				if (rowIndex === 1) {
+				if ((rowIndex + 3) % 4 == 0) {
 					return 'warning-row';
-				} else if (rowIndex === 3) {
+				}
+				if ((rowIndex + 1) % 4 == 0) {
 					return 'success-row';
 				}
 				return '';

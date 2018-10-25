@@ -21,29 +21,19 @@
 				</div>
 			</el-row>
 
-			<el-table :data="packages" :row-class-name="tableRowClassName" v-loading="tableLoading">
-				<el-table-column prop="name" label="name"></el-table-column>
-				<el-table-column prop="var" label="var">
+			<el-table :data="users" :row-class-name="tableRowClassName" v-loading="tableLoading">
+				<el-table-column prop="image" label="ico" width="60" align="center">
 					<template slot-scope="scope">
-						{{scope.row.var}}
-						<span @click="copyToClipboard(scope.row.var)"><el-tag size="mini" type="warning">复制</el-tag></span>
+						<img v-if="scope.row.image" class="ico" :src="scope.row.image" />
 					</template>
 				</el-table-column>
-				<el-table-column prop="link" label="doc">
-					<template slot-scope="scope">
-						<a :href="scope.row.link" target="_blank">
-							<el-tooltip class="item" effect="dark" :content="scope.row.link" placement="right-start">
-								<el-button type="text">前往</el-button>
-							</el-tooltip>
-						</a>
-					</template>
+				<el-table-column prop="username" label="name"></el-table-column>
+				<el-table-column prop="email" label="email">
 				</el-table-column>
-				<el-table-column prop="isActive" label="status">
-					<template slot-scope="scope">
-						<el-switch v-model="scope.row.isActive" active-color="#13ce66" inactive-color="#ff4949" :change="switchPackage(scope.row)">
-						</el-switch>
-					</template>
+				<el-table-column prop="phone" label="phone">
 				</el-table-column>
+				<el-table-column prop="inc" label="inc" width="60"></el-table-column>
+				<el-table-column prop="client" label="client"></el-table-column>
 				<el-table-column width="70" label="action">
 					<template slot-scope="scope">
 						<el-button icon="el-icon-edit" size="mini" plain @click="toggleEdit(scope.row)"></el-button>
@@ -62,17 +52,17 @@
 		<!-- edit dialog -->
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
 			<el-form :model="editPackage" :rules="editRules" ref="editPackage">
-				<el-form-item label="name" prop="name">
-					<el-input v-model="editPackage.name" placeholder="请输入包名"></el-input>
+				<el-form-item label="name" prop="username">
+					<el-input v-model="editPackage.username" placeholder="请输入username"></el-input>
 				</el-form-item>
-				<el-form-item label="var" prop="var">
-					<el-input v-model="editPackage.var" placeholder="请输入变量名"></el-input>
+				<el-form-item label="email" prop="email">
+					<el-input v-model="editPackage.email" placeholder="请输入email"></el-input>
 				</el-form-item>
-				<el-form-item label="link" prop="link">
-					<el-input v-model="editPackage.link" placeholder="请输入文档链接"></el-input>
+				<el-form-item label="phone" prop="phone">
+					<el-input v-model="editPackage.phone" placeholder="请输入phone"></el-input>
 				</el-form-item>
-				<el-form-item label="是否启用" prop="isActive">
-					<el-switch v-model="editPackage.isActive" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+				<el-form-item label="image" prop="image">
+					<el-input v-model="editPackage.image" placeholder="请输入image"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -83,31 +73,20 @@
 	</div>
 </template>
 
-<style>
-	.el-table .warning-row {
-	  background: oldlace;
-	}
-
-	.el-table .success-row {
-	  background: #f0f9eb;
+<style lang="scss" scoped>
+	.ico {
+	  width: 35px;
 	}
 </style>
 
 <script>
 	import { validateURL } from '@/utils/validate';
-	const packages = {
-		lodash: require('lodash'),
-		moment: require('moment'),
-		joi: require('joi'),
-		jquery: require('jquery'),
-	};
-
 	function editPackage () {
 		return {
-			name: null,
-			var: null,
-			link: 'http://mofunc.com/',
-			isActive: true,
+			username: undefined,
+			email: undefined,
+			phone: undefined,
+			image: undefined,
 		};
 	}
 	export default {
@@ -122,7 +101,7 @@
 				}
 			}
 			return {
-				packages: [],
+				users: [],
 				pagination: {
 					total: 0,
 					currentPage: 1,
@@ -136,18 +115,18 @@
 					title: null
 				},
 				editRules: {
-					name: [
-						{ required: true, message: '请输入包名', trigger: 'blur' }
+					username: [
+						{ required: true, message: '请输入', trigger: 'blur' }
 					],
-					var: [
-						{ required: true, message: '请输入变量名', trigger: 'blur' }
+					email: [
+						{ required: true, message: '请输入', trigger: 'blur' }
 					],
-					link: [
+					phone: [
+						{ required: true, message: '请输入', trigger: 'blur' }
+					],
+					image: [
 						{ required: true, message: '请输入链接', trigger: 'blur' },
 						{ validator: validLink, trigger: 'blur' }
-					],
-					isActive: [
-						{ type: 'boolean', message: '必须为布尔值' }
 					],
 				},
 				tableLoading: false
@@ -155,33 +134,13 @@
 		},
 		methods: {
 			tableRowClassName ({ row, rowIndex }) {
-				if (rowIndex === 1) {
+				if ((rowIndex + 3) % 4 == 0) {
 					return 'warning-row';
-				} else if (rowIndex === 3) {
+				}
+				if ((rowIndex + 1) % 4 == 0) {
 					return 'success-row';
 				}
 				return '';
-			},
-			loadPackages () {
-				this.packages.forEach(elem => {
-					elem && this.switchPackage(elem);
-				});
-			},
-			switchPackage (data) {
-				if (data.isActive) {
-					if (!window[data.var]) {
-						if (!packages[data.name]) {
-							this.$message({
-								message: `Cannot find module '${data.name}'`,
-								type: 'error'
-							});
-						} else {
-							window[data.var] = packages[data.name];
-						}
-					}
-				} else {
-					window[data.var] = null;
-				}
 			},
 			pageSizeChange (e) {
 				this.pagination.pageSize = e;
@@ -197,9 +156,9 @@
 				if (this.searchVal) {
 					searchVal = `{"name":{"$regex":"${this.searchVal}","$options":"$i"}}`;
 				}
-				return this.query(`services/packages?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
+				return this.query(`services/users?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
-					this.packages = res.data;
+					this.users = res.data;
 					this.tableLoading = false;
 				});
 			},
@@ -216,9 +175,9 @@
 				this.$refs.editPackage.validate(async valid => {
 					if (valid) {
 						if (this.editPackage._id) {
-							await this.patch(`services/packages/${this.editPackage._id}`, this.editPackage);
+							await this.patch(`services/users/${this.editPackage._id}`, this.editPackage);
 						} else {
-							await this.post('services/packages', this.editPackage);
+							await this.post('services/users', this.editPackage);
 						}
 						await this.queryPackages();
 						this.dialog.visible = false;
@@ -232,7 +191,6 @@
 			},
 			async refresh () {
 				await this.queryPackages();
-				this.loadPackages();
 			},
 			remove (data) {
 				this.$confirm(`此操作将永久删除:${data.name}, 是否继续?`, '提示', {
@@ -240,7 +198,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(async () => {
-					await this.del(`services/packages/${data._id}`);
+					await this.del(`services/users/${data._id}`);
 					this.$notify.success({
 						message: '删除成功',
 					});
@@ -252,18 +210,6 @@
 					});
 				});
 
-			},
-			copyToClipboard (text) {
-				let _tmpInput = document.createElement('input');
-				_tmpInput.value = text;
-				document.body.appendChild(_tmpInput);
-				_tmpInput.select();
-				document.execCommand('Copy');
-				document.body.removeChild(_tmpInput);
-				this.$message({
-					message: '已复制到剪切版',
-					type: 'success'
-				});
 			},
 			search () {
 				if (this.searchVal) {
@@ -279,7 +225,6 @@
 		},
 		async mounted () {
 			await this.queryPackages();
-			this.loadPackages();
 		}
 	};
 </script>

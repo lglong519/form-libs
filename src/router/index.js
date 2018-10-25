@@ -164,6 +164,18 @@ export default new Router({
 			]
 		},
 		{
+			path: '/users',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					name: 'Users',
+					component: resolve => require(['@/views/users/index'], resolve),
+					meta: { title: 'Users', icon: 'user-o' }
+				}
+			]
+		},
+		{
 			path: 'Space',
 			component: Layout,
 			children: [
