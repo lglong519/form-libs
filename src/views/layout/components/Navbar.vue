@@ -8,24 +8,7 @@
 					<el-tag size="mini" :type="leftType" :class="leftTime<60000?'blink':''">{{calcTime}}</el-tag>
 				</el-tooltip>
 			</el-row>
-			<el-dropdown trigger="click" class="clear-all">
-				<div class="mr-10">
-					<el-tooltip effect="dark" content="localhost" placement="bottom">
-						<el-tag type="info" size="mini">MODE</el-tag>
-					</el-tooltip>
-				</div>
-				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item :class="mode=='localhost'&&'hover'">
-						<span style="display:block;" @click="toggleMode('localhost')">localhost</span>
-					</el-dropdown-item>
-					<el-dropdown-item :class="mode=='development'&&'hover'">
-						<span style="display:block;" @click="toggleMode('development')">development</span>
-					</el-dropdown-item>
-					<el-dropdown-item :class="mode=='development'&&'hover'" divided>
-						<span style="display:block;" @click="toggleMode('')">重置</span>
-					</el-dropdown-item>
-				</el-dropdown-menu>
-			</el-dropdown>
+			<toggle-mode class="clear-all mr-10"></toggle-mode>
 			<el-dropdown class="avatar-container" trigger="click">
 				<div class="avatar-wrapper">
 					<img :src="myProfile.image||avatar" class="user-avatar">
@@ -49,6 +32,7 @@ import { mapGetters } from 'vuex';
 import Breadcrumb from '@/components/Breadcrumb';
 import Hamburger from '@/components/Hamburger';
 import EditProfile from '@/components/EditProfile';
+import ToggleMode from '@/components/ToggleMode';
 import processLeftTime from '@/utils/processLeftTime';
 
 export default {
@@ -62,13 +46,13 @@ export default {
 		Breadcrumb,
 		Hamburger,
 		EditProfile,
+		ToggleMode,
 	},
 	computed: {
 		...mapGetters([
 			'sidebar',
 			'myProfile',
 			'leftTime',
-			'mode'
 		]),
 		calcTime () {
 			let m = new Date(this.leftTime).getMinutes();
@@ -111,23 +95,6 @@ export default {
 					message: '已取消'
 				});
 			});
-		},
-		toggleMode (mode) {
-			if (!localStorage.getItem('mode') && !mode) {
-				return;
-			}
-			if (this.mode != mode) {
-				this.$confirm('确定切换模式并重新登录?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning',
-				}).then(() => {
-					this.$store.commit('SET_MODE', mode);
-					this.$store.dispatch('LogOut');
-					window.location.href = '/login';
-				});
-
-			}
 		},
 	},
 	created () {

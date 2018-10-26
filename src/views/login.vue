@@ -1,7 +1,11 @@
 <template>
 	<div>
 		<el-card class="box-card">
-			<div>帐号登录</div>
+			<el-row type="flex" justify="space-between">
+				<div>帐号登录</div>
+				<toggle-mode></toggle-mode>
+			</el-row>
+
 			<br>
 			<el-form :model="form" :rules="rules" ref="form">
 				<el-form-item prop="login">
@@ -28,6 +32,7 @@
 import { setToken, removeToken } from '@/utils/auth';
 import { LOCAL_SESSION } from '@/.config';
 import { mapGetters } from 'vuex';
+import ToggleMode from '@/components/ToggleMode';
 
 export default {
 	data () {
@@ -56,6 +61,9 @@ export default {
 				type: 'password'
 			}
 		};
+	},
+	components: {
+		ToggleMode,
 	},
 	watch: {
 		$route: {
@@ -144,15 +152,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-	.box-card {
-	  margin: 100px auto;
-	  max-width: 500px;
-	}
-	@media screen and (max-width: 500px) {
-	  .box-card {
-	    margin-top: 0;
-	    width: 100%;
-	  }
-	}
+.box-card {
+  margin: 100px auto;
+  max-width: 500px;
+}
+@media screen and (max-width: 500px) {
+  .box-card {
+    margin-top: 0;
+    width: 100%;
+  }
+}
 </style>
 

@@ -85,13 +85,24 @@
       }
     }
   }
+  // 左侧菜单 子目录
   .sidebar-container .nest-menu .el-submenu>.el-submenu__title,
   .sidebar-container .el-submenu .el-menu-item {
     min-width: 180px !important;
     background-color: $subMenuBg !important;
     &:hover {
-      background-color: $menuHover !important;
+	  background-color: $menuHover !important;
+	  i,span{
+		color:#409EFF !important;
+	  }
     }
+  }
+  .sidebar-container .el-menu-item,.sidebar-container .el-submenu .el-submenu__title{
+	&:hover {
+		i,span{
+		  color:#409EFF !important;
+		}
+	  }
   }
   .el-menu--collapse .el-menu .el-submenu {
     min-width: 180px !important;
