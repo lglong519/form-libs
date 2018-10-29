@@ -23,7 +23,7 @@
 	  img {
 	    margin-right: -5px;
 	    height: 20px;
-	    filter: contrast(50%);
+	    filter: contrast(80%);
 	  }
 	  .spacer {
 	    margin-right: 8px;

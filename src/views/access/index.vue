@@ -20,13 +20,13 @@
 				</div>
 			</el-row>
 			<el-table :default-sort="{prop: 'updatedAt', order: 'descending'}" :data="tableData" stripe style="width: 100%" v-loading="tableLoading" border>
-				<el-table-column type="index" label="#"></el-table-column>
-				<el-table-column prop="inc" label="次数" sortable width="80"> </el-table-column>
+				<el-table-column type="index" label="#" align="center"></el-table-column>
+				<el-table-column prop="inc" label="次数" sortable width="80" align="center"> </el-table-column>
 				<el-table-column prop="ip" label="ip" sortable width="160"> </el-table-column>
-				<el-table-column prop="action" label="请求" sortable width="80"> </el-table-column>
-				<el-table-column prop="resource" label="资源"> </el-table-column>
+				<el-table-column prop="action" label="请求" sortable width="80" align="center"> </el-table-column>
+				<el-table-column prop="resource" label="资源" :show-overflow-tooltip="true" min-width="150"></el-table-column>
 				<el-table-column prop="host" label="入口" sortable width="180"> </el-table-column>
-				<el-table-column prop="updatedAt" label="时间" sortable width="155">
+				<el-table-column prop="updatedAt" label="时间" sortable min-width="100">
 					<template slot-scope="scope">
 						{{scope.row.updatedAt|dateTime}}
 					</template>

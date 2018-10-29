@@ -31,7 +31,7 @@
 						<img class="ico" :src="scope.row.image" />
 					</template>
 				</el-table-column>
-				<el-table-column prop="formula" label="Formula"></el-table-column>
+				<el-table-column prop="formula" label="Formula" min-width="250"></el-table-column>
 				<el-table-column prop="formula" label="Reletive">
 					<template slot-scope="scope">
 						{{scope.row.from}}<=>{{scope.row.to}}

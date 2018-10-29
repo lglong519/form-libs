@@ -69,36 +69,41 @@ a:hover {
 
 //main-container全局样式
 .app-main {
-   min-height: 100%
+	min-height: 100%;
 }
 
 .app-container {
-   padding: 20px;
+	padding: 20px;
 }
 
-@media only screen and (max-width:768px) {
-   .app-container {
-      padding: 0;
-   }
-   .el-dialog {
-      width: 80%;
-   } // 提示框在小屏幕超出body
-   .el-message-box {
-      width: auto;
-   }
+@media only screen and (max-width: 768px) {
+	.app-container {
+		padding: 0;
+	}
+	.el-dialog {
+		width: 80%;
+	} // 提示框在小屏幕超出body
+	.el-message-box {
+		width: auto;
+	}
 }
 
 // 分页在小屏幕可以滚动显示
 .pagination-container {
-   margin-top: 10px;
-   overflow-x: auto;
-   text-align: right;
+	margin-top: 10px;
+	overflow-x: auto;
+	text-align: right;
 }
 
 .el-table .warning-row {
-   background: oldlace;
+	background: oldlace;
 }
 
 .el-table .success-row {
-   background: #f0f9eb;
+	background: #f0f9eb;
+}
+
+.no-wrap {
+	word-break: keep-all;
+	white-space: nowrap;
 }
