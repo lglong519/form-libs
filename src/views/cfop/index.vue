@@ -39,12 +39,17 @@
 				</el-table-column>
 				<el-table-column width="70" label="video" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-caret-right" plain circle></i></el-button>
+						<el-button size="mini" :disabled="!scope.row.video" @click="openVideo(scope.row)" type="primary" icon="el-icon-caret-right" plain circle></i></el-button>
 					</template>
 				</el-table-column>
 				<el-table-column width="60" label="Tag" align="center">
 					<template slot-scope="scope">
 						<el-tag v-if="scope.row.tags.length" v-for="item of scope.row.tags" :key="item._id" :type="item.type" size="mini">{{item.label}}</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column width="70">
+					<template slot-scope="scope">
+						<el-button icon="el-icon-edit" size="mini" type="warning" plain @click="toggleEdit(scope.row)"></el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -54,6 +59,38 @@
 				</div>
 				<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
 			</div>
+			<!-- edit dialog -->
+			<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
+				<el-form :model="editForm" :rules="editRules" ref="editform">
+					<el-form-item label="order" prop="order">
+						<el-input v-model.number="editForm.order" placeholder="请输入" :autofocus="true"></el-input>
+					</el-form-item>
+					<el-form-item label="number" prop="number">
+						<el-input v-model.number="editForm.number" placeholder="请输入"></el-input>
+					</el-form-item>
+					<el-form-item label="image" prop="image">
+						<el-input v-model="editForm.image" placeholder="请输入"></el-input>
+					</el-form-item>
+					<el-form-item label="formula" prop="formula">
+						<el-input v-model="editForm.formula" placeholder="请输入"></el-input>
+					</el-form-item>
+					<el-form-item label="reletive" prop="reletive">
+						<el-input v-model="editForm.reletive" placeholder="请输入"></el-input>
+					</el-form-item>
+					<el-form-item label="video" prop="video">
+						<el-input v-model="editForm.video" placeholder="请输入"></el-input>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="cancel">取 消</el-button>
+					<el-button type="primary" @click="submit">确 定</el-button>
+				</div>
+			</el-dialog>
+			<!-- video -->
+			<el-dialog :title="dialog.title" :before-close="beforeClose" :visible.sync="videoVisible" custom-class="video-dialog">
+				<video-player ref="vvideo" :videoSrc="videoSrc" />
+			</el-dialog>
+
 		</el-card>
 	</div>
 </template>
@@ -65,20 +102,55 @@
 	}
 
 	.el-table__row {
-		&:hover #edit-order-btn{
-			display: inline-block;
-		}
+	  &:hover #edit-order-btn {
+	    display: inline-block;
+	  }
 	}
 	#edit-order-btn {
-		display: none;
+	  display: none;
 	}
-	.multi-edit{
-		float: left;
+	.multi-edit {
+	  float: left;
+	}
+</style>
+
+<style lang="scss">
+	.video-dialog{
+		width:50%;
+		.el-dialog__header{
+			padding: 0;
+			.el-dialog__headerbtn{
+				top: 10px;
+			}
+		}
+		.el-dialog__body{
+			padding: 0;
+		}
+		@media only screen and (max-width: 992px) {
+			width:80%;
+		}
+		@media only screen and (max-width: 768px) {
+			width:100%;
+		}
 	}
 </style>
 
 <script>
+	import VideoPlayer from '@/components/VideoPlayer';
+	function editForm () {
+		return {
+			order: undefined,
+			number: undefined,
+			image: undefined,
+			formula: undefined,
+			reletive: undefined,
+			video: undefined,
+		};
+	}
 	export default {
+		components: {
+			VideoPlayer
+		},
 		data () {
 			return {
 				source: 'f2ls',
@@ -90,8 +162,30 @@
 					pageSize: 10,
 				},
 				searchVal: null,
-				dialogVisible: false,
-				tableLoading: false
+				editForm: editForm(),
+				dialog: {
+					visible: false,
+					title: null
+				},
+				tableLoading: false,
+				editRules: {
+					order: [
+						{ required: true, message: '请输入', trigger: 'blur' },
+						{ type: 'number', message: '必须为数字值' }
+					],
+					number: [
+						{ required: true, message: '请输入', trigger: 'blur' },
+						{ type: 'number', message: '必须为数字值' }
+					],
+					formula: [
+						{ required: true, message: '请输入', trigger: 'blur' }
+					],
+					image: [
+						{ required: true, message: '请输入', trigger: 'blur' }
+					],
+				},
+				videoSrc: '',
+				videoVisible: false,
 			};
 		},
 		methods: {
@@ -124,7 +218,15 @@
 					this.tableLoading = false;
 				});
 			},
-			toggleEdit () {},
+			toggleEdit (data) {
+				if (data._id) {
+					this.dialog.title = '修改';
+					this.editForm = JSON.parse(JSON.stringify(data));
+				} else {
+					this.dialog.title = '新建';
+				}
+				this.dialog.visible = true;
+			},
 			refresh () {
 				this.queryDatas();
 			},
@@ -141,6 +243,31 @@
 			toReorder () {
 				this.$router.push({ path: `/cfop/${this.source}/reorder` });
 			},
+			submit () {
+				this.$refs.editform.validate(async valid => {
+					if (valid) {
+						if (this.editForm._id) {
+							await this.patch(`cfop/${this.source}/${this.editForm._id}`, this.editForm);
+						} else {
+							await this.post(`cfop/${this.source}`, this.editForm);
+						}
+						await this.queryDatas();
+						this.dialog.visible = false;
+						this.editForm = editForm();
+					}
+				});
+			},
+			cancel () {
+				this.dialog.visible = false;
+			},
+			openVideo (data) {
+				this.videoSrc = data.video;
+				this.videoVisible = true;
+			},
+			beforeClose (fn) {
+				this.$refs.vvideo.pause();
+				fn(true);
+			}
 		},
 		watch: {
 			$route () {

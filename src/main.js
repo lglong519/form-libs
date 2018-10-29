@@ -8,6 +8,7 @@ import store from './store';
 import plugin from './plugin';
 import ElementUI from 'element-ui';
 import debug from 'debug';
+import VideoPlayer from 'vue-video-player';
 import './utils/nprogress';
 import './utils/init';
 
@@ -18,8 +19,12 @@ import 'element-ui/lib/theme-chalk/display.css';
 import 'font-awesome/css/font-awesome.min.css';
 import './styles/index.scss';
 
+import 'video.js/dist/video-js.css';
+import 'vue-video-player/src/custom-theme.css';
+
 require('./.config').MODE === 'localhost' && debug.enable('app');
 
+Vue.use(VideoPlayer);
 Vue.use(plugin);
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
