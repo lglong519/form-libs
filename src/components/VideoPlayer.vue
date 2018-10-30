@@ -41,6 +41,14 @@ export default {
 			return this.$refs.videoPlayer.player;
 		}
 	},
+	watch: {
+		videoSrc () {
+			this.playerOptions.sources.splice(0, 1, {
+				type: 'video/mp4',
+				src: this.videoSrc,
+			});
+		}
+	},
 	methods: {
 		play () {
 			this.player.play();
@@ -83,9 +91,8 @@ export default {
 		// player is ready
 		playerReadied (player) {
 			// seek to 10s
-			console.log('example player 1 readied', player);
+			console.log('Player\'s readied', player);
 			player.currentTime(10);
-			// console.log('example 01: the player is readied', player)
 		}
 	}
 };

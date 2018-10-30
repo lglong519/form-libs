@@ -87,7 +87,7 @@
 				</div>
 			</el-dialog>
 			<!-- video -->
-			<el-dialog :title="dialog.title" :before-close="beforeClose" :visible.sync="videoVisible" custom-class="video-dialog">
+			<el-dialog :before-close="beforeClose" :visible.sync="videoVisible" custom-class="video-dialog">
 				<video-player ref="vvideo" :videoSrc="videoSrc" />
 			</el-dialog>
 
