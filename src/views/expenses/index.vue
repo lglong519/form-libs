@@ -21,7 +21,7 @@
 				</div>
 			</el-row>
 
-			<el-table :data="expenses" v-loading="tableLoading" border>
+			<el-table :data="expenses" v-loading="tableLoading" border stripe>
 				<el-table-column prop="amount" label="金额">
 					<template slot-scope="scope">
 						{{scope.row.amount|currency}}
@@ -59,6 +59,12 @@
 				</el-form-item>
 				<el-form-item label="备注" prop="note">
 					<el-input type="textarea" v-model="editExpense.note" placeholder="请输入内容"></el-input>
+				</el-form-item>
+				<el-form-item label="修改" prop="updatedAt">
+					<el-date-picker type="datetime" placeholder="选择日期" v-model="editExpense.updatedAt" style="width: 100%;"></el-date-picker>
+				</el-form-item>
+				<el-form-item label="创建" prop="createdAt">
+					<el-date-picker type="datetime" placeholder="选择日期" v-model="editExpense.createdAt" style="width: 100%;"></el-date-picker>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
