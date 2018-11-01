@@ -1,7 +1,7 @@
 <template>
 	<el-dropdown trigger="click" class="clear-all">
 		<div class="mr-10">
-			<el-tooltip effect="dark" content="localhost" placement="bottom">
+			<el-tooltip effect="dark" :content="mode" placement="bottom">
 				<el-tag type="info" size="mini">MODE</el-tag>
 			</el-tooltip>
 		</div>

@@ -13,7 +13,7 @@ const CFOP = resolve => require(['@/views/cfop/index'], resolve);
 const Sort = resolve => require(['@/views/cfop/sort'], resolve);
 
 export default new Router({
-	mode: 'history',
+	mode: 'hash', // history
 	routes: [
 		{ path: '/404', component: () => import('@/views/404') },
 		{
