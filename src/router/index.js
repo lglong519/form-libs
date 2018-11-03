@@ -9,7 +9,8 @@ Vue.use(Router);
 
 // import Layout from '@/views/layout/Layout';
 const Layout = resolve => require(['@/views/layout/Layout'], resolve);
-const CFOP = resolve => require(['@/views/cfop/index'], resolve);
+// const CFOP = resolve => require(['@/views/cfop/index'], resolve);
+const CFOP = () => import('@/views/cfop/index');
 const Sort = resolve => require(['@/views/cfop/sort'], resolve);
 
 export default new Router({
@@ -172,6 +173,18 @@ export default new Router({
 					name: 'Users',
 					component: resolve => require(['@/views/users/index'], resolve),
 					meta: { title: 'Users', icon: 'user-o' }
+				}
+			]
+		},
+		{
+			path: '/settings',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					name: 'Settings',
+					component: resolve => require(['@/views/settings/index'], resolve),
+					meta: { title: 'Settings', icon: 'gear' }
 				}
 			]
 		},

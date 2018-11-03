@@ -1,6 +1,10 @@
 <template>
-	<el-dialog title="个人设置" :visible="dialogVisible" @close="cancel">
+	<div class="app-container">
+		<el-card>
 			<el-form :model="editForm" :rules="editRules" ref="editform" label-width="80px">
+				<el-form-item>
+					<img v-if="editForm.image" :src="editForm.image" class="avatar">
+				</el-form-item>
 				<el-form-item label="头像" prop="image">
 					<el-input v-model="editForm.image" placeholder="请选择头像"></el-input>
 				</el-form-item>
@@ -26,12 +30,18 @@
 					<el-input :value="editForm.updatedAt|dateTime" disabled></el-input>
 				</el-form-item>
 			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="cancel">取 消</el-button>
+			<el-row type="flex" justify="end" class="dialog-footer">
 				<el-button type="primary" @click="submit">确 定</el-button>
-			</div>
-		</el-dialog>
+			</el-row>
+		</el-card>
+	</div>
 </template>
+
+<style lang="scss" scoped>
+	.avatar{
+		height: 100px;
+	}
+</style>
 
 
 <script>
@@ -51,20 +61,12 @@
 	export default {
 		computed: {
 			...mapGetters(['myProfile']),
-			dialogVisible () {
-				return this.openSetting;
-			}
 		},
 		watch: {
-			dialogVisible () {
-				if (this.dialogVisible) {
-					this.editForm = JSON.parse(JSON.stringify(this.myProfile));
-				}
+			myProfile () {
+				this.editForm = JSON.parse(JSON.stringify(this.myProfile));
 			}
 		},
-		props: [
-			'openSetting',
-		],
 		data () {
 			return {
 				source: 'squats',
@@ -93,14 +95,13 @@
 					if (valid) {
 						await this.patch(`services/users/${this.editForm._id}`, this.editForm);
 						this.$store.dispatch('GetProfile');
-						this.$emit('update:openSetting', false);
-						this.editForm = editForm();
+						this.$message({
+							message: '修改成功',
+							type: 'success',
+							duration: 1500,
+						});
 					}
 				});
-			},
-			cancel () {
-				this.$emit('update:openSetting', false);
-				this.editForm = editForm();
 			},
 		},
 		created () {

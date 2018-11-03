@@ -15,7 +15,7 @@
 				</div>
 				<el-dropdown-menu slot="dropdown">
 					<el-dropdown-item>
-						<span style="display:block;" @click="openSetting=!openSetting">设置</span>
+						<router-link to='/settings'>设置</router-link>
 					</el-dropdown-item>
 					<el-dropdown-item divided>
 						<span style="display:block;" @click="logout">退出</span>
@@ -23,7 +23,6 @@
 				</el-dropdown-menu>
 			</el-dropdown>
 		</div>
-		<edit-profile :openSetting.sync="openSetting"></edit-profile>
 	</el-menu>
 </template>
 
@@ -31,7 +30,6 @@
 import { mapGetters } from 'vuex';
 import Breadcrumb from '@/components/Breadcrumb';
 import Hamburger from '@/components/Hamburger';
-import EditProfile from '@/components/EditProfile';
 import ToggleMode from '@/components/ToggleMode';
 import processLeftTime from '@/utils/processLeftTime';
 
@@ -39,13 +37,11 @@ export default {
 	data () {
 		return {
 			avatar: require('@/assets/avatar.svg'),
-			openSetting: false,
 		};
 	},
 	components: {
 		Breadcrumb,
 		Hamburger,
-		EditProfile,
 		ToggleMode,
 	},
 	computed: {
