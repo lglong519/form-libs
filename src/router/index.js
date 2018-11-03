@@ -177,6 +177,25 @@ export default new Router({
 			]
 		},
 		{
+			path: '/entertainments',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					name: 'ENT',
+					component: resolve => require(['@/views/entertainments/index'], resolve),
+					meta: { title: 'ENT', icon: 'ge' }
+				},
+				{
+					hidden: true,
+					path: 'edit/:id?',
+					name: 'Edit',
+					component: resolve => require(['@/views/entertainments/edit'], resolve),
+					meta: { title: 'Edit', icon: 'edit' }
+				}
+			]
+		},
+		{
 			path: '/settings',
 			component: Layout,
 			children: [
