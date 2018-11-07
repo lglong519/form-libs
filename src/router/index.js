@@ -84,6 +84,12 @@ export default new Router({
 					// component: () => import('@/views/exercise/index'),
 					component: resolve => require(['@/views/exercise/index'], resolve),
 					meta: { title: 'PressUps', icon: 'hand-paper-o' }
+				},
+				{
+					path: '/exercise/waists',
+					name: 'Waists',
+					component: resolve => require(['@/views/exercise/index'], resolve),
+					meta: { title: 'Waists', icon: 'hand-lizard-o' }
 				}
 			]
 		},
