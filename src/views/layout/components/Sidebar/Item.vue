@@ -45,7 +45,12 @@ export default {
   margin-right: 10px;
   color: #fff;
 }
-.sidebar--collapse .sidebar-icon{
-	margin-left:8px;
+.external-link {
+  .sidebar-icon,span {
+    color: #FFF6B5;
+  }
+}
+.sidebar--collapse .sidebar-icon {
+  margin-left: 8px;
 }
 </style>

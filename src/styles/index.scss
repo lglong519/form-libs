@@ -79,6 +79,9 @@ a:hover {
 @media only screen and (max-width: 768px) {
 	.app-container {
 		padding: 0;
+		.el-card__body {
+			padding: 20px 5px;
+		}
 	}
 	.el-dialog {
 		width: 80%;
