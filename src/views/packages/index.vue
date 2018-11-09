@@ -90,7 +90,7 @@
 		lodash: require('lodash'),
 		moment: require('moment'),
 		joi: require('joi'),
-		jquery: require('jquery'),
+		$: require('jquery'),
 		dateTime: DateTime,
 	};
 

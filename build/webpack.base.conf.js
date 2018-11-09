@@ -94,7 +94,7 @@ module.exports = {
 		child_process: 'empty'
 	},
 	externals: {
-		jquery: 'jquery',
+		jquery: '$',
 		lodash: '_',
 		'vue': 'Vue',
 		'vuex': 'Vuex',

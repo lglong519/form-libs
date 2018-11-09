@@ -6,16 +6,16 @@
 					<img v-if="editForm.image" :src="editForm.image" class="avatar">
 				</el-form-item>
 				<el-form-item label="头像" prop="image">
-					<el-input v-model="editForm.image" placeholder="请选择头像"></el-input>
+					<el-input v-model="editForm.image" placeholder="请选择头像" :disabled="!editting"></el-input>
 				</el-form-item>
 				<el-form-item label="用户名" prop="username">
-					<el-input v-model="editForm.username" placeholder="请输入帐号"></el-input>
+					<el-input v-model="editForm.username" placeholder="请输入帐号" :disabled="!editting"></el-input>
 				</el-form-item>
 				<el-form-item label="邮箱" prop="email">
-					<el-input v-model="editForm.email" placeholder="请输入邮箱"></el-input>
+					<el-input v-model="editForm.email" placeholder="请输入邮箱" :disabled="!editting"></el-input>
 				</el-form-item>
 				<el-form-item label="电话" prop="phone">
-					<el-input v-model="editForm.phone" placeholder="请输入电话"></el-input>
+					<el-input v-model="editForm.phone" placeholder="请输入电话" :disabled="!editting"></el-input>
 				</el-form-item>
 				<el-form-item label="登录次数">
 					<el-input v-model="editForm.inc" disabled></el-input>
@@ -30,8 +30,10 @@
 					<el-input :value="editForm.updatedAt|dateTime" disabled></el-input>
 				</el-form-item>
 			</el-form>
-			<el-row type="flex" justify="end" class="dialog-footer">
-				<el-button type="primary" @click="submit">确 定</el-button>
+			<el-row type="flex" justify="end">
+				<el-button v-if="editting" type="warning" @click="cancel" plain>取消</el-button>
+				<el-button v-if="editting" type="primary" @click="submit">保存</el-button>
+				<el-button v-else type="primary" @click="editting=true">编辑</el-button>
 			</el-row>
 		</el-card>
 	</div>
@@ -87,6 +89,7 @@
 						{ required: false, message: '请输入电话', trigger: 'blur' },
 					],
 				},
+				editting: false
 			};
 		},
 		methods: {
@@ -100,7 +103,18 @@
 							type: 'success',
 							duration: 1500,
 						});
+						this.editting = false;
 					}
+				});
+			},
+			cancel () {
+				this.$confirm('取消后编辑的资料将丢失, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(async () => {
+					this.editForm = JSON.parse(JSON.stringify(this.myProfile));
+					this.editting = false;
 				});
 			},
 		},
