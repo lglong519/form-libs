@@ -6,7 +6,7 @@ import App from './App';
 import router from './router';
 import store from './store';
 import plugin from './plugin';
-import ElementUI from 'element-ui';
+// import ElementUI from 'element-ui';
 import debug from 'debug';
 import VideoPlayer from 'vue-video-player';
 import './utils/nprogress';
@@ -26,7 +26,7 @@ require('./.config').MODE === 'localhost' && debug.enable('app');
 
 Vue.use(VideoPlayer);
 Vue.use(plugin);
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 new Vue({

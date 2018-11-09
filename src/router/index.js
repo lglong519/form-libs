@@ -1,11 +1,11 @@
 import Vue from 'vue';
-import Router from 'vue-router';
+import VueRouter from 'vue-router';
 import login from '@/views/login';
 import { REQUST, MODE } from '@/.config';
 let mode = localStorage.getItem('mode');
 mode || (mode = MODE);
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
 // import Layout from '@/views/layout/Layout';
 const Layout = resolve => require(['@/views/layout/Layout'], resolve);
@@ -13,7 +13,7 @@ const Layout = resolve => require(['@/views/layout/Layout'], resolve);
 const CFOP = () => import('@/views/cfop/index');
 const Sort = resolve => require(['@/views/cfop/sort'], resolve);
 
-export default new Router({
+export default new VueRouter({
 	mode: 'hash', // history
 	routes: [
 		{ path: '/404', component: () => import('@/views/404') },

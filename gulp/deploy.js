@@ -38,6 +38,18 @@ const destGlobs = [
 	'./dist/**',
 	'./dist/**/*'
 ];
-gulp.task('deploy', () => gulp
+gulp.task('dest', () => gulp
 	.src(destGlobs)
 	.pipe(gulpSSH.dest(nconf.get('SERVER'))));
+gulp.task('shell', () => gulpSSH
+	.shell([
+		`cd ${nconf.get('SERVER')}`,
+		'rm -r ./*',
+	], {
+		filePath: 'shell.log'
+	})
+	.pipe(gulp.dest('logs')));
+gulp.task(
+	'deploy',
+	gulp.series('shell', 'dest')
+);

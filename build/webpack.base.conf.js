@@ -92,5 +92,15 @@ module.exports = {
 		net: 'empty',
 		tls: 'empty',
 		child_process: 'empty'
-	}
+	},
+	externals: {
+		jquery: 'jquery',
+		lodash: '_',
+		'vue': 'Vue',
+		'vuex': 'Vuex',
+		'vue-router': 'VueRouter',
+		'element-ui': 'ELEMENT',
+		'axios': 'axios',
+		echarts: 'echarts',
+	},
 };
