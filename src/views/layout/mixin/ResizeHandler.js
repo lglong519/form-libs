@@ -16,11 +16,7 @@ export default {
 		window.addEventListener('resize', this.resizeHandler);
 	},
 	mounted () {
-		const isMobile = this.isMobile();
-		if (isMobile) {
-			store.dispatch('ToggleDevice', 'mobile');
-			store.dispatch('CloseSideBar', { withoutAnimation: true });
-		}
+		this.resizeHandler();
 	},
 	methods: {
 		isMobile () {
@@ -34,6 +30,14 @@ export default {
 
 				if (isMobile) {
 					store.dispatch('CloseSideBar', { withoutAnimation: true });
+				} else {
+					const rect = body.getBoundingClientRect();
+					if (rect.width - RATIO > 1200) {
+						store.dispatch('OpenSideBar', { withoutAnimation: true });
+					} else {
+						store.dispatch('CloseSideBar', { withoutAnimation: true });
+					}
+
 				}
 			}
 		}

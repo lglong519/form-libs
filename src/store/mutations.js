@@ -17,6 +17,11 @@ export default {
 		state.sidebar.opened = false;
 		state.sidebar.withoutAnimation = withoutAnimation;
 	},
+	OPEN_SIDEBAR: (state, withoutAnimation) => {
+		localStorage.setItem('sidebarStatus', '');
+		state.sidebar.opened = true;
+		state.sidebar.withoutAnimation = withoutAnimation;
+	},
 	TOGGLE_DEVICE: (state, device) => {
 		state.device = device;
 	},
