@@ -57,7 +57,8 @@
 		data () {
 			function validLink (rule, value, callback) {
 				if (!value) {
-					callback(new Error('请输入链接'));
+					callback();
+					// callback(new Error('请输入链接'));
 				} else if (!validateURL(value)) {
 					callback(new Error('链接格式不对'));
 				} else {
