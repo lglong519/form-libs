@@ -207,9 +207,9 @@ export default new VueRouter({
 			children: [
 				{
 					path: '',
-					name: 'Favo',
+					name: 'Favor',
 					component: resolve => require(['@/views/favorites/index'], resolve),
-					meta: { title: 'Favo', icon: 'heart-o' }
+					meta: { title: 'Favor', icon: 'heart-o' }
 				}
 			]
 		},

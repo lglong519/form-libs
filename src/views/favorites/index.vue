@@ -22,11 +22,18 @@
 			</el-row>
 
 			<el-table :data="favorites" v-loading="tableLoading" border stripe>
-				<el-table-column prop="title" label="title">
+				<el-table-column prop="title" label="title" min-width="120">
+					<template slot-scope="scope">
+						<el-tooltip class="item" effect="dark" :content="scope.row.title" placement="right-start">
+							<div class="link-title">{{scope.row.title||'前往'}}</div>
+						</el-tooltip>
+					</template>
+				</el-table-column>
+				<el-table-column prop="link" label="link" width="70">
 					<template slot-scope="scope">
 						<a :href="scope.row.link" target="_blank">
 							<el-tooltip class="item" effect="dark" :content="scope.row.link" placement="right-start">
-								<el-button type="text">{{scope.row.title||'前往'}}</el-button>
+								<el-button type="text">前往</el-button>
 							</el-tooltip>
 						</a>
 					</template>
@@ -73,6 +80,19 @@
 		</el-dialog>
 	</div>
 </template>
+
+<style lang="scss" scoped>
+	.link-title{
+		padding-right: 10px;
+		min-width: 120px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display:-webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		color: #6DBA45;
+	}
+</style>
 
 <script>
 	import { validateURL } from '@/utils/validate';
