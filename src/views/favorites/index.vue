@@ -4,7 +4,7 @@
 			<el-row type="flex" justify="space-between">
 				<el-form :inline="true">
 					<el-form-item>
-						<el-input placeholder="请输入类型" v-model="searchVal" clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+						<el-input placeholder="请输入" v-model="searchVal" clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="success" icon="el-icon-search" plain @click="search">搜索</el-button>
@@ -21,18 +21,17 @@
 				</div>
 			</el-row>
 
-			<el-table :data="expenses" v-loading="tableLoading" border stripe>
-				<el-table-column prop="amount" label="金额">
+			<el-table :data="favorites" v-loading="tableLoading" border stripe>
+				<el-table-column prop="title" label="title">
 					<template slot-scope="scope">
-						{{scope.row.amount|currency}}
+						<a :href="scope.row.link" target="_blank">
+							<el-tooltip class="item" effect="dark" :content="scope.row.link" placement="right-start">
+								<el-button type="text">{{scope.row.title||'前往'}}</el-button>
+							</el-tooltip>
+						</a>
 					</template>
 				</el-table-column>
-				<el-table-column prop="type" label="类型"></el-table-column>
-				<el-table-column prop="createdAt" label="日期">
-					<template slot-scope="scope">
-						{{scope.row.createdAt|dateTime}}
-					</template>
-				</el-table-column>
+				<el-table-column prop="type" label="类型" width="70"></el-table-column>
 				<el-table-column prop="note" label="备注"></el-table-column>
 				<el-table-column width="130" label="编辑">
 					<template slot-scope="scope">
@@ -47,24 +46,24 @@
 		</el-card>
 		<!-- edit dialog -->
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
-			<el-form :model="editExpense" :rules="editRules" ref="editExpense" label-width="50px">
-				<el-form-item label="金额" prop="amount">
-					<el-input v-model.number="editExpense.amount" placeholder="请输入金额" autofocus="true"></el-input>
+			<el-form :model="editForm" :rules="editRules" ref="editForm" label-width="50px">
+				<el-form-item label="title" prop="title">
+					<el-input v-model="editForm.title" placeholder="请输入" autofocus="true"></el-input>
+				</el-form-item>
+				<el-form-item label="link" prop="link">
+					<el-input v-model="editForm.link" placeholder="请输入"></el-input>
 				</el-form-item>
 				<el-form-item label="类型" prop="type">
-					<el-select v-model="editExpense.type" placeholder="选择">
-						<el-option v-for="item of ['food','general']" :key="item" :label="item" :value="item">
+					<el-select v-model="editForm.type" placeholder="选择">
+						<el-option v-for="item of ['default', 'music', 'article', 'movie', 'fiction', 'novel', 'ev']" :key="item" :label="item" :value="item">
 						</el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="备注" prop="note">
-					<el-input type="textarea" v-model="editExpense.note" placeholder="请输入内容"></el-input>
+					<el-input type="textarea" v-model="editForm.note" placeholder="请输入内容"></el-input>
 				</el-form-item>
-				<el-form-item label="修改" prop="updatedAt">
-					<el-date-picker type="datetime" placeholder="选择日期" v-model="editExpense.updatedAt" style="width: 100%;"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="创建" prop="createdAt">
-					<el-date-picker type="datetime" placeholder="选择日期" v-model="editExpense.createdAt" style="width: 100%;"></el-date-picker>
+				<el-form-item label="date" prop="date">
+					<el-date-picker type="datetime" placeholder="选择日期" v-model="editForm.date" style="width: 100%;"></el-date-picker>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -76,16 +75,29 @@
 </template>
 
 <script>
-	function editExpense () {
+	import { validateURL } from '@/utils/validate';
+	function editForm () {
 		return {
-			amount: undefined,
-			type: 'food',
+			title: undefined,
+			link: undefined,
+			note: undefined,
+			date: undefined,
+			type: 'default',
 		};
+	}
+	function validLink (rule, value, callback) {
+		if (!value) {
+			callback(new Error('请输入链接'));
+		} else if (!validateURL(value)) {
+			callback(new Error('链接格式不对'));
+		} else {
+			callback();
+		}
 	}
 	export default {
 		data () {
 			return {
-				expenses: [],
+				favorites: [],
 				pagination: {
 					total: 0,
 					currentPage: 1,
@@ -93,18 +105,18 @@
 					pageSize: 10,
 				},
 				searchVal: null,
-				editExpense: editExpense(),
+				editForm: editForm(),
 				dialog: {
 					visible: false,
 					title: null
 				},
 				editRules: {
 					amount: [
-						{ required: true, message: '请输入金额', trigger: 'blur' },
-						{ type: 'number', message: 'amount 必须为数字值' }
+						{ message: '请输入金额', trigger: 'blur' },
 					],
-					type: [
-						{ required: true, message: '请选择类型', trigger: 'change' }
+					link: [
+						{ required: true, message: '请输入链接', trigger: 'blur' },
+						{ validator: validLink, trigger: 'blur' }
 					],
 				},
 				tableLoading: false
@@ -113,57 +125,54 @@
 		methods: {
 			pageSizeChange (e) {
 				this.pagination.pageSize = e;
-				this.queryExpenses();
+				this.queryDatas();
 			},
 			pageChange (e) {
 				this.pagination.currentPage = e;
-				this.queryExpenses();
+				this.queryDatas();
 			},
-			queryExpenses () {
+			queryDatas () {
 				let searchVal = '';
 				this.tableLoading = true;
 				if (this.searchVal) {
-					searchVal = `{"type":"${this.searchVal}"}`;
+					searchVal = `{"title":{"$regex":"${this.searchVal}","$options":"$i"}}`;
 				}
-				return this.query(`services/expenses?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
+				return this.query(`services/favorites?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
-					this.expenses = res.data;
+					this.favorites = res.data;
 					this.tableLoading = false;
 				});
 			},
 			toggleEdit (data) {
 				if (data._id) {
 					this.dialog.title = '修改';
-					this.editExpense = JSON.parse(JSON.stringify(data));
+					this.editForm = JSON.parse(JSON.stringify(data));
 				} else {
 					this.dialog.title = '新建';
-				}
-				if (this.editExpense.amount) {
-					this.editExpense.amount = this.editExpense.amount / 100;
 				}
 				this.dialog.visible = true;
 			},
 			submit () {
-				this.$refs.editExpense.validate(async valid => {
+				this.$refs.editForm.validate(async valid => {
 					if (valid) {
-						this.editExpense.amount = this.editExpense.amount * 100;
+						this.editForm.amount = this.editForm.amount * 100;
 						this.dialog.visible = false;
-						if (this.editExpense._id) {
-							await this.patch(`services/expenses/${this.editExpense._id}`, this.editExpense);
+						if (this.editForm._id) {
+							await this.patch(`services/favorites/${this.editForm._id}`, this.editForm);
 						} else {
-							await this.post('services/expenses', this.editExpense);
+							await this.post('services/favorites', this.editForm);
 						}
-						await this.queryExpenses();
-						this.editExpense = editExpense();
+						await this.queryDatas();
+						this.editForm = editForm();
 					}
 				});
 			},
 			cancel () {
 				this.dialog.visible = false;
-				this.editExpense = editExpense();
+				this.editForm = editForm();
 			},
 			refresh () {
-				this.queryExpenses();
+				this.queryDatas();
 			},
 			remove (data) {
 				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
@@ -171,7 +180,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(async () => {
-					await this.del(`services/expenses/${data._id}`);
+					await this.del(`services/favorites/${data._id}`);
 					this.$notify.success({
 						message: '删除成功',
 					});
@@ -197,7 +206,7 @@
 			}
 		},
 		mounted () {
-			this.queryExpenses();
+			this.queryDatas();
 		}
 	};
 </script>

@@ -81,7 +81,7 @@ export default {
 			this.lineChartData.commits.contributions = this.gitData.commits.week;
 		}
 	},
-	async created () {
+	created () {
 		this.aggregation();
 		this.getGit();
 	}

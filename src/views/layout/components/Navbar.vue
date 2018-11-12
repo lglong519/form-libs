@@ -121,9 +121,12 @@ export default {
 	    color: red;
 	  }
 	  .float-right {
+		z-index: 1;
+		position: relative;
 	    float: right;
-	    height: 50px;
+	    height: 49px;
 	    display: flex;
+		background-color: #fff;
 	    .mr-10 {
 	      margin-right: 10px;
 	    }

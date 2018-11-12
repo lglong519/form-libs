@@ -202,6 +202,18 @@ export default new VueRouter({
 			]
 		},
 		{
+			path: '/favorites',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					name: 'Favo',
+					component: resolve => require(['@/views/favorites/index'], resolve),
+					meta: { title: 'Favo', icon: 'heart-o' }
+				}
+			]
+		},
+		{
 			path: '/settings',
 			component: Layout,
 			children: [
