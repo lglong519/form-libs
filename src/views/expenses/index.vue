@@ -28,7 +28,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="type" label="类型"></el-table-column>
-				<el-table-column prop="createdAt" label="日期">
+				<el-table-column prop="createdAt" label="日期" min-width="100">
 					<template slot-scope="scope">
 						{{scope.row.createdAt|dateTime}}
 					</template>

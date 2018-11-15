@@ -22,10 +22,37 @@
 			</el-row>
 
 			<el-table :data="favorites" v-loading="tableLoading" border stripe>
+				<el-table-column type="expand">
+					<template slot-scope="props">
+						<el-form label-position="left" class="table-expand">
+							<el-form-item label="title:">
+								<span>{{ props.row.title }}</span>
+							</el-form-item>
+							<el-form-item label="link:">
+								<span>{{ props.row.link }}</span>
+							</el-form-item>
+							<el-form-item label="type:">
+								<span>{{ props.row.type }}</span>
+							</el-form-item>
+							<el-form-item v-if="props.row.status" label="status:">
+								<span>{{ props.row.status }}</span>
+							</el-form-item>
+							<el-form-item v-if="props.row.description" label="description:">
+								<span>{{ props.row.description }}</span>
+							</el-form-item>
+							<el-form-item v-if="props.row.note" label="note:">
+								<span>{{ props.row.note }}</span>
+							</el-form-item>
+							<el-form-item v-if="props.row.tags.length" label="tags:">
+								<span>{{ props.row.tags }}</span>
+							</el-form-item>
+						</el-form>
+					</template>
+				</el-table-column>
 				<el-table-column prop="title" label="title" min-width="120">
 					<template slot-scope="scope">
-						<el-tooltip class="item" effect="dark" :content="scope.row.title" placement="right-start">
-							<div class="link-title">{{scope.row.title||'前往'}}</div>
+						<el-tooltip class="item" effect="light" :content="scope.row.title||scope.row.link" placement="top-start">
+							<div class="link-title">{{scope.row.title||scope.row.link}}</div>
 						</el-tooltip>
 					</template>
 				</el-table-column>
@@ -39,7 +66,11 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="type" label="类型" width="70"></el-table-column>
-				<el-table-column prop="note" label="备注"></el-table-column>
+				<el-table-column width="70" label="active">
+					<template slot-scope="scope">
+						<el-switch v-model="scope.row.active" active-color="#409EFF" inactive-color="#f56c6c"></el-switch>
+					</template>
+				</el-table-column>
 				<el-table-column width="130" label="编辑">
 					<template slot-scope="scope">
 						<el-button type="warning" icon="el-icon-edit" size="mini" plain @click="toggleEdit(scope.row)"></el-button>
@@ -82,16 +113,21 @@
 </template>
 
 <style lang="scss" scoped>
-	.link-title{
-		padding-right: 10px;
-		min-width: 120px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display:-webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		color: #6DBA45;
-	}
+.link-title {
+  padding-right: 10px;
+  min-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: #6dba45;
+}
+
+.table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+}
 </style>
 
 <script>

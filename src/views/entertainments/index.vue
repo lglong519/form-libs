@@ -32,7 +32,7 @@
 						<el-tag v-if="scope.row.tags.length" v-for="item of scope.row.tags" :key="item._id" :type="item.type" size="mini">{{item.label}}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="date" label="date" align="center">
+				<el-table-column prop="date" label="date" align="center" min-width="100">
 					<template slot-scope="scope">
 						{{scope.row.date|dateTime('YYYY-MM-DD')}}
 					</template>
