@@ -36,6 +36,18 @@ export default new VueRouter({
 			component: login
 		},
 		{
+			path: '/tiebas',
+			component: Layout,
+			children: [
+				{
+					path: '',
+					name: 'Tieba',
+					component: () => import('@/views/tiebas/index'),
+					meta: { title: 'Tieba', icon: 'paw' }
+				}
+			]
+		},
+		{
 			path: '/access',
 			component: Layout,
 			children: [
