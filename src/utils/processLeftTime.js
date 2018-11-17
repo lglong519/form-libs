@@ -39,7 +39,7 @@ export default function processLeftTime (store) {
 				cancelButtonText: '取消',
 				type: 'error',
 			}).then(() => {
-				router.push({ path: '/login', query: { redirect: router.app.$route.path } });
+				router.push({ path: '/login', query: { redirect: router.app.$route.fullPath } });
 			});
 		} else {
 			store.commit('SET_TIMER', setTimeout(tick, 1000));

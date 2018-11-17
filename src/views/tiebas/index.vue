@@ -17,18 +17,28 @@
 			<el-alert v-if="currAccount" :title="'UID: '+currAccount.uid" type="warning" :closable="false"></el-alert>
 			<el-alert v-if="currAccount" style="margin-bottom:5px;white-space:nowrap;" :title="'BDUSS: '+currAccount.BDUSS" type="info" :closable="false"></el-alert>
 
-			<el-table :data="tiebas" v-loading="tableLoading" border stripe>
-				<el-table-column prop="kw" label="kw"></el-table-column>
+			<el-table :data="tiebas" :row-class-name="tableRowClassName" v-loading="tableLoading" border stripe>
+				<el-table-column prop="kw" label="kw">
+					<template slot-scope="scope">
+						<a :href="'https://tieba.baidu.com/f?kw='+scope.row.kw" target="_blank" :style="scope.row.void?'color:#f56c6c':'color:#409EFF'">{{scope.row.kw}}</a>
+					</template>
+				</el-table-column>
 				<el-table-column prop="level_id" label="★" align="center" width="100">
 					<template slot-scope="scope">
 						<el-tag size="mini">{{scope.row.cur_score}}</el-tag>
 						<el-tag size="mini" type="warning">{{scope.row.level_id}}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="status" label="status" align="center" width="90"></el-table-column>
+				<el-table-column prop="status" label="状态" align="center" width="50">
+					<template slot-scope="scope">
+						<span v-if="scope.row.status=='pendding'">待签</span>
+						<span v-if="scope.row.status=='resolve'">已签</span>
+						<span v-if="scope.row.status=='reject'">出错</span>
+					</template>
+				</el-table-column>
 				<el-table-column prop="desc" label="desc">
 					<template slot-scope="scope">
-						<div v-if="!scope.row.void" :class="scope.row.status=='reject'&&'color-danger'">{{scope.row.desc}}</div>
+						<div :class="scope.row.status=='reject'&&'color-danger'">{{scope.row.desc}}</div>
 					</template>
 				</el-table-column>
 				<el-table-column prop="updatedAt" label="时间" min-width="100">
@@ -38,12 +48,12 @@
 				</el-table-column>
 				<el-table-column width="70" label="active" align="center">
 					<template slot-scope="scope">
-						<el-switch v-model="scope.row.void" active-color="#f56c6c" inactive-color="#409EFF"></el-switch>
+						<el-switch v-model="scope.row.void" :data-id="scope.row._id" ref="dataId" @change="updateVoid(scope.row)" active-color="#f56c6c" inactive-color="#409EFF"></el-switch>
 					</template>
 				</el-table-column>
 				<el-table-column width="130" label="编辑">
 					<template slot-scope="scope">
-						<el-button type="warning" size="mini" plain @click="signOne(scope.row)">签</el-button>
+						<el-button type="warning" size="mini" plain @click="signOne(scope.row)" :disabled="scope.row.void || scope.row.status=='resolve'">签</el-button>
 						<el-button type="danger" icon="el-icon-delete" size="mini" plain @click="remove(scope.row)"></el-button>
 					</template>
 				</el-table-column>
@@ -58,7 +68,7 @@
 
 		<!-- edit dialog -->
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
-			<el-form :model="editTiebaAccount" :rules="editRules" ref="editTiebaAccount" label-width="50px">
+			<el-form :model="editTiebaAccount" :rules="editRules" ref="editTiebaAccount" label-width="70px">
 				<el-form-item v-if="editTiebaAccount._id" label="_id" prop="_id">
 					<el-input v-model="editTiebaAccount._id" autofocus="true" disabled></el-input>
 				</el-form-item>
@@ -142,6 +152,12 @@
 			};
 		},
 		methods: {
+			tableRowClassName ({ row, rowIndex }) {
+				if (row.void) {
+					return 'delete-row';
+				}
+				return '';
+			},
 			pageSizeChange (e) {
 				this.pagination.pageSize = e;
 				this.queryTiebas();
@@ -261,6 +277,13 @@
 					});
 				});
 			},
+			updateVoid (data) {
+				this.patch(`tieba/tiebas/${data._id}`, data).then(() => {
+					this.getSumarize();
+				}).catch(() => {
+					data.void = !data.void;
+				});
+			}
 		},
 		created () {
 			this.queryAccount();

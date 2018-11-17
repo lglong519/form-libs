@@ -24,7 +24,7 @@ export default {
 		api.del('services/access-tokens').then(() => {
 			commit('GET_PROFILE', {});
 			removeToken();
-			router.push({ path: '/login', query: { redirect: router.app.$route.path } });
+			router.push({ path: '/login', query: { redirect: router.app.$route.fullPath } });
 		});
 	}
 };

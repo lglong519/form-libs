@@ -84,7 +84,7 @@ service.interceptors.response.use(
 			store.commit('GET_PROFILE', {});
 			message = '未登录';
 			duration = 2000;
-			redirect = { path: '/login', query: { redirect: router.app.$route.path } };
+			redirect = { path: '/login', query: { redirect: router.app.$route.fullPath } };
 		}
 		Message({
 			message: message || _.get(error, 'response.data.message') || error.message,

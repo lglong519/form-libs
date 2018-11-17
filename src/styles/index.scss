@@ -98,12 +98,18 @@ a:hover {
 	text-align: right;
 }
 
-.el-table .warning-row {
-	background: oldlace;
-}
-
-.el-table .success-row {
-	background: #f0f9eb;
+.el-table{
+	.delete-row {
+		background: #fdf2f2;
+		text-decoration:line-through;
+		color: #f56c6c;
+	}
+	.warning-row {
+		background: oldlace;
+	}
+	.success-row {
+		background: #f0f9eb;
+	}
 }
 
 .no-wrap {

@@ -43,7 +43,11 @@ export default {
 				}).then(() => {
 					this.$store.commit('SET_MODE', mode);
 					this.$store.dispatch('LogOut');
-					window.location.href = '/login';
+					if (this.$route.path.includes('login')) {
+						window.location.reload();
+					} else {
+						window.location.href = '/#login';
+					}
 				});
 			}
 		},
