@@ -132,15 +132,15 @@
 				});
 			},
 			toggleEdit (data) {
-				if (data._id) {
-					this.dialog.title = '修改';
+				if (data && data._id) {
 					this.editExpense = JSON.parse(JSON.stringify(data));
-				} else {
-					this.dialog.title = '新建';
+				} else if (this.editExpense._id) {
+					this.editExpense = editExpense();
 				}
 				if (this.editExpense.amount) {
 					this.editExpense.amount = this.editExpense.amount / 100;
 				}
+				this.dialog.title = this.editExpense._id ? '修改' : '新建';
 				this.dialog.visible = true;
 			},
 			submit () {

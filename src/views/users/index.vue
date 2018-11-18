@@ -51,18 +51,18 @@
 		</el-card>
 		<!-- edit dialog -->
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
-			<el-form :model="editPackage" :rules="editRules" ref="editPackage">
+			<el-form :model="editForm" :rules="editRules" ref="editForm">
 				<el-form-item label="name" prop="username">
-					<el-input v-model="editPackage.username" placeholder="请输入username"></el-input>
+					<el-input v-model="editForm.username" placeholder="请输入username"></el-input>
 				</el-form-item>
 				<el-form-item label="email" prop="email">
-					<el-input v-model="editPackage.email" placeholder="请输入email"></el-input>
+					<el-input v-model="editForm.email" placeholder="请输入email"></el-input>
 				</el-form-item>
 				<el-form-item label="phone" prop="phone">
-					<el-input v-model="editPackage.phone" placeholder="请输入phone"></el-input>
+					<el-input v-model="editForm.phone" placeholder="请输入phone"></el-input>
 				</el-form-item>
 				<el-form-item label="image" prop="image">
-					<el-input v-model="editPackage.image" placeholder="请输入image"></el-input>
+					<el-input v-model="editForm.image" placeholder="请输入image"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -81,7 +81,7 @@
 
 <script>
 	import { validateURL } from '@/utils/validate';
-	function editPackage () {
+	function editForm () {
 		return {
 			username: undefined,
 			email: undefined,
@@ -109,7 +109,7 @@
 					pageSize: 10,
 				},
 				searchVal: null,
-				editPackage: editPackage(),
+				editForm: editForm(),
 				dialog: {
 					visible: false,
 					title: null
@@ -163,31 +163,31 @@
 				});
 			},
 			toggleEdit (data) {
-				if (data._id) {
-					this.dialog.title = '修改';
-					this.editPackage = JSON.parse(JSON.stringify(data));
-				} else {
-					this.dialog.title = '新建';
+				if (data && data._id) {
+					this.editForm = JSON.parse(JSON.stringify(data));
+				} else if (this.editForm._id) {
+					this.editForm = editForm();
 				}
+				this.dialog.title = this.editForm._id ? '修改' : '新建';
 				this.dialog.visible = true;
 			},
 			submit () {
-				this.$refs.editPackage.validate(async valid => {
+				this.$refs.editForm.validate(async valid => {
 					if (valid) {
-						if (this.editPackage._id) {
-							await this.patch(`services/users/${this.editPackage._id}`, this.editPackage);
+						if (this.editForm._id) {
+							await this.patch(`services/users/${this.editForm._id}`, this.editForm);
 						} else {
-							await this.post('services/users', this.editPackage);
+							await this.post('services/users', this.editForm);
 						}
 						await this.queryPackages();
 						this.dialog.visible = false;
-						this.editPackage = editPackage();
+						this.editForm = editForm();
 					}
 				});
 			},
 			cancel () {
 				this.dialog.visible = false;
-				this.editPackage = editPackage();
+				this.editForm = editForm();
 			},
 			async refresh () {
 				await this.queryPackages();

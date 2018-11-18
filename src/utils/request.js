@@ -12,7 +12,8 @@ mode || (mode = MODE);
 // create an axios instance
 const service = axios.create({
 	baseURL: REQUST[mode].BASE_URL, // api的base_url
-	timeout: 300000 // request timeout
+	timeout: 300000, // request timeout
+	withCredentials: true,
 });
 
 // request interceptor
@@ -23,6 +24,7 @@ service.interceptors.request.use(
 			// 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
 			config.headers[SESSION_KEY] = getToken();
 		}
+
 		config.headers['x-requested-with'] = 'XMLHttpRequest';
 		config.headers['x-serve'] = 'service';
 		return config;

@@ -200,12 +200,12 @@
 				});
 			},
 			toggleEdit (data) {
-				if (data._id) {
-					this.dialog.title = '修改';
+				if (data && data._id) {
 					this.editForm = JSON.parse(JSON.stringify(data));
-				} else {
-					this.dialog.title = '新建';
+				} else if (this.editForm._id) {
+					this.editForm = editForm();
 				}
+				this.dialog.title = this.editForm._id ? '修改' : '新建';
 				this.dialog.visible = true;
 			},
 			submit () {

@@ -17,7 +17,7 @@
 			<el-alert v-if="currAccount" :title="'UID: '+currAccount.uid" type="warning" :closable="false"></el-alert>
 			<el-alert v-if="currAccount" style="margin-bottom:5px;white-space:nowrap;" :title="'BDUSS: '+currAccount.BDUSS" type="info" :closable="false"></el-alert>
 
-			<el-table :data="tiebas" :row-class-name="tableRowClassName" v-loading="tableLoading" border stripe>
+			<el-table :data="tiebas" :row-class-name="tableRowClassName" :header-row-class-name="headerRowClassName" v-loading="tableLoading" border stripe>
 				<el-table-column prop="kw" label="kw">
 					<template slot-scope="scope">
 						<a :href="'https://tieba.baidu.com/f?kw='+scope.row.kw" target="_blank" :style="scope.row.void?'color:#f56c6c':'color:#409EFF'">{{scope.row.kw}}</a>
@@ -51,7 +51,13 @@
 						<el-switch v-model="scope.row.void" :data-id="scope.row._id" ref="dataId" @change="updateVoid(scope.row)" active-color="#f56c6c" inactive-color="#409EFF"></el-switch>
 					</template>
 				</el-table-column>
-				<el-table-column width="130" label="编辑">
+				<el-table-column width="130">
+					<template slot="header" slot-scope="scope">
+						<el-select v-model="searchProp" placeholder="请选择" size="mini" @change="searchBystatus">
+							<el-option v-for="item in searchProps" :key="item.label" :label="item.label" :value="item.status">
+							</el-option>
+						</el-select>
+					</template>
 					<template slot-scope="scope">
 						<el-button type="warning" size="mini" plain @click="signOne(scope.row)" :disabled="scope.row.void || scope.row.status=='resolve'">签</el-button>
 						<el-button type="danger" icon="el-icon-delete" size="mini" plain @click="remove(scope.row)"></el-button>
@@ -60,7 +66,7 @@
 			</el-table>
 			<div class="pagination-container">
 				<div class="float-left">
-					<el-button size="small" @click="refresh" plain>刷新</el-button>
+					<el-button size="small" @click="queryAccount" plain>刷新</el-button>
 				</div>
 				<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
 			</div>
@@ -104,9 +110,20 @@
 	  margin-bottom: 10px;
 	  background-color: #edeff2;
 	  font-size: 14px;
-	  color: #787B80;
+	  color: #787b80;
 	  .el-row {
 	    margin-bottom: 5px;
+	  }
+	}
+</style>
+<style lang="scss">
+	.header-row th:nth-child(7) {
+	  padding: 0;
+	  .el-select {
+	    top: 4px;
+	    input {
+	      padding-left: 10px;
+	    }
 	  }
 	}
 </style>
@@ -148,7 +165,30 @@
 						{ required: true, message: '请输入', trigger: 'blur' },
 					],
 				},
-				tableLoading: false
+				tableLoading: false,
+				searchProp: '',
+				searchProps: [
+					{
+						status: '',
+						label: '全部'
+					},
+					{
+						status: 'pendding',
+						label: '待签'
+					},
+					{
+						status: 'resolve',
+						label: '已签'
+					},
+					{
+						status: 'reject',
+						label: '出错'
+					},
+					{
+						status: true,
+						label: '忽略'
+					}
+				],
 			};
 		},
 		methods: {
@@ -157,6 +197,9 @@
 					return 'delete-row';
 				}
 				return '';
+			},
+			headerRowClassName ({ row, column, rowIndex, columnIndex }) {
+				return 'header-row';
 			},
 			pageSizeChange (e) {
 				this.pagination.pageSize = e;
@@ -167,20 +210,30 @@
 				this.queryTiebas();
 			},
 			queryAccount () {
-				return this.query('tieba/tieba-accounts').then(res => {
+				return this.query('tieba/tieba-accounts?sort=createdAt').then(res => {
 					this.tiebaAccounts = res.data;
-					[this.currAccount] = this.tiebaAccounts;
+					this.currAccount = this.tiebaAccounts[this.tabIndex];
 					this.getSumarize();
 					this.queryTiebas();
 				});
 			},
 			queryTiebas () {
 				this.tableLoading = true;
-				let query = '{}';
+				let query = {};
 				if (this.currAccount) {
-					query = `{"tiebaAccount":"${this.currAccount._id}"}`;
+					query.tiebaAccount = this.currAccount._id;
 				}
-				return this.query(`tieba/tiebas?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${query}`).then(res => {
+				if (this.searchProp) {
+					if (this.searchProp === true) {
+						query.void = true;
+					} else {
+						query.status = this.searchProp;
+						query.void = {
+							$ne: true
+						};
+					}
+				}
+				return this.query(`tieba/tiebas?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${JSON.stringify(query)}`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
 					this.tiebas = res.data;
 					this.tableLoading = false;
@@ -205,11 +258,11 @@
 			},
 			toggleEdit (data) {
 				if (data && data._id) {
-					this.dialog.title = '修改';
 					this.editTiebaAccount = JSON.parse(JSON.stringify(data));
-				} else {
-					this.dialog.title = '新建';
+				} else if (this.editTiebaAccount._id) {
+					this.editTiebaAccount = editTiebaAccount();
 				}
+				this.dialog.title = this.editTiebaAccount._id ? '修改' : '新建';
 				this.dialog.visible = true;
 			},
 			submit () {
@@ -272,9 +325,15 @@
 			},
 			signOne (data) {
 				this.post(`tieba/tiebas/${data._id}/sign`).then(result => {
-					this.$notify.success({
-						message: '签到成功',
-					});
+					if (result.status == 'resolve') {
+						this.$notify.success({
+							message: '签到成功',
+						});
+					} else {
+						this.$notify.error({
+							message: result.desc || '签到失败',
+						});
+					}
 				});
 			},
 			updateVoid (data) {
@@ -283,6 +342,9 @@
 				}).catch(() => {
 					data.void = !data.void;
 				});
+			},
+			searchBystatus () {
+				this.queryTiebas();
 			}
 		},
 		created () {
