@@ -4,10 +4,10 @@
 			<el-row type="flex" justify="space-between">
 				<el-form :inline="true">
 					<el-form-item>
-						<el-input placeholder="请输入" v-model="searchVal" clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="success" icon="el-icon-search" plain @click="search">搜索</el-button>
+						<el-select v-model="searchVal" clearable placeholder="选择类型" @change="refresh">
+							<el-option v-for="item in types" :key="item" :label="item" :value="item">
+							</el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" icon="el-icon-edit" plain @click="toggleEdit">添加</el-button>
@@ -93,7 +93,7 @@
 				</el-form-item>
 				<el-form-item label="类型" prop="type">
 					<el-select v-model="editForm.type" placeholder="选择">
-						<el-option v-for="item of ['default', 'music', 'article', 'movie', 'fiction', 'novel', 'ev']" :key="item" :label="item" :value="item">
+						<el-option v-for="item of types" :key="item" :label="item" :value="item">
 						</el-option>
 					</el-select>
 				</el-form-item>
@@ -113,21 +113,21 @@
 </template>
 
 <style lang="scss" scoped>
-.link-title {
-  padding-right: 10px;
-  min-width: 120px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  color: #6dba45;
-}
+	.link-title {
+	  padding-right: 10px;
+	  min-width: 120px;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+	  display: -webkit-box;
+	  -webkit-line-clamp: 2;
+	  -webkit-box-orient: vertical;
+	  color: #6dba45;
+	}
 
-.table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-}
+	.table-expand .el-form-item {
+	  margin-right: 0;
+	  margin-bottom: 0;
+	}
 </style>
 
 <script>
@@ -153,6 +153,7 @@
 	export default {
 		data () {
 			return {
+				types: ['default', 'music', 'article', 'movie', 'fiction', 'novel', 'event'],
 				favorites: [],
 				pagination: {
 					total: 0,
@@ -191,7 +192,7 @@
 				let searchVal = '';
 				this.tableLoading = true;
 				if (this.searchVal) {
-					searchVal = `{"title":{"$regex":"${this.searchVal}","$options":"$i"}}`;
+					searchVal = `{"type":{"$regex":"${this.searchVal}","$options":"$i"}}`;
 				}
 				return this.query(`services/favorites?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);

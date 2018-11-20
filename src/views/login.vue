@@ -126,12 +126,10 @@ export default {
 						this.$message({
 							message: '登录成功',
 							type: 'success',
-							onClose () {
-								self.$router.push({ path: self.redirect || '/' });
-							}
 						});
 						setToken(res[LOCAL_SESSION], res.expireAt);
 						this.$store.dispatch('GetProfile');
+						self.$router.push({ path: self.redirect || '/' });
 					}).catch(() => {
 						this.loading = false;
 					});
