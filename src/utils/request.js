@@ -89,7 +89,7 @@ service.interceptors.response.use(
 			redirect = { path: '/login', query: { redirect: router.app.$route.fullPath } };
 		}
 		Message({
-			message: message || _.get(error, 'response.data.message') || error.message,
+			message: message || _.get(error, 'response.data.message') || _.get(error, 'response.data.errors.type.message') || error.message,
 			type: 'error',
 			duration,
 			onClose () {

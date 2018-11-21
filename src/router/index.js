@@ -220,7 +220,7 @@ export default new VueRouter({
 				{
 					path: '',
 					name: 'Favor',
-					component: resolve => require(['@/views/favorites/index'], resolve),
+					component: () => import('@/views/favorites/index'),
 					meta: { title: 'Favor', icon: 'heart-o' }
 				}
 			]

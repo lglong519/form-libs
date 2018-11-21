@@ -4,10 +4,13 @@
 			<el-row type="flex" justify="space-between">
 				<el-form :inline="true">
 					<el-form-item>
-						<el-select v-model="searchVal" clearable placeholder="选择类型" @change="refresh">
+						<el-select v-model="searchForm.type" clearable placeholder="选择类型" @change="refresh">
 							<el-option v-for="item in types" :key="item" :label="item" :value="item">
 							</el-option>
 						</el-select>
+					</el-form-item>
+					<el-form-item>
+						<el-switch v-model="searchForm.active" active-color="#409EFF" inactive-color="#f56c6c" @change="refresh"></el-switch>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" icon="el-icon-edit" plain @click="toggleEdit">添加</el-button>
@@ -29,7 +32,7 @@
 								<span>{{ props.row.title }}</span>
 							</el-form-item>
 							<el-form-item label="link:">
-								<span>{{ props.row.link }}</span>
+								<a :href="props.row.link" target="_blank">{{ props.row.link }}</a>
 							</el-form-item>
 							<el-form-item label="type:">
 								<span>{{ props.row.type }}</span>
@@ -68,7 +71,7 @@
 				<el-table-column prop="type" label="类型" width="70"></el-table-column>
 				<el-table-column width="70" label="active">
 					<template slot-scope="scope">
-						<el-switch v-model="scope.row.active" active-color="#409EFF" inactive-color="#f56c6c"></el-switch>
+						<el-switch v-model="scope.row.active" active-color="#409EFF" inactive-color="#f56c6c" @change="switchActive(scope.row)"></el-switch>
 					</template>
 				</el-table-column>
 				<el-table-column width="130" label="编辑">
@@ -153,7 +156,7 @@
 	export default {
 		data () {
 			return {
-				types: ['default', 'music', 'article', 'movie', 'fiction', 'novel', 'event'],
+				types: ['default', 'doc', 'music', 'article', 'movie', 'fiction', 'novel', 'event'],
 				favorites: [],
 				pagination: {
 					total: 0,
@@ -161,7 +164,10 @@
 					pageSizes: [10, 20, 30, 50, 100],
 					pageSize: 10,
 				},
-				searchVal: null,
+				searchForm: {
+					type: '',
+					active: true
+				},
 				editForm: editForm(),
 				dialog: {
 					visible: false,
@@ -189,12 +195,14 @@
 				this.queryDatas();
 			},
 			queryDatas () {
-				let searchVal = '';
+				let query = {
+					active: this.searchForm.active
+				};
 				this.tableLoading = true;
-				if (this.searchVal) {
-					searchVal = `{"type":{"$regex":"${this.searchVal}","$options":"$i"}}`;
+				if (this.searchForm.type) {
+					query.type = this.searchForm.type;
 				}
-				return this.query(`services/favorites?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
+				return this.query(`services/favorites?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${JSON.stringify(query)}`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
 					this.favorites = res.data;
 					this.tableLoading = false;
@@ -251,7 +259,7 @@
 
 			},
 			search () {
-				if (this.searchVal) {
+				if (this.searchForm) {
 					this.refresh();
 				} else {
 					this.$message({
@@ -260,7 +268,12 @@
 					});
 				}
 
-			}
+			},
+			async switchActive (data) {
+				data.isActive = !data.isActive;
+				await this.patch(`services/favorites/${data._id}`, data);
+				this.refresh();
+			},
 		},
 		mounted () {
 			this.queryDatas();
