@@ -2,7 +2,7 @@
 	<div class="app-container">
 		<el-card class="sumarize" shadow="hover">
 			<el-row>
-				总共 {{sumarize.total}} 个贴吧，已签 {{sumarize.resolve}} 个，待签 {{sumarize.pendding}} 个，出错 {{sumarize.reject}} 个，忽略 {{sumarize.void}} 个
+				总共 {{sumarize.total}} 个贴吧，已签 {{sumarize.resolve}} 个，待签 {{sumarize.pendding}} 个，出错 {{sumarize.reject}} 个，忽略 {{sumarize.void}} 个， 无效 {{sumarize.invalid}} 个
 			</el-row>
 			<el-button-group>
 				<el-button plain size="mini" type="primary" @click="sync">更新列表</el-button>
@@ -13,9 +13,9 @@
 			</el-button-group>
 		</el-card>
 		<el-tabs type="border-card" @tab-click="handleClick">
-			<el-tab-pane v-for="(ac,i) in this.tiebaAccounts" :key="ac._id" :label="ac.account"></el-tab-pane>
+			<el-tab-pane v-for="(ac,i) in this.tiebaAccounts" :key="ac._id" :label="ac.un"></el-tab-pane>
 			<el-alert v-if="currAccount" :title="'UID: '+currAccount.uid" type="warning" :closable="false"></el-alert>
-			<el-alert v-if="currAccount" style="margin-bottom:5px;white-space:nowrap;" :title="'BDUSS: '+currAccount.BDUSS" type="info" :closable="false"></el-alert>
+			<el-alert v-if="currAccount" style="margin-bottom:5px;white-space:nowrap;" :title="currAccount.active?'BDUSS: '+currAccount.BDUSS:'BDUSS: 失效'" :type="currAccount.active?'info':'error'" :closable="false"></el-alert>
 
 			<el-table :data="tiebas" :row-class-name="tableRowClassName" :header-row-class-name="headerRowClassName" v-loading="tableLoading" border stripe>
 				<el-table-column prop="kw" label="kw">
@@ -76,19 +76,16 @@
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
 			<el-form :model="editTiebaAccount" :rules="editRules" ref="editTiebaAccount" label-width="70px">
 				<el-form-item v-if="editTiebaAccount._id" label="_id" prop="_id">
-					<el-input v-model="editTiebaAccount._id" autofocus="true" disabled></el-input>
+					<el-input v-model="editTiebaAccount._id" disabled></el-input>
 				</el-form-item>
-				<el-form-item label="account" prop="account">
-					<el-input v-model="editTiebaAccount.account" autofocus="true"></el-input>
+				<el-form-item v-if="editTiebaAccount.un" label="un" prop="un">
+					<el-input v-model="editTiebaAccount.un" disabled></el-input>
 				</el-form-item>
 				<el-form-item label="BDUSS" prop="BDUSS">
-					<el-input v-model="editTiebaAccount.BDUSS"></el-input>
+					<el-input v-model="editTiebaAccount.BDUSS" autofocus="true"></el-input>
 				</el-form-item>
-				<el-form-item label="active" prop="active">
-					<el-select v-model="editTiebaAccount.active" placeholder="选择">
-						<el-option v-for="item of [false,true]" :key="item" :label="item" :value="item">
-						</el-option>
-					</el-select>
+				<el-form-item v-if="editTiebaAccount.active===true||editTiebaAccount.active===false" label="active" prop="active">
+					<el-input v-model="editTiebaAccount.active" disabled></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -128,13 +125,10 @@
 	}
 </style>
 
-
 <script>
 	function editTiebaAccount () {
 		return {
-			account: undefined,
 			BDUSS: undefined,
-			active: false,
 		};
 	}
 	export default {
@@ -187,6 +181,10 @@
 					{
 						status: true,
 						label: '忽略'
+					},
+					{
+						status: false,
+						label: '无效'
 					}
 				],
 			};
@@ -224,6 +222,7 @@
 					query.tiebaAccount = this.currAccount._id;
 				}
 				if (this.searchProp) {
+					query.active = true;
 					if (this.searchProp === true) {
 						query.void = true;
 					} else {
@@ -232,6 +231,8 @@
 							$ne: true
 						};
 					}
+				} else if (this.searchProp === false) {
+					query.active = false;
 				}
 				return this.query(`tieba/tiebas?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${JSON.stringify(query)}`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
@@ -276,6 +277,7 @@
 						}
 						await this.queryAccount();
 						this.editTiebaAccount = editTiebaAccount();
+						this.sync();
 					}
 				});
 			},
@@ -309,18 +311,20 @@
 				if (!this.currAccount) {
 					return;
 				}
-				this.post(`tieba/tieba-accounts/${this.currAccount._id}/tiebas/sync`);
-				this.$notify.success({
-					message: '正在更新列表,请稍后刷新...',
+				this.post(`tieba/tieba-accounts/${this.currAccount._id}/tiebas/sync`).then(() => {
+					this.$notify.success({
+						message: '正在更新列表,请稍后刷新...',
+					});
 				});
 			},
 			signAll () {
 				if (!this.currAccount) {
 					return;
 				}
-				this.post(`tieba/tieba-accounts/${this.currAccount._id}/sign`);
-				this.$notify.success({
-					message: '正在签到,请稍后刷新...',
+				this.post(`tieba/tieba-accounts/${this.currAccount._id}/sign`).then(() => {
+					this.$notify.success({
+						message: '正在签到,请稍后刷新...',
+					});
 				});
 			},
 			signOne (data) {
