@@ -13,7 +13,7 @@ const Layout = resolve => require(['@/views/layout/Layout'], resolve);
 const CFOP = () => import('@/views/cfop/index');
 const Sort = resolve => require(['@/views/cfop/sort'], resolve);
 
-export default new VueRouter({
+const router = new VueRouter({
 	mode: 'hash', // history
 	routes: [
 		{ path: '/404', component: () => import('@/views/404') },
@@ -269,4 +269,15 @@ export default new VueRouter({
 		},
 		{ path: '*', redirect: '/404' }
 	]
+});
+
+export default router;
+
+router.onError(error => {
+	const pattern = /Loading chunk (\d)+ failed/g;
+	const isChunkLoadFailed = error.message.match(pattern);
+	const targetPath = router.history.pending.fullPath;
+	if (isChunkLoadFailed) {
+		router.replace(targetPath);
+	}
 });
