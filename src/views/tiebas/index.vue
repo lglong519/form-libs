@@ -9,7 +9,7 @@
 				<el-button plain size="mini" type="primary" @click="signAll">一键签到</el-button>
 				<el-button plain size="mini" type="primary" @click="toggleEdit" icon="el-icon-plus"></el-button>
 				<el-button plain size="mini" type="primary" @click="toggleEdit(currAccount)" icon="el-icon-edit"></el-button>
-				<el-button plain size="mini" type="danger" icon="el-icon-delete"></el-button>
+				<el-button plain size="mini" type="danger" @click="deleteAccount" icon="el-icon-delete"></el-button>
 			</el-button-group>
 		</el-card>
 		<el-tabs type="border-card" @tab-click="handleClick">
@@ -349,6 +349,24 @@
 			},
 			searchBystatus () {
 				this.queryTiebas();
+			},
+			deleteAccount () {
+				this.$confirm(`此操作将永久删除:${this.currAccount.un}, 是否继续?`, '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(async () => {
+					await this.del(`tieba/tieba-accounts/${this.currAccount._id}`);
+					this.$notify.success({
+						message: '删除成功',
+					});
+					this.queryAccount();
+				}).catch(action => {
+					this.$notify({
+						type: action === 'cancel' ? 'info' : 'error',
+						message: action === 'cancel' ? '已取消删除' : '删除失败',
+					});
+				});
 			}
 		},
 		created () {
