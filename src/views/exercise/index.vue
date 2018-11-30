@@ -51,7 +51,7 @@
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
 			<el-form :model="editForm" :rules="editRules" ref="editform">
 				<el-form-item label="count" prop="count">
-					<el-input v-model.number="editForm.count" placeholder="请输入数量" autofocus="true"></el-input>
+					<el-input v-model.number="editForm.count" placeholder="请输入数量" autofocus="true" @keyup.enter.native="submit"></el-input>
 				</el-form-item>
 				<el-form-item label="参考日期" prop="referenceDate">
 					<el-date-picker type="datetime" placeholder="选择日期" v-model="editForm.referenceDate" style="width: 100%;"></el-date-picker>

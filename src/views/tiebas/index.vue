@@ -20,7 +20,7 @@
 			<el-table :data="tiebas" :row-class-name="tableRowClassName" :header-row-class-name="headerRowClassName" v-loading="tableLoading" border stripe>
 				<el-table-column prop="kw" label="kw">
 					<template slot-scope="scope">
-						<a :href="'https://tieba.baidu.com/f?kw='+scope.row.kw" target="_blank" :style="scope.row.void?'color:#f56c6c':'color:#409EFF'">{{scope.row.kw}}</a>
+						<a target="_blank" :onclick="`window.open('https://tieba.baidu.com/f?kw=${scope.row.kw}');`" :style="scope.row.void?'color:#f56c6c':'color:#409EFF'">{{scope.row.kw}}</a>
 					</template>
 				</el-table-column>
 				<el-table-column prop="level_id" label="★" align="center" width="100">

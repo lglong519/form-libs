@@ -39,7 +39,7 @@
 				</el-table-column>
 				<el-table-column width="50" prop="link" label="link">
 					<template slot-scope="scope">
-						<a v-if="scope.row.link" :href="scope.row.link" target="_blank">
+						<a v-if="scope.row.link" target="_blank" :onclick="`window.open('${scope.row.link}');`">
 							<el-tooltip class="item" effect="dark" :content="scope.row.link" placement="right-start">
 								<el-button type="text">前往</el-button>
 							</el-tooltip>

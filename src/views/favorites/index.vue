@@ -32,7 +32,7 @@
 								<span>{{ props.row.title }}</span>
 							</el-form-item>
 							<el-form-item label="link:">
-								<a :href="props.row.link" target="_blank">{{ props.row.link }}</a>
+								<a target="_blank" :onclick="`window.open('${props.row.link}');`" style="color:#409EFF">{{ props.row.link }}</a>
 							</el-form-item>
 							<el-form-item label="type:">
 								<span>{{ props.row.type }}</span>
@@ -61,7 +61,7 @@
 				</el-table-column>
 				<el-table-column prop="link" label="link" width="70">
 					<template slot-scope="scope">
-						<a :href="scope.row.link" target="_blank">
+						<a target="_blank" :onclick="`window.open('${scope.row.link}');`">
 							<el-tooltip class="item" effect="dark" :content="scope.row.link" placement="right-start">
 								<el-button type="text">前往</el-button>
 							</el-tooltip>

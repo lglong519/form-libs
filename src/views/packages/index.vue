@@ -31,7 +31,7 @@
 				</el-table-column>
 				<el-table-column prop="link" label="doc">
 					<template slot-scope="scope">
-						<a :href="scope.row.link" target="_blank">
+						<a target="_blank" :onclick="`window.open('${scope.row.link}');`">
 							<el-tooltip class="item" effect="dark" :content="scope.row.link" placement="right-start">
 								<el-button type="text">前往</el-button>
 							</el-tooltip>

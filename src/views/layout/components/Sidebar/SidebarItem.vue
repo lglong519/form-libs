@@ -87,10 +87,12 @@ export default {
 			return validateURL(routePath);
 		},
 		clickLink (routePath, e) {
+			e.preventDefault();
 			if (!this.isExternalLink(routePath)) {
-				e.preventDefault();
 				const path = this.resolvePath(routePath);
 				this.$router.push(path);
+			} else {
+				window.open(routePath);
 			}
 		}
 	}

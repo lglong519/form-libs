@@ -49,7 +49,7 @@
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
 			<el-form :model="editExpense" :rules="editRules" ref="editExpense" label-width="50px">
 				<el-form-item label="金额" prop="amount">
-					<el-input v-model.number="editExpense.amount" placeholder="请输入金额" autofocus="true"></el-input>
+					<el-input v-model.number="editExpense.amount" placeholder="请输入金额" autofocus="true" @keyup.enter.native="submit"></el-input>
 				</el-form-item>
 				<el-form-item label="类型" prop="type">
 					<el-select v-model="editExpense.type" placeholder="选择">

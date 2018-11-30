@@ -72,6 +72,9 @@
 					title: [
 						{ required: true, message: '请输入', trigger: 'blur' }
 					],
+					type: [
+						{ required: true, message: '请选择', trigger: 'change' }
+					],
 					link: [
 						{ message: '请输入链接', trigger: 'blur' },
 						{ validator: validLink, trigger: 'blur' }

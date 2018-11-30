@@ -1,5 +1,5 @@
 <template>
-  <a href="https://github.com/lglong519" target="_blank" class="github-corner" aria-label="View My Github">
+  <a target="_blank" onclick="window.open('https://github.com/lglong519');" class="github-corner" aria-label="View My Github">
     <svg
       :width="size"
       :height="size"

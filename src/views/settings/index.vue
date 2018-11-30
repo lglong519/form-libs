@@ -3,7 +3,7 @@
 		<el-card>
 			<el-form :model="editForm" :rules="editRules" ref="editform" label-width="80px">
 				<el-form-item>
-					<img v-if="editForm.image" :src="editForm.image" class="avatar">
+					<img :src="editForm.image||avatar" class="avatar">
 				</el-form-item>
 				<el-form-item label="头像" prop="image">
 					<el-input v-model="editForm.image" placeholder="请选择头像" :disabled="!editting"></el-input>
@@ -71,6 +71,7 @@
 		},
 		data () {
 			return {
+				avatar: require('@/assets/avatar.svg'),
 				source: 'squats',
 				searchForm: {
 					from: null,
