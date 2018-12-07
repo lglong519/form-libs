@@ -190,9 +190,13 @@
 			};
 		},
 		methods: {
+			// 判断是否 void 或者 active
 			tableRowClassName ({ row, rowIndex }) {
 				if (row.void) {
 					return 'delete-row';
+				}
+				if (!row.active) {
+					return 'unactive-row';
 				}
 				return '';
 			},
