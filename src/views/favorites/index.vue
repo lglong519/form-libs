@@ -54,9 +54,9 @@
 				</el-table-column>
 				<el-table-column prop="title" label="title" min-width="120">
 					<template slot-scope="scope">
-						<el-tooltip class="item" effect="light" :content="scope.row.title||scope.row.link" placement="top-start">
+						<!-- <el-tooltip class="item" effect="light" :content="scope.row.title||scope.row.link" placement="top-start"> -->
 							<div class="link-title">{{scope.row.title||scope.row.link}}</div>
-						</el-tooltip>
+						<!-- </el-tooltip> -->
 					</template>
 				</el-table-column>
 				<el-table-column prop="link" label="link" width="70">

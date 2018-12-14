@@ -40,7 +40,7 @@ export default {
 			form: {
 				login: null,
 				password: null,
-				client: 'web'
+				client: 'CNS'
 			},
 			rememberMe: false,
 			loading: false,

@@ -207,7 +207,7 @@ const router = new VueRouter({
 				{
 					hidden: true,
 					path: 'edit/:id?',
-					name: 'Edit',
+					// name: 'Edit',
 					component: resolve => require(['@/views/entertainments/edit'], resolve),
 					meta: { title: 'Edit', icon: 'edit' }
 				}
