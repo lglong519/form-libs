@@ -21,12 +21,12 @@
 				<el-table-column prop="formula" label="Formula"></el-table-column>
 				<el-table-column prop="formula" label="Reletive">
 					<template slot-scope="scope">
-						{{scope.row.from}}<=>{{scope.row.to}}
+						{{scope.row.from}}&lt;=&gt;{{scope.row.to}}
 					</template>
 				</el-table-column>
 				<el-table-column width="70" label="video" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-caret-right" plain circle></i></el-button>
+						<el-button size="mini" type="primary" icon="el-icon-caret-right" plain circle></el-button>
 					</template>
 				</el-table-column>
 			</el-table>

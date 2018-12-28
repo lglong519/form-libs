@@ -8,7 +8,7 @@ module.exports = {
 		expect: false,
 	},
 	extends: [
-		'teslint'
+		'teslint/typescript'
 	],
 	rules: {
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'

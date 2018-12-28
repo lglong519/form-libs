@@ -4,7 +4,9 @@
 			<el-row type="flex" justify="space-between">
 				<el-form :inline="true">
 					<el-form-item>
-						<el-input placeholder="请输入内容" v-model="searchVal" clearable><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
+						<el-input placeholder="请输入内容" v-model="searchVal" clearable>
+							<i slot="prefix" class="el-input__icon el-icon-search"></i>
+						</el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="success" icon="el-icon-search" plain @click="search">搜索</el-button>
@@ -22,29 +24,46 @@
 			</el-row>
 
 			<!-- content -->
-			<el-table :data="tableDatas" :row-class-name="tableRowClassName" v-loading="tableLoading" :default-sort="{prop: 'order', order: 'ascending'}" border>
-				<el-table-column prop="order" class="order" label="#" width="55" align="center" sortable>
-				</el-table-column>
+			<el-table
+				:data="tableDatas"
+				:row-class-name="tableRowClassName"
+				v-loading="tableLoading"
+				:default-sort="{prop: 'order', order: 'ascending'}"
+				border
+			>
+				<el-table-column prop="order" class="order" label="#" width="55" align="center" sortable></el-table-column>
 				<el-table-column prop="number" label="No" width="65" align="center" sortable></el-table-column>
 				<el-table-column prop="image" label="ico" width="60" align="center">
 					<template slot-scope="scope">
-						<img class="ico" :src="scope.row.image" />
+						<img class="ico" :src="scope.row.image">
 					</template>
 				</el-table-column>
 				<el-table-column prop="formula" label="Formula" min-width="250"></el-table-column>
 				<el-table-column prop="formula" label="Reletive">
-					<template slot-scope="scope">
-						{{scope.row.from}}<=>{{scope.row.to}}
-					</template>
+					<template slot-scope="scope">{{scope.row.from}}&lt;=&gt;{{scope.row.to}}</template>
 				</el-table-column>
 				<el-table-column width="70" label="video" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" :disabled="!scope.row.video" @click="openVideo(scope.row)" type="primary" icon="el-icon-caret-right" plain circle></i></el-button>
+						<el-button
+							size="mini"
+							:disabled="!scope.row.video"
+							@click="openVideo(scope.row)"
+							type="primary"
+							icon="el-icon-caret-right"
+							plain
+							circle
+						></el-button>
 					</template>
 				</el-table-column>
 				<el-table-column width="60" label="Tag" align="center">
 					<template slot-scope="scope">
-						<el-tag v-if="scope.row.tags.length" v-for="item of scope.row.tags" :key="item._id" :type="item.type" size="mini">{{item.label}}</el-tag>
+						<el-tag
+							v-if="scope.row.tags.length"
+							v-for="item of scope.row.tags"
+							:key="item._id"
+							:type="item.type"
+							size="mini"
+						>{{item.label}}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column width="70">
@@ -57,7 +76,13 @@
 				<div class="multi-edit">
 					<el-button type="warning" size="small" @click="toReorder" plain>重新排序</el-button>
 				</div>
-				<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
+				<el-pagination
+					layout="total, sizes, prev, pager, next, jumper"
+					@size-change="pageSizeChange"
+					:page-sizes="pagination.pageSizes"
+					:total="pagination.total"
+					@current-change="pageChange"
+				></el-pagination>
 			</div>
 			<!-- edit dialog -->
 			<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
@@ -88,9 +113,8 @@
 			</el-dialog>
 			<!-- video -->
 			<el-dialog :before-close="beforeClose" :visible.sync="videoVisible" custom-class="video-dialog">
-				<video-player ref="vvideo" :videoSrc="videoSrc" />
+				<video-player ref="vvideo" :videoSrc="videoSrc"/>
 			</el-dialog>
-
 		</el-card>
 	</div>
 </template>
@@ -98,39 +122,39 @@
 
 <style lang="scss" scoped>
 	.ico {
-	  width: 35px;
+		width: 35px;
 	}
 
 	.el-table__row {
-	  &:hover #edit-order-btn {
-	    display: inline-block;
-	  }
+		&:hover #edit-order-btn {
+			display: inline-block;
+		}
 	}
 	#edit-order-btn {
-	  display: none;
+		display: none;
 	}
 	.multi-edit {
-	  float: left;
+		float: left;
 	}
 </style>
 
 <style lang="scss">
-	.video-dialog{
-		width:50%;
-		.el-dialog__header{
+	.video-dialog {
+		width: 50%;
+		.el-dialog__header {
 			padding: 0;
-			.el-dialog__headerbtn{
+			.el-dialog__headerbtn {
 				top: 10px;
 			}
 		}
-		.el-dialog__body{
+		.el-dialog__body {
 			padding: 0;
 		}
 		@media only screen and (max-width: 992px) {
-			width:80%;
+			width: 80%;
 		}
 		@media only screen and (max-width: 768px) {
-			width:100%!important;
+			width: 100% !important;
 		}
 	}
 </style>
