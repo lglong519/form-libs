@@ -48,6 +48,7 @@
 
 <script>
 	import { mapGetters } from 'vuex';
+	import * as _ from 'lodash';
 	function editForm () {
 		return {
 			username: null,
@@ -97,7 +98,7 @@
 			submit () {
 				this.$refs.editform.validate(async valid => {
 					if (valid) {
-						await this.patch(`services/users/${this.editForm._id}`, this.editForm);
+						await this.patch(`services/users/${this.editForm._id}`, _.pick(this.editForm, ['username', 'email', 'phone', 'image']));
 						this.$store.dispatch('GetProfile');
 						this.$message({
 							message: '修改成功',

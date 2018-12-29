@@ -36,6 +36,21 @@ import ToggleMode from '@/components/ToggleMode';
 
 export default {
 	data () {
+		let validateAccount = (rule, value, callback) => {
+			if (!value) {
+				return callback();
+			}
+			if ((/^[A-Za-z_]\w{2,30}$/).test(value)) {
+				return callback();
+			}
+			if ((/^\d{11}$/).test(value)) {
+				return callback();
+			}
+			if ((/^[\w.]{3,30}@[\w.]+$/).test(value)) {
+				return callback();
+			}
+			return callback(new Error('请输入正确的账号'));
+		};
 		return {
 			form: {
 				login: null,
@@ -47,11 +62,12 @@ export default {
 			rules: {
 				login: [
 					{ required: true, message: '请输入帐号', trigger: 'blur' },
-					{ min: 4, max: 15, message: '长度在 4 到 15 个字符', trigger: 'blur' }
+					{ min: 3, max: 30, message: '长度至少 3 个字符', trigger: 'blur' },
+					{ validator: validateAccount, trigger: 'blur' }
 				],
 				password: [
 					{ required: true, message: '请输入密码', trigger: 'blur' },
-					{ min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+					{ min: 6, max: 15, message: '长度至少 6 个字符', trigger: 'blur' }
 				],
 			},
 			redirect: null,
