@@ -13,12 +13,12 @@
 			</el-button-group>
 		</el-card>
 		<el-tabs type="border-card" @tab-click="handleClick">
-			<el-tab-pane v-for="(ac,i) in this.tiebaAccounts" :key="ac._id" :label="ac.un"></el-tab-pane>
+			<el-tab-pane v-for="ac in this.tiebaAccounts" :key="ac._id" :label="ac.un"></el-tab-pane>
 			<el-alert v-if="currAccount" :title="'UID: '+currAccount.uid" type="warning" :closable="false"></el-alert>
 			<el-alert v-if="currAccount" style="margin-bottom:5px;white-space:nowrap;" :title="currAccount.active?'BDUSS: '+currAccount.BDUSS:'BDUSS: 失效'" :type="currAccount.active?'info':'error'" :closable="false"></el-alert>
 
 			<el-table :data="tiebas" :row-class-name="tableRowClassName" :header-row-class-name="headerRowClassName" v-loading="tableLoading" border stripe>
-				<el-table-column prop="kw" label="kw">
+				<el-table-column prop="kw" label="kw" fixed>
 					<template slot-scope="scope">
 						<a target="_blank" :onclick="`window.open('https://tieba.baidu.com/f?kw=${scope.row.kw}');`" :style="scope.row.void?'color:#f56c6c':'color:#409EFF'">{{scope.row.kw}}</a>
 					</template>

@@ -33,7 +33,7 @@
 						{{scope.row.createdAt|dateTime}}
 					</template>
 				</el-table-column>
-				<el-table-column prop="note" label="备注"></el-table-column>
+				<!-- <el-table-column prop="note" label="备注"></el-table-column> -->
 				<el-table-column width="130" label="编辑">
 					<template slot-scope="scope">
 						<el-button type="warning" icon="el-icon-edit" size="mini" plain @click="toggleEdit(scope.row)"></el-button>

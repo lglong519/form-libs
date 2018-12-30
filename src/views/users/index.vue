@@ -81,6 +81,8 @@
 
 <script>
 	import { validateURL } from '@/utils/validate';
+	import * as _ from 'lodash';
+
 	function editForm () {
 		return {
 			username: undefined,
@@ -93,7 +95,7 @@
 		data () {
 			function validLink (rule, value, callback) {
 				if (!value) {
-					callback(new Error('请输入链接'));
+					callback();
 				} else if (!validateURL(value)) {
 					callback(new Error('链接格式不对'));
 				} else {
@@ -119,13 +121,13 @@
 						{ required: true, message: '请输入', trigger: 'blur' }
 					],
 					email: [
-						{ required: true, message: '请输入', trigger: 'blur' }
+						{ message: '请输入', trigger: 'blur' }
 					],
 					phone: [
-						{ required: true, message: '请输入', trigger: 'blur' }
+						{ message: '请输入', trigger: 'blur' }
 					],
 					image: [
-						{ required: true, message: '请输入链接', trigger: 'blur' },
+						{ message: '请输入链接', trigger: 'blur' },
 						{ validator: validLink, trigger: 'blur' }
 					],
 				},
@@ -175,7 +177,7 @@
 				this.$refs.editForm.validate(async valid => {
 					if (valid) {
 						if (this.editForm._id) {
-							await this.patch(`services/users/${this.editForm._id}`, this.editForm);
+							await this.patch(`services/users/${this.editForm._id}`, _.pick(this.editForm, ['username', 'email', 'phone', 'image']));
 						} else {
 							await this.post('services/users', this.editForm);
 						}
