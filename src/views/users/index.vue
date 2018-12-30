@@ -146,13 +146,13 @@
 			},
 			pageSizeChange (e) {
 				this.pagination.pageSize = e;
-				this.queryPackages();
+				this.queryDatas();
 			},
 			pageChange (e) {
 				this.pagination.currentPage = e;
-				this.queryPackages();
+				this.queryDatas();
 			},
-			queryPackages () {
+			queryDatas () {
 				let searchVal = '';
 				this.tableLoading = true;
 				if (this.searchVal) {
@@ -181,7 +181,7 @@
 						} else {
 							await this.post('services/users', this.editForm);
 						}
-						await this.queryPackages();
+						await this.queryDatas();
 						this.dialog.visible = false;
 						this.editForm = editForm();
 					}
@@ -192,7 +192,7 @@
 				this.editForm = editForm();
 			},
 			async refresh () {
-				await this.queryPackages();
+				await this.queryDatas();
 			},
 			remove (data) {
 				this.$confirm(`此操作将永久删除:${data.username}, 是否继续?`, '提示', {
@@ -226,7 +226,7 @@
 			}
 		},
 		async mounted () {
-			await this.queryPackages();
+			await this.queryDatas();
 		}
 	};
 </script>

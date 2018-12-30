@@ -81,7 +81,7 @@ export default {
 			return false;
 		},
 		resolvePath (routePath) {
-			return path.resolve(this.basePath, routePath);
+			return path.resolve(this.basePath, routePath.replace(/\/:(.*)?/g, ''));
 		},
 		isExternalLink (routePath) {
 			return validateURL(routePath);

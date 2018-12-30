@@ -24,6 +24,7 @@
 
 <script>
 import ScrollPane from '@/components/ScrollPane';
+import getRealPath from '@/utils/getRealPath';
 
 export default {
 	components: { ScrollPane },
@@ -59,12 +60,18 @@ export default {
 	methods: {
 		generateRoute () {
 			if (this.$route.name) {
+				if (this.$route.meta && this.$route.meta.hidden) {
+					return false;
+				}
 				return this.$route;
 			}
 			return false;
 		},
 		isActive (route) {
-			return route.path === this.$route.path || route.path === `${this.$route.path}/`;
+			let viewPath = getRealPath(route);
+			let vPath = getRealPath(this.$route);
+
+			return viewPath === vPath;
 		},
 		addViewTags () {
 			const route = this.generateRoute();

@@ -32,19 +32,39 @@ const router = new VueRouter({
 		},
 		{
 			path: '/login',
-			name: '登录',
+			name: 'Login',
 			component: login
 		},
 		{
-			path: '/tiebas',
+			path: '/tieba',
+			name: 'Tieba',
+			meta: { title: 'Tieba', icon: 'paw' },
 			component: Layout,
 			children: [
 				{
-					path: '',
-					name: 'Tieba',
+					path: 'tieba-accounts/users',
+					name: 'Users',
+					component: () => import('@/views/tiebas/users'),
+					meta: { title: 'Users', icon: 'user' }
+				},
+				{
+					path: 'tieba-accounts/:user?',
+					name: 'Accounts',
+					component: () => import('@/views/tiebas/accounts'),
+					meta: { title: 'Accounts', icon: 'credit-card' }
+				},
+				{
+					path: 'tiebas/:user?/:account?',
+					name: 'Tiebas',
 					component: () => import('@/views/tiebas/index'),
-					meta: { title: 'Tieba', icon: 'paw' }
-				}
+					meta: { title: 'Tiebas', icon: 'paw' }
+				},
+				{
+					path: 'summary/:user?/:account?',
+					name: 'Summary',
+					component: () => import('@/views/tiebas/summary'),
+					meta: { title: 'Summary', icon: 'bar-chart' }
+				},
 			]
 		},
 		{

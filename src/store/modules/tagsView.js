@@ -1,3 +1,5 @@
+import getRealPath from '@/utils/getRealPath';
+
 const tagsView = {
 	state: {
 		visitedViews: [],
@@ -5,7 +7,8 @@ const tagsView = {
 	},
 	mutations: {
 		ADD_VISITED_VIEW: (state, view) => {
-			if (state.visitedViews.some(v => v.path === view.path || v.path === `${view.path}/`)) return;
+			let viewPath = getRealPath(view);
+			if (state.visitedViews.some(v => getRealPath(v) === viewPath)) return;
 			state.visitedViews.push(Object.assign({}, view, {
 				title: view.meta.title || 'untitled'
 			}));
