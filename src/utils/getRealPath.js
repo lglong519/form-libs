@@ -8,5 +8,5 @@ export default route => {
 			viewPath += `/:${key}`;
 		}
 	});
-	return viewPath.replace(/\/+^/, '');
+	return viewPath.replace(/\/+$/, '');
 };

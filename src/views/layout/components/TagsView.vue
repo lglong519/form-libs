@@ -70,7 +70,6 @@ export default {
 		isActive (route) {
 			let viewPath = getRealPath(route);
 			let vPath = getRealPath(this.$route);
-
 			return viewPath === vPath;
 		},
 		addViewTags () {
@@ -115,6 +114,7 @@ export default {
 						this.$router.push(latestView);
 					} else {
 						this.$router.push('/');
+						this.addViewTags();
 					}
 				}
 			});
@@ -128,6 +128,7 @@ export default {
 		closeAllTags () {
 			this.$store.dispatch('delAllViews');
 			this.$router.push('/');
+			this.addViewTags();
 		},
 		openMenu (tag, e) {
 			this.visible = true;

@@ -1,13 +1,12 @@
 <template>
 	<div class="app-container">
-		<el-card class="sumarize" shadow="hover">
-			<el-row>
-				总共 {{sumarize.total}} 个贴吧，已签 {{sumarize.resolve}} 个，待签 {{sumarize.pendding}} 个，出错 {{sumarize.reject}} 个，忽略 {{sumarize.void}} 个， 无效 {{sumarize.invalid}} 个
-			</el-row>
+		<el-card class="summarize" shadow="hover">
+			<el-row>总共 {{summarize.total}} 个贴吧，已签 {{summarize.resolve}} 个，待签 {{summarize.pendding}} 个，出错 {{summarize.reject}} 个，忽略 {{summarize.void}} 个， 无效 {{summarize.invalid}} 个</el-row>
 			<el-button-group>
+				<el-button plain size="mini" type="warning" @click="reset">重置</el-button>
 				<el-button plain size="mini" type="primary" @click="sync">更新列表</el-button>
 				<el-button plain size="mini" type="primary" @click="signAll">一键签到</el-button>
-				<el-button plain size="mini" type="primary" @click="toggleEdit" icon="el-icon-plus"></el-button>
+				<el-button v-if="$route.params.user" plain size="mini" type="primary" @click="toggleEdit" icon="el-icon-plus"></el-button>
 				<el-button plain size="mini" type="primary" @click="toggleEdit(currAccount)" icon="el-icon-edit"></el-button>
 				<el-button plain size="mini" type="danger" @click="deleteAccount" icon="el-icon-delete"></el-button>
 			</el-button-group>
@@ -15,12 +14,29 @@
 		<el-tabs type="border-card" v-model="tabIndex" @tab-click="handleClick">
 			<el-tab-pane v-for="(ac,i) in this.tiebaAccounts" :key="ac._id" :label="ac.un" :name="i+''"></el-tab-pane>
 			<el-alert v-if="currAccount" :title="'UID: '+currAccount.uid" type="warning" :closable="false"></el-alert>
-			<el-alert v-if="currAccount" style="margin-bottom:5px;white-space:nowrap;" :title="currAccount.active?'BDUSS: '+currAccount.BDUSS:'BDUSS: 失效'" :type="currAccount.active?'info':'error'" :closable="false"></el-alert>
+			<el-alert
+				v-if="currAccount"
+				style="margin-bottom:5px;white-space:nowrap;"
+				:title="currAccount.active?'BDUSS: '+currAccount.BDUSS:'BDUSS: 失效'"
+				:type="currAccount.active?'info':'error'"
+				:closable="false"
+			></el-alert>
 
-			<el-table :data="tiebas" :row-class-name="tableRowClassName" :header-row-class-name="headerRowClassName" v-loading="tableLoading" border stripe>
+			<el-table
+				:data="tiebas"
+				:row-class-name="tableRowClassName"
+				:header-row-class-name="headerRowClassName"
+				v-loading="tableLoading"
+				border
+				stripe
+			>
 				<el-table-column prop="kw" label="kw" fixed>
 					<template slot-scope="scope">
-						<a target="_blank" :onclick="`window.open('https://tieba.baidu.com/f?kw=${scope.row.kw}');`" :style="scope.row.void?'color:#f56c6c':'color:#409EFF'">{{scope.row.kw}}</a>
+						<a
+							target="_blank"
+							:onclick="`window.open('https://tieba.baidu.com/f?kw=${scope.row.kw}');`"
+							:style="scope.row.void?'color:#f56c6c':'color:#409EFF'"
+						>{{scope.row.kw}}</a>
 					</template>
 				</el-table-column>
 				<el-table-column prop="level_id" label="★" align="center" width="100">
@@ -42,24 +58,34 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="updatedAt" label="时间" min-width="100">
-					<template slot-scope="scope">
-						{{scope.row.updatedAt|dateTime}}
-					</template>
+					<template slot-scope="scope">{{scope.row.updatedAt|dateTime}}</template>
 				</el-table-column>
 				<el-table-column width="70" label="active" align="center">
 					<template slot-scope="scope">
-						<el-switch v-model="scope.row.void" :data-id="scope.row._id" ref="dataId" @change="updateVoid(scope.row)" active-color="#f56c6c" inactive-color="#409EFF"></el-switch>
+						<el-switch
+							v-model="scope.row.void"
+							:data-id="scope.row._id"
+							ref="dataId"
+							@change="updateVoid(scope.row)"
+							active-color="#f56c6c"
+							inactive-color="#409EFF"
+						></el-switch>
 					</template>
 				</el-table-column>
 				<el-table-column width="130">
 					<template slot="header" slot-scope="scope">
 						<el-select v-model="searchProp" placeholder="请选择" size="mini" @change="searchBystatus">
-							<el-option v-for="item in searchProps" :key="item.label" :label="item.label" :value="item.status">
-							</el-option>
+							<el-option v-for="item in searchProps" :key="item.label" :label="item.label" :value="item.status"></el-option>
 						</el-select>
 					</template>
 					<template slot-scope="scope">
-						<el-button type="warning" size="mini" plain @click="signOne(scope.row)" :disabled="scope.row.void || scope.row.status=='resolve'">签</el-button>
+						<el-button
+							type="warning"
+							size="mini"
+							plain
+							@click="signOne(scope.row)"
+							:disabled="scope.row.void || scope.row.status=='resolve'"
+						>签</el-button>
 						<el-button type="danger" icon="el-icon-delete" size="mini" plain @click="remove(scope.row)"></el-button>
 					</template>
 				</el-table-column>
@@ -68,7 +94,13 @@
 				<div class="float-left">
 					<el-button size="small" @click="queryAccount" plain>刷新</el-button>
 				</div>
-				<el-pagination layout="total, sizes, prev, pager, next, jumper" @size-change="pageSizeChange" :page-sizes="pagination.pageSizes" :total="pagination.total" @current-change="pageChange"></el-pagination>
+				<el-pagination
+					layout="total, sizes, prev, pager, next, jumper"
+					@size-change="pageSizeChange"
+					:page-sizes="pagination.pageSizes"
+					:total="pagination.total"
+					@current-change="pageChange"
+				></el-pagination>
 			</div>
 		</el-tabs>
 
@@ -85,7 +117,7 @@
 					<el-input v-model="editTiebaAccount.BDUSS" autofocus="true"></el-input>
 				</el-form-item>
 				<el-form-item v-if="editTiebaAccount.active===true||editTiebaAccount.active===false" label="active" prop="active">
-					<el-input v-model="editTiebaAccount.active" disabled></el-input>
+					<el-switch v-model="editTiebaAccount.active" active-color="#13ce66" inactive-color="#ff4949" disabled></el-switch>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -98,30 +130,30 @@
 
 <style lang="scss" scoped>
 	.color-danger {
-	  color: #f56c6c;
+		color: #f56c6c;
 	}
 	.float-left {
-	  float: left;
+		float: left;
 	}
-	.sumarize {
-	  margin-bottom: 10px;
-	  background-color: #edeff2;
-	  font-size: 14px;
-	  color: #787b80;
-	  .el-row {
-	    margin-bottom: 5px;
-	  }
+	.summarize {
+		margin-bottom: 10px;
+		background-color: #edeff2;
+		font-size: 14px;
+		color: #787b80;
+		.el-row {
+			margin-bottom: 5px;
+		}
 	}
 </style>
 <style lang="scss">
 	.header-row th:nth-child(7) {
-	  padding: 0;
-	  .el-select {
-	    top: 4px;
-	    input {
-	      padding-left: 10px;
-	    }
-	  }
+		padding: 0;
+		.el-select {
+			top: 4px;
+			input {
+				padding-left: 10px;
+			}
+		}
 	}
 </style>
 
@@ -138,7 +170,14 @@
 				tiebas: [],
 				currAccount: null,
 				tabIndex: '0',
-				sumarize: {},
+				summarize: {
+					total: 0,
+					resolve: 0,
+					pendding: 0,
+					reject: 0,
+					void: 0,
+					invalid: 0,
+				},
 				pagination: {
 					total: 0,
 					currentPage: 1,
@@ -263,8 +302,8 @@
 				if (!this.currAccount) {
 					return;
 				}
-				return this.get(`tieba/tieba-accounts/${this.currAccount._id}/sumarize`).then(result => {
-					this.sumarize = result;
+				return this.get(`tieba/tieba-accounts/${this.currAccount._id}/summarize`).then(result => {
+					this.summarize = result;
 				});
 			},
 			handleClick (tab, event) {
@@ -288,6 +327,7 @@
 						if (this.editTiebaAccount._id) {
 							await this.patch(`tieba/tieba-accounts/${this.editTiebaAccount._id}`, this.editTiebaAccount);
 						} else {
+							this.editTiebaAccount.user = this.$route.params.user;
 							await this.post('tieba/tieba-accounts', this.editTiebaAccount);
 						}
 						await this.queryAccount();
@@ -382,7 +422,20 @@
 						message: action === 'cancel' ? '已取消删除' : '删除失败',
 					});
 				});
-			}
+			},
+			reset () {
+				this.$confirm('当前帐号重置为待签, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(async () => {
+					await this.post(`tieba/tieba-accounts/${this.currAccount._id}/tiebas/reset`);
+					this.$notify.success({
+						message: '重置成功',
+					});
+					this.refresh();
+				});
+			},
 		},
 		created () {
 			this.queryAccount();
