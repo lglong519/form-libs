@@ -59,7 +59,7 @@ module.exports = {
 		// Paths
 		assetsRoot: path.resolve(__dirname, '../dist'),
 		assetsSubDirectory: 'static',
-		assetsPublicPath: '', // 如果使用静态服务器则需要配置绝对路径"/",如果是静态目录则使用相对路径""
+		assetsPublicPath: '/', // 如果使用静态服务器则需要配置绝对路径"/",如果是静态目录则使用相对路径""
 
 		/**
      * Source Maps
