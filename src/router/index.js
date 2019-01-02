@@ -14,7 +14,7 @@ const CFOP = () => import('@/views/cfop/index');
 const Sort = resolve => require(['@/views/cfop/sort'], resolve);
 
 const router = new VueRouter({
-	mode: 'hash', // history
+	mode: 'history', // history hash
 	routes: [
 		{ path: '/404', component: () => import('@/views/404') },
 		{

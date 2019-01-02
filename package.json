@@ -1,5 +1,5 @@
 {
-	"name": "form-libs",
+	"name": "project-cns",
 	"version": "1.0.6",
 	"description": "form test",
 	"author": "lglong519 <769141564@qq.com>",
@@ -17,7 +17,7 @@
 		"axios": "^0.18.0",
 		"babel-polyfill": "^6.26.0",
 		"echarts": "^4.2.0-rc.2",
-		"element-ui": "^2.4.8",
+		"element-ui": "^2.4.9",
 		"font-awesome": "^4.7.0",
 		"joi": "^13.7.0",
 		"jquery": "^3.3.1",

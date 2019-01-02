@@ -144,10 +144,13 @@ export default {
 	      cursor: pointer;
 	      margin-top: 5px;
 	      position: relative;
-	      .user-avatar {
-	        width: 40px;
-	        height: 40px;
-	        border-radius: 10px;
+	      overflow: hidden;
+			.user-avatar {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 100%;
+				transform: translateX(-50%) translateY(-50%);
 	      }
 	    }
 	  }
