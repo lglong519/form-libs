@@ -10,6 +10,3 @@ if (!localStorage.getItem('gitData')) {
 		}
 	}));
 }
-if (!localStorage.getItem('city')) {
-	localStorage.setItem('city', '东莞');
-}

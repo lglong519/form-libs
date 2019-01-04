@@ -9,11 +9,13 @@
 				<line-chart :chart-data="currentLineChartData" />
 			</el-row>
 		</div>
+		<baidu-map />
 	</div>
 </template>
 
 <script>
 import GithubCorner from '@/components/GithubCorner';
+import BaiduMap from '@/components/BaiduMap';
 import PanelGroup from './components/PanelGroup';
 import LineChart from './components/LineChart';
 import WeatherInfo from './components/WeatherInfo';
@@ -25,6 +27,7 @@ export default {
 		PanelGroup,
 		LineChart,
 		WeatherInfo,
+		BaiduMap,
 	},
 	data () {
 		return {

@@ -1,5 +1,5 @@
 <template>
-	<el-row type="flex" align="middle" class="s-weather-wrapper">
+	<el-row v-if="weather.data" type="flex" align="middle" class="s-weather-wrapper">
 		<span @click="selectCity">{{city}}</span>： {{week}}
 		<i class="spacer"></i>
 		{{lunar}}
@@ -89,7 +89,11 @@
 			}
 		},
 		async created () {
-			this.weather = await this.get('services/weather/东莞');
+			this.weather = await this.get('services/weather');
+			if (!_.get(this.weather, 'data.weather.content.city')) {
+				this.weather = {};
+				return;
+			}
 			localStorage.setItem('weather', JSON.stringify(this.weather));
 		}
 	};

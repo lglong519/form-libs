@@ -102,5 +102,6 @@ module.exports = {
 		'element-ui': 'ELEMENT',
 		'axios': 'axios',
 		echarts: 'echarts',
+		BMap: 'BMap',
 	},
 };

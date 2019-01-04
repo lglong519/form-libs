@@ -6,6 +6,10 @@ module.exports = {
 	},
 	globals: {
 		expect: false,
+		BMap: false,
+		BMAP_NORMAL_MAP: false,
+		BMAP_HYBRID_MAP: false,
+		BMAP_ANCHOR_TOP_LEFT: false,
 	},
 	extends: [
 		'teslint/typescript'
