@@ -47,7 +47,7 @@
 		</el-card>
 		<!-- edit dialog -->
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
-			<el-form :model="editExpense" :rules="editRules" ref="editExpense" label-width="50px">
+			<el-form :model="editExpense" :rules="editRules" ref="editExpense" label-width="50px" label-position="top">
 				<el-form-item label="金额" prop="amount">
 					<el-input v-model.number="editExpense.amount" placeholder="请输入金额" autofocus="true" @keyup.enter.native="submit"></el-input>
 				</el-form-item>

@@ -74,7 +74,7 @@
 				</el-table-column>
 				<el-table-column width="130">
 					<template slot="header" slot-scope="scope">
-						<el-select v-model="searchProp" placeholder="请选择" size="mini" @change="searchBystatus">
+						<el-select v-model="searchProp" placeholder="请选择" size="mini" @change="searchBystatus" :data-s="scope">
 							<el-option v-for="item in searchProps" :key="item.label" :label="item.label" :value="item.status"></el-option>
 						</el-select>
 					</template>
@@ -84,7 +84,6 @@
 							size="mini"
 							plain
 							@click="signOne(scope.row)"
-							:disabled="scope.row.void || scope.row.status=='resolve'"
 						>签</el-button>
 						<el-button type="danger" icon="el-icon-delete" size="mini" plain @click="remove(scope.row)"></el-button>
 					</template>
@@ -106,7 +105,7 @@
 
 		<!-- edit dialog -->
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible">
-			<el-form :model="editTiebaAccount" :rules="editRules" ref="editTiebaAccount" label-width="70px">
+			<el-form :model="editTiebaAccount" :rules="editRules" ref="editTiebaAccount" label-width="70px" :label-position="labelPosition">
 				<el-form-item v-if="editTiebaAccount._id" label="_id" prop="_id">
 					<el-input v-model="editTiebaAccount._id" disabled></el-input>
 				</el-form-item>
@@ -114,7 +113,7 @@
 					<el-input v-model="editTiebaAccount.un" disabled></el-input>
 				</el-form-item>
 				<el-form-item label="BDUSS" prop="BDUSS">
-					<el-input v-model="editTiebaAccount.BDUSS" autofocus="true"></el-input>
+					<el-input type="textarea" v-model="editTiebaAccount.BDUSS" autofocus="true" autosize></el-input>
 				</el-form-item>
 				<el-form-item v-if="editTiebaAccount.active===true||editTiebaAccount.active===false" label="active" prop="active">
 					<el-switch v-model="editTiebaAccount.active" active-color="#13ce66" inactive-color="#ff4949" disabled></el-switch>
@@ -158,6 +157,8 @@
 </style>
 
 <script>
+	import generateQeuqryOptions, { searchProps } from './generateQeuqryOptions';
+	import { mapGetters } from 'vuex';
 	function editTiebaAccount () {
 		return {
 			BDUSS: undefined,
@@ -200,33 +201,17 @@
 				},
 				tableLoading: false,
 				searchProp: '',
-				searchProps: [
-					{
-						status: '',
-						label: '全部'
-					},
-					{
-						status: 'pendding',
-						label: '待签'
-					},
-					{
-						status: 'resolve',
-						label: '已签'
-					},
-					{
-						status: 'reject',
-						label: '出错'
-					},
-					{
-						status: true,
-						label: '忽略'
-					},
-					{
-						status: false,
-						label: '无效'
-					}
-				],
+				searchProps,
 			};
+		},
+		computed: {
+			...mapGetters(['device']),
+			labelPosition () {
+				if (this.device == 'mobile') {
+					return 'top';
+				}
+				return 'left';
+			},
 		},
 		methods: {
 			// 判断是否 void 或者 active
@@ -279,19 +264,8 @@
 				if (this.currAccount) {
 					query.tiebaAccount = this.currAccount._id;
 				}
-				if (this.searchProp) {
-					query.active = true;
-					if (this.searchProp === true) {
-						query.void = true;
-					} else {
-						query.status = this.searchProp;
-						query.void = {
-							$ne: true
-						};
-					}
-				} else if (this.searchProp === false) {
-					query.active = false;
-				}
+				Object.assign(query, generateQeuqryOptions(this.searchProp));
+
 				return this.query(`tieba/tiebas?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${JSON.stringify(query)}`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
 					this.tiebas = res.data;

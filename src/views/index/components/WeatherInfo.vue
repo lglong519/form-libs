@@ -89,7 +89,7 @@
 			}
 		},
 		async created () {
-			this.weather = await this.get('services/weather');
+			this.weather = await this.get('common/weather');
 			if (!_.get(this.weather, 'data.weather.content.city')) {
 				this.weather = {};
 				return;

@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container">
-		<el-card>
-			<el-form :model="editForm" :rules="editRules" ref="editform" label-width="80px">
+		<el-card :class="{'padding-20':device=='mobile'}">
+			<el-form :model="editForm" :rules="editRules" ref="editform" label-width="80px" :label-position="labelPosition">
 				<el-form-item>
 					<img :src="editForm.image||avatar" class="avatar">
 				</el-form-item>
@@ -43,6 +43,9 @@
 	.avatar{
 		height: 100px;
 	}
+	.padding-20{
+		padding: 15px;
+	}
 </style>
 
 
@@ -63,7 +66,13 @@
 	}
 	export default {
 		computed: {
-			...mapGetters(['myProfile']),
+			...mapGetters(['myProfile', 'device']),
+			labelPosition () {
+				if (this.device == 'mobile') {
+					return 'top';
+				}
+				return 'left';
+			},
 		},
 		watch: {
 			myProfile () {

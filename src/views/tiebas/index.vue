@@ -64,8 +64,8 @@
 				<template slot-scope="scope">{{scope.row.updatedAt|dateTime}}</template>
 			</el-table-column>
 			<el-table-column prop="fid" label="fid" min-width="120"></el-table-column>
-			<el-table-column prop="tiebaAccount" label="account" min-width="210"></el-table-column>
-			<el-table-column prop="user" label="user" min-width="210"></el-table-column>
+			<el-table-column prop="tiebaAccount.un" label="account" min-width="210"></el-table-column>
+			<el-table-column prop="user.username" label="user" min-width="210"></el-table-column>
 			<el-table-column prop="sequence" label="sequence" min-width="140"></el-table-column>
 			<el-table-column width="70" label="有效" align="center">
 				<template slot-scope="scope">{{scope.row.active}}</template>
@@ -76,7 +76,7 @@
 
 			<el-table-column width="90" label="Summary" align="center">
 				<template slot-scope="scope">
-					<router-link :to="{name:'Summary',params:{account:scope.row.tiebaAccount,user:scope.row.user}}">
+					<router-link :to="{name:'Summary',params:{account:scope.row.tiebaAccount._id,user:scope.row.user._id}}">
 						<el-tag size="mini">view</el-tag>
 					</router-link>
 				</template>
@@ -95,6 +95,9 @@
 </template>
 
 <style lang="scss" scoped>
+	.color-danger {
+		color: #f56c6c;
+	}
 	.ico {
 		width: 35px;
 	}
@@ -110,14 +113,8 @@
 </style>
 
 <script>
-	function editForm () {
-		return {
-			BDUSS: undefined,
-			sequence: undefined,
-			active: undefined,
-			user: undefined,
-		};
-	}
+	import generateQeuqryOptions, { searchProps } from './generateQeuqryOptions';
+
 	export default {
 		data () {
 			return {
@@ -139,32 +136,7 @@
 				searchVal: null,
 				tableLoading: false,
 				searchProp: '',
-				searchProps: [
-					{
-						status: '',
-						label: '全部'
-					},
-					{
-						status: 'pendding',
-						label: '待签'
-					},
-					{
-						status: 'resolve',
-						label: '已签'
-					},
-					{
-						status: 'reject',
-						label: '出错'
-					},
-					{
-						status: true,
-						label: '忽略'
-					},
-					{
-						status: false,
-						label: '无效'
-					}
-				],
+				searchProps,
 			};
 		},
 		methods: {
@@ -198,21 +170,11 @@
 					searchVal.tiebaAccount = this.$route.params.account;
 				}
 
-				if (this.searchProp) {
-					searchVal.active = true;
-					if (this.searchProp === true) {
-						searchVal.void = true;
-					} else {
-						searchVal.status = this.searchProp;
-						searchVal.void = {
-							$ne: true
-						};
-					}
-				} else if (this.searchProp === false) {
-					searchVal.active = false;
-				}
+				Object.assign(searchVal, generateQeuqryOptions(this.searchProp));
 
-				return this.query(`tieba/tiebas?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${JSON.stringify(searchVal)}`).then(res => {
+				return this.query(`tieba/tiebas?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${JSON.stringify(searchVal)}`, {
+					populate: 'tiebaAccount,user'
+				}).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
 					this.accounts = res.data;
 					this.tableLoading = false;

@@ -1,7 +1,7 @@
 <template>
 	<div class="baidu-map" :class="{'xl':device=='mobile'}" ref="baiduMap"></div>
 </template>
- 
+
 <script>
 import { mapGetters } from 'vuex';
 
@@ -27,11 +27,11 @@ export default {
 					log = this.geo.log;
 					lat = this.geo.lat;
 				} else {
-					let result = await this.get('services/address');
+					let result = await this.get('common/address');
 					address = result.city;
 				}
 			} else {
-				let result = await this.get('services/address');
+				let result = await this.get('common/address');
 				address = result.city;
 			}
 			if (address) {
@@ -133,7 +133,7 @@ export default {
 	}
 };
 </script>
- 
+
 <style lang="scss">
 .baidu-map{
   height: 500px;

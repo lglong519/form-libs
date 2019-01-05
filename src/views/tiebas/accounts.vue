@@ -21,7 +21,7 @@
 			<el-table :data="accounts" :row-class-name="tableRowClassName" v-loading="tableLoading">
 				<el-table-column prop="un" label="un" fixed></el-table-column>
 				<el-table-column prop="uid" label="uid" min-width="120"></el-table-column>
-				<el-table-column prop="user" label="user" min-width="210"></el-table-column>
+				<el-table-column prop="user.username" label="user" min-width="210"></el-table-column>
 				<el-table-column prop="sequence" label="sequence" min-width="140"></el-table-column>
 				<el-table-column prop="BDUSS" label="BDUSS" min-width="180">
 					<template slot-scope="scope">
@@ -40,7 +40,7 @@
 				</el-table-column>
 				<el-table-column width="90" label="Summary" align="center">
 					<template slot-scope="scope">
-						<router-link :to="{name:'Summary',params:{account:scope.row._id,user:scope.row.user}}"><el-tag size="mini">view</el-tag></router-link>
+						<router-link :to="{name:'Summary',params:{account:scope.row._id,user:scope.row.user._id}}"><el-tag size="mini">view</el-tag></router-link>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -108,7 +108,9 @@
 				if (this.$route.params.user) {
 					searchVal.user = this.$route.params.user;
 				}
-				return this.query(`tieba/tieba-accounts?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${JSON.stringify(searchVal)}`).then(res => {
+				return this.query(`tieba/tieba-accounts?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${JSON.stringify(searchVal)}`, {
+					populate: 'user'
+				}).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);
 					this.accounts = res.data;
 					this.tableLoading = false;
@@ -119,7 +121,7 @@
 			},
 			viewTiebas (data) {
 				this.$router.push({
-					path: `/tieba/tiebas/${data.user}/${data._id}`
+					path: `/tieba/tiebas/${data.user._id}/${data._id}`
 				});
 			},
 			search () {
