@@ -99,6 +99,7 @@
 					:page-sizes="pagination.pageSizes"
 					:total="pagination.total"
 					@current-change="pageChange"
+					:current-page="pagination.currentPage"
 				></el-pagination>
 			</div>
 		</el-tabs>
@@ -377,6 +378,7 @@
 				});
 			},
 			searchBystatus () {
+				this.pagination.currentPage = 1;
 				this.queryTiebas();
 			},
 			deleteAccount () {

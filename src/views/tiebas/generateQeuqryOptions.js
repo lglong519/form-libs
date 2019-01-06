@@ -12,7 +12,7 @@ export default function generateQeuqryOptions (status) {
 				},
 				{
 					status: 'resolve',
-					update: {
+					updatedAt: {
 						$lt: new Date(`${new Date().toLocaleDateString()} 00:00`),
 					},
 					void: false,
@@ -23,7 +23,7 @@ export default function generateQeuqryOptions (status) {
 	}
 	if (status == 'resolve') {
 		return {
-			update: {
+			updatedAt: {
 				$gte: new Date(`${new Date().toLocaleDateString()} 00:00`),
 			},
 			status: 'resolve',
@@ -33,7 +33,7 @@ export default function generateQeuqryOptions (status) {
 	}
 	if (status == 'resolve') {
 		return {
-			update: {
+			updatedAt: {
 				$gte: new Date(`${new Date().toLocaleDateString()} 00:00`),
 			},
 			status: 'resolve',

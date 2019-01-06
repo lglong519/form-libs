@@ -2,7 +2,7 @@
 
 > CNS
 
-**Live:** http://admin.mofunc.com
+**Live:** <a href="http://admin.mofunc.com" target="_blank">http://admin.mofunc.com</a>
 
 ## Build Setup
 
