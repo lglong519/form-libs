@@ -139,9 +139,8 @@ export default {
 						this.form
 					).then(res => {
 						const self = this;
-						this.$message({
+						this.$notify.success({
 							message: '登录成功',
-							type: 'success',
 						});
 						setToken(res[LOCAL_SESSION], res.expireAt);
 						this.$store.dispatch('GetProfile');

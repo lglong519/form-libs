@@ -11,6 +11,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+const HtmlReplacePlugin = require('./HtmlReplacePlugin');
 
 const env = process.env.NODE_ENV === 'testing'
 	? require('../config/test.env')
@@ -73,6 +74,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 				? { safe: true, map: { inline: false } }
 				: { safe: true }
 		}),
+		new HtmlReplacePlugin(),
 		// generate dist index.html with correct asset hash for caching.
 		// you can customize output by editing /index.html
 		// see https://github.com/ampedandwired/html-webpack-plugin

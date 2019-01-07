@@ -8,11 +8,14 @@
 				<el-button plain size="mini" type="primary" @click="signAll">一键签到</el-button>
 				<el-button v-if="$route.params.user" plain size="mini" type="primary" @click="toggleEdit" icon="el-icon-plus"></el-button>
 				<el-button plain size="mini" type="primary" @click="toggleEdit(currAccount)" icon="el-icon-edit"></el-button>
+				<el-button v-if="$route.params.user" plain size="mini" type="primary" @click="toggleEditTieba" icon="el-icon-plus">吧</el-button>
 				<el-button plain size="mini" type="danger" @click="deleteAccount" icon="el-icon-delete"></el-button>
 			</el-button-group>
 		</el-card>
 		<el-tabs type="border-card" v-model="tabIndex" @tab-click="handleClick">
 			<el-tab-pane v-for="(ac,i) in this.tiebaAccounts" :key="ac._id" :label="ac.un" :name="i+''"></el-tab-pane>
+			<el-alert v-if="currAccount" :title="'USER: '+currAccount.user" type="info" :closable="false"></el-alert>
+			<el-alert v-if="currAccount" :title="'ACC: '+currAccount._id" type="success" :closable="false"></el-alert>
 			<el-alert v-if="currAccount" :title="'UID: '+currAccount.uid" type="warning" :closable="false"></el-alert>
 			<el-alert
 				v-if="currAccount"
@@ -60,7 +63,7 @@
 				<el-table-column prop="updatedAt" label="时间" min-width="100">
 					<template slot-scope="scope">{{scope.row.updatedAt|dateTime}}</template>
 				</el-table-column>
-				<el-table-column width="70" label="active" align="center">
+				<el-table-column width="100" label="active" align="center">
 					<template slot-scope="scope">
 						<el-switch
 							v-model="scope.row.void"
@@ -72,7 +75,7 @@
 						></el-switch>
 					</template>
 				</el-table-column>
-				<el-table-column width="130">
+				<el-table-column width="185" align="center">
 					<template slot="header" slot-scope="scope">
 						<el-select v-model="searchProp" placeholder="请选择" size="mini" @change="searchBystatus" :data-s="scope">
 							<el-option v-for="item in searchProps" :key="item.label" :label="item.label" :value="item.status"></el-option>
@@ -85,6 +88,7 @@
 							plain
 							@click="signOne(scope.row)"
 						>签</el-button>
+						<el-button type="primary" icon="el-icon-edit" size="mini" plain @click="toggleEditTieba(scope.row)"></el-button>
 						<el-button type="danger" icon="el-icon-delete" size="mini" plain @click="remove(scope.row)"></el-button>
 					</template>
 				</el-table-column>
@@ -116,6 +120,9 @@
 				<el-form-item label="BDUSS" prop="BDUSS">
 					<el-input type="textarea" v-model="editTiebaAccount.BDUSS" autofocus="true" autosize></el-input>
 				</el-form-item>
+				<el-form-item v-if="editTiebaAccount.sequence" label="sequence" prop="sequence">
+					<el-input v-model.number="editTiebaAccount.sequence"></el-input>
+				</el-form-item>
 				<el-form-item v-if="editTiebaAccount.active===true||editTiebaAccount.active===false" label="active" prop="active">
 					<el-switch v-model="editTiebaAccount.active" active-color="#13ce66" inactive-color="#ff4949" disabled></el-switch>
 				</el-form-item>
@@ -125,6 +132,8 @@
 				<el-button type="primary" @click="submit">确 定</el-button>
 			</div>
 		</el-dialog>
+
+		<edit-tieba :tieba="tieba" :currAccount="currAccount" @toggleEditTieba="toggleEditTieba" :editTiebaVisible="editTiebaVisible"/>
 	</div>
 </template>
 
@@ -159,6 +168,7 @@
 
 <script>
 	import generateQeuqryOptions, { searchProps } from './generateQeuqryOptions';
+	import EditTieba from './components/EditTieba';
 	import { mapGetters } from 'vuex';
 	function editTiebaAccount () {
 		return {
@@ -166,10 +176,14 @@
 		};
 	}
 	export default {
+		components: {
+			EditTieba
+		},
 		data () {
 			return {
 				tiebaAccounts: [],
 				tiebas: [],
+				tieba: null,
 				currAccount: null,
 				tabIndex: '0',
 				summarize: {
@@ -203,6 +217,7 @@
 				tableLoading: false,
 				searchProp: '',
 				searchProps,
+				editTiebaVisible: false,
 			};
 		},
 		computed: {
@@ -412,6 +427,14 @@
 					this.refresh();
 				});
 			},
+			toggleEditTieba (data) {
+				if (data && data._id) {
+					this.tieba = data;
+				} else {
+					this.tieba = null;
+				}
+				this.editTiebaVisible = !this.editTiebaVisible;
+			}
 		},
 		created () {
 			this.queryAccount();

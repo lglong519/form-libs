@@ -5,11 +5,14 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<title>CNS</title>
-	<script src='http://api.map.baidu.com/api?v=2.0&ak=hT7m8zIdGlKnsA9LgmtdbjslWxcpKegz'></script>
+	<script src='http://api.map.baidu.com/api?v=2.0&ak={{BAIDU_AK}}'></script>
 </head>
 
 <body>
-	<div></div>
+	{{VUE_APP_TRACE}}
+	<noscript>
+		<strong>We're sorry but CNS doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+	</noscript>
 	<div style="margin:0 auto;text-align: center;" id="formLibs">
 		<!-- built files will be auto injected -->
 		<style>
@@ -29,7 +32,7 @@
 			@keyframes masked-animation { 0% { background-position: 0 0; } 100% { background-position: -100% 0; } }
 			@keyframes rotate { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
 		</style>
-			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256px" height="256px" x="0px" y="0px"
+		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256px" height="256px" x="0px" y="0px"
 				 viewBox="0 0 552 583" style="enable-background:new 0 0 552 583;" xml:space="preserve">
 			<g id="circle-bg" style="transform-origin: center;animation: rotate 12s infinite linear;">
 				<circle stroke-dasharray="20,10" style="display:inline;fill:none;stroke:#8ED6FB;stroke-width:8;stroke-miterlimit:10;transform-origin:center center;transform: rotate(360deg); transition: transform 1s; " cx="269.5" cy="276.409" r="190.5"/>
@@ -58,10 +61,10 @@
 					z M307.333,376c-31.333,41.333-60,79.333-111.333,92.667s-81.333-36-68.667-76.667s38.667-83.333,76-104.667S282,262,282,262
 					s80-18,92-3.333C377.333,270,338.667,334.667,307.333,376z"/>
 			</g>
-			</svg>
-			<div class="masked" >
-				<h1>welcome...</h1>
-			</div>
+		</svg>
+		<div class="masked" >
+			<h1>welcome...</h1>
+		</div>
 	</div>
 	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery<%= process.env.MIN %>js"></script>
 	<script src="https://cdn.bootcss.com/lodash.js/4.17.11/lodash<%= process.env.MIN %>js"></script>

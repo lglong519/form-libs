@@ -57,13 +57,14 @@
 				</el-table-column>
 				<el-table-column width="60" label="Tag" align="center">
 					<template slot-scope="scope">
+						<template v-if="scope.row.tags.length">
 						<el-tag
-							v-if="scope.row.tags.length"
 							v-for="item of scope.row.tags"
 							:key="item._id"
 							:type="item.type"
 							size="mini"
 						>{{item.label}}</el-tag>
+						</template>
 					</template>
 				</el-table-column>
 				<el-table-column width="70">

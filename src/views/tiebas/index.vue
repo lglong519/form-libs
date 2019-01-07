@@ -7,7 +7,7 @@
 			</el-row>
 		</el-card>
 
-		<el-row type="flex" justify="space-between">
+		<el-row type="flex" justify="space-between" :class="{'padding-x':device=='mobile'}">
 			<el-form :inline="true">
 				<el-form-item>
 					<el-select v-model="searchProp" placeholder="请选择" size="mini" @change="searchBystatus">
@@ -96,6 +96,10 @@
 </template>
 
 <style lang="scss" scoped>
+	.padding-x{
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 	.color-danger {
 		color: #f56c6c;
 	}
@@ -115,7 +119,7 @@
 
 <script>
 	import generateQeuqryOptions, { searchProps } from './generateQeuqryOptions';
-
+	import { mapGetters } from 'vuex';
 	export default {
 		data () {
 			return {
@@ -140,6 +144,7 @@
 				searchProps,
 			};
 		},
+		computed: mapGetters(['device']),
 		methods: {
 			tableRowClassName ({ row, rowIndex }) {
 				if (row.void) {

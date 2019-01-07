@@ -26,7 +26,7 @@
 				</el-table-column>
 				<el-table-column width="70" label="video" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-caret-right" plain circle></el-button>
+						<el-button size="mini" type="primary" icon="el-icon-caret-right" :data-s="scope" plain circle></el-button>
 					</template>
 				</el-table-column>
 			</el-table>

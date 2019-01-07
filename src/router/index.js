@@ -43,9 +43,9 @@ const router = new VueRouter({
 			children: [
 				{
 					path: 'tieba-accounts/users',
-					name: 'Users',
+					name: 'T_Users',
 					component: () => import('@/views/tiebas/users'),
-					meta: { title: 'Users', icon: 'user' }
+					meta: { title: 'T_Users', icon: 'user' }
 				},
 				{
 					path: 'tieba-accounts/:user?',

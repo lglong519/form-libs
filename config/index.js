@@ -58,7 +58,7 @@ module.exports = {
 
 		// Paths
 		assetsRoot: path.resolve(__dirname, '../dist'),
-		assetsSubDirectory: 'static',
+		assetsSubDirectory: '',
 		assetsPublicPath: '/', // 如果使用静态服务器则需要配置绝对路径"/",如果是静态目录则使用相对路径""
 
 		/**
@@ -73,7 +73,7 @@ module.exports = {
 		// Surge or Netlify already gzip all static assets for you.
 		// Before setting to `true`, make sure to:
 		// npm install --save-dev compression-webpack-plugin
-		productionGzip: false,
+		productionGzip: true,
 		productionGzipExtensions: ['js', 'css'],
 
 		// Run the build command with an extra argument to

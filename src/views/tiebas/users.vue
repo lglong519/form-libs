@@ -39,6 +39,7 @@
 						{{scope.row.updatedAt|dateTime}}
 					</template>
 				</el-table-column>
+				<el-table-column prop="_id" label="_id"></el-table-column>
 				<el-table-column width="85" label="Accounts" align="center">
 					<template slot-scope="scope">
 						<el-button type="text" size="mini" plain @click="viewAccounts(scope.row)">{{scope.row.accounts}}</el-button>

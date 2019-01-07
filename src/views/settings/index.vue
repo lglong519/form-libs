@@ -6,7 +6,7 @@
 					<img :src="editForm.image||avatar" class="avatar">
 				</el-form-item>
 				<el-form-item label="头像" prop="image">
-					<el-input v-model="editForm.image" placeholder="请选择头像" :disabled="!editting"></el-input>
+					<el-input type="textarea" v-model="editForm.image" placeholder="请选择头像" :disabled="!editting" autosize></el-input>
 				</el-form-item>
 				<el-form-item label="用户名" prop="username">
 					<el-input v-model="editForm.username" placeholder="请输入帐号" :disabled="!editting"></el-input>
@@ -21,7 +21,7 @@
 					<el-input v-model="editForm.inc" disabled></el-input>
 				</el-form-item>
 				<el-form-item label="客户端">
-					<el-input v-model="editForm.client" disabled></el-input>
+					<el-input v-model="editForm.client" :disabled="!editting"></el-input>
 				</el-form-item>
 				<el-form-item label="创建时间">
 					<el-input :value="editForm.createdAt|dateTime" disabled></el-input>
@@ -119,6 +119,10 @@
 				});
 			},
 			cancel () {
+				if (JSON.stringify(this.myProfile) == JSON.stringify(this.editForm)) {
+					this.editting = false;
+					return;
+				}
 				this.$confirm('取消后编辑的资料将丢失, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',

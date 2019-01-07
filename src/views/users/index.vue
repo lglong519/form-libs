@@ -34,6 +34,7 @@
 				</el-table-column>
 				<el-table-column prop="inc" label="inc" width="60"></el-table-column>
 				<el-table-column prop="client" label="client"></el-table-column>
+				<el-table-column prop="_id" label="_id"></el-table-column>
 				<el-table-column width="70" label="action">
 					<template slot-scope="scope">
 						<el-button icon="el-icon-edit" size="mini" plain @click="toggleEdit(scope.row)"></el-button>
@@ -62,7 +63,10 @@
 					<el-input v-model="editForm.phone" placeholder="请输入phone"></el-input>
 				</el-form-item>
 				<el-form-item label="image" prop="image">
-					<el-input v-model="editForm.image" placeholder="请输入image"></el-input>
+					<el-input type="textarea" v-model="editForm.image" placeholder="请输入image" autosize></el-input>
+				</el-form-item>
+				<el-form-item label="client">
+					<el-input v-model="editForm.client"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
