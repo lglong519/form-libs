@@ -160,7 +160,7 @@
 				let searchVal = '';
 				this.tableLoading = true;
 				if (this.searchVal) {
-					searchVal = `{"name":{"$regex":"${this.searchVal}","$options":"$i"}}`;
+					searchVal = `{"username":{"$regex":"${this.searchVal}","$options":"$i"}}`;
 				}
 				return this.query(`services/users?pageSize=${this.pagination.pageSize}&p=${this.pagination.currentPage - 1}&q=${searchVal}`).then(res => {
 					this.pagination.total = Number(res.headers['x-total-count']);

@@ -2,11 +2,11 @@ export default function generateQeuqryOptions (status) {
 	if (!status) {
 		return {};
 	}
-	if (status == 'pendding') {
+	if (status == 'pending') {
 		return {
 			$or: [
 				{
-					status: 'pendding',
+					status: 'pending',
 					void: false,
 					active: true,
 				},
@@ -68,7 +68,7 @@ export const searchProps = [
 		label: '全部'
 	},
 	{
-		status: 'pendding',
+		status: 'pending',
 		label: '待签'
 	},
 	{

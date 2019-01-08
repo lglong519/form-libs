@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container">
 		<el-card class="summarize">
-			<el-row>总共 {{summarize.total}} 个贴吧，已签 {{summarize.resolve}} 个，待签 {{summarize.pendding}} 个，出错 {{summarize.reject}} 个，忽略 {{summarize.void}} 个， 无效 {{summarize.invalid}} 个</el-row>
+			<el-row>总共 {{summarize.total}} 个贴吧，已签 {{summarize.resolve}} 个，待签 {{summarize.pending}} 个，出错 {{summarize.reject}} 个，忽略 {{summarize.void}} 个， 无效 {{summarize.invalid}} 个</el-row>
 			<el-row>
 				<el-button plain size="mini" type="warning" @click="resetAll">重置</el-button>
 			</el-row>
@@ -50,7 +50,7 @@
 			</el-table-column>
 			<el-table-column prop="status" label="状态" align="center" width="50">
 				<template slot-scope="scope">
-					<span v-if="scope.row.status=='pendding'">待签</span>
+					<span v-if="scope.row.status=='pending'">待签</span>
 					<span v-if="scope.row.status=='resolve'">已签</span>
 					<span v-if="scope.row.status=='reject'">出错</span>
 				</template>
@@ -126,7 +126,7 @@
 				summarize: {
 					total: 0,
 					resolve: 0,
-					pendding: 0,
+					pending: 0,
 					reject: 0,
 					void: 0,
 					invalid: 0,

@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container">
 		<el-card class="summarize" shadow="hover">
-			<el-row>总共 {{summarize.total}} 个贴吧，已签 {{summarize.resolve}} 个，待签 {{summarize.pendding}} 个，出错 {{summarize.reject}} 个，忽略 {{summarize.void}} 个， 无效 {{summarize.invalid}} 个</el-row>
+			<el-row>总共 {{summarize.total}} 个贴吧，已签 {{summarize.resolve}} 个，待签 {{summarize.pending}} 个，出错 {{summarize.reject}} 个，忽略 {{summarize.void}} 个， 无效 {{summarize.invalid}} 个</el-row>
 			<el-button-group>
 				<el-button plain size="mini" type="warning" @click="reset">重置</el-button>
 				<el-button plain size="mini" type="primary" @click="sync">更新列表</el-button>
@@ -14,7 +14,7 @@
 		</el-card>
 		<el-tabs type="border-card" v-model="tabIndex" @tab-click="handleClick">
 			<el-tab-pane v-for="(ac,i) in this.tiebaAccounts" :key="ac._id" :label="ac.un" :name="i+''"></el-tab-pane>
-			<el-alert v-if="currAccount" :title="'USER: '+currAccount.user" type="info" :closable="false"></el-alert>
+			<el-alert v-if="currAccount" :title="'USN: '+currAccount.user.username" type="info" :closable="false"></el-alert>
 			<el-alert v-if="currAccount" :title="'ACC: '+currAccount._id" type="success" :closable="false"></el-alert>
 			<el-alert v-if="currAccount" :title="'UID: '+currAccount.uid" type="warning" :closable="false"></el-alert>
 			<el-alert
@@ -50,7 +50,7 @@
 				</el-table-column>
 				<el-table-column prop="status" label="状态" align="center" width="50">
 					<template slot-scope="scope">
-						<span v-if="scope.row.status=='pendding'">待签</span>
+						<span v-if="scope.row.status=='pending'">待签</span>
 						<span v-if="scope.row.status=='resolve'">已签</span>
 						<span v-if="scope.row.status=='reject'">出错</span>
 					</template>
@@ -189,7 +189,7 @@
 				summarize: {
 					total: 0,
 					resolve: 0,
-					pendding: 0,
+					pending: 0,
 					reject: 0,
 					void: 0,
 					invalid: 0,
@@ -226,7 +226,7 @@
 				if (this.device == 'mobile') {
 					return 'top';
 				}
-				return 'left';
+				return 'right';
 			},
 		},
 		methods: {
@@ -256,7 +256,9 @@
 				if (this.$route.params.user) {
 					query.user = this.$route.params.user;
 				}
-				return this.query(`tieba/tieba-accounts?sort=createdAt&q=${JSON.stringify(query)}`).then(res => {
+				return this.query(`tieba/tieba-accounts?sort=createdAt&q=${JSON.stringify(query)}`, {
+					populate: 'user'
+				}).then(res => {
 					this.calcIndex(res.data);
 					this.tiebaAccounts = res.data;
 					this.currAccount = this.tiebaAccounts[this.tabIndex];

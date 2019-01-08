@@ -1,24 +1,27 @@
 <template>
 		<el-dialog :title="dialog.title" :visible.sync="dialog.visible" :before-close="cancel">
-			<el-form :model="editForm" :rules="editRules" ref="editForm" label-width="70px" :label-position="labelPosition">
+			<el-form :model="editForm" :rules="editRules" ref="editForm" label-width="50px" :label-position="labelPosition">
 				<el-form-item v-if="editForm._id" label="_id" prop="_id">
 					<el-input v-model="editForm._id" disabled></el-input>
 				</el-form-item>
 				<el-form-item v-if="editForm.user" label="user" prop="user">
 					<el-input v-model="editForm.user" disabled></el-input>
 				</el-form-item>
-				<el-form-item v-if="editForm.tiebaAccount" label="Account" prop="tiebaAccount">
+				<el-form-item v-if="editForm.tiebaAccount" label="acc" prop="tiebaAccount">
 					<el-input v-model="editForm.tiebaAccount" disabled></el-input>
 				</el-form-item>
-				<el-form-item label="kw" prop="kw">
+				<el-form-item label="吧名" prop="kw">
 					<el-input v-model="editForm.kw" autofocus="true"></el-input>
 				</el-form-item>
 				<el-form-item v-if="editForm.sequence" label="sequence" prop="sequence">
 					<el-input v-model.number="editForm.sequence"></el-input>
 				</el-form-item>
+				<el-form-item label="fid" prop="fid">
+					<el-input v-model="editForm.fid"></el-input>
+				</el-form-item>
 				<el-form-item v-if="editForm.status" label="status" prop="status">
 					<el-select v-model="editForm.status" placeholder="选择">
-						<el-option v-for="item of ['pendding', 'resolve', 'reject']" :key="item" :label="item" :value="item">
+						<el-option v-for="item of ['pending', 'resolve', 'reject']" :key="item" :label="item" :value="item">
 						</el-option>
 					</el-select>
 				</el-form-item>
@@ -72,7 +75,7 @@
 				if (this.device == 'mobile') {
 					return 'top';
 				}
-				return 'left';
+				return 'right';
 			},
 		},
 		watch: {
@@ -117,7 +120,7 @@
 			},
 			init () {
 				this.editForm = this.processTieba();
-				this.dialog.title = this.editForm._id ? '修改' : '新建';
+				this.dialog.title = this.editForm._id ? '修改' : '添加一个吧';
 			},
 		},
 	};

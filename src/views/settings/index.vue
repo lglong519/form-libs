@@ -71,7 +71,7 @@
 				if (this.device == 'mobile') {
 					return 'top';
 				}
-				return 'left';
+				return 'right';
 			},
 		},
 		watch: {
