@@ -62,7 +62,7 @@
 				<el-table-column prop="link" label="link" width="70">
 					<template slot-scope="scope">
 						<a target="_blank" :onclick="`window.open('${scope.row.link}');`">
-							<el-tooltip class="item" effect="dark" :content="scope.row.link" placement="right-start">
+							<el-tooltip class="item" effect="dark" :content="scope.row.link" placement="top-start">
 								<el-button type="text">前往</el-button>
 							</el-tooltip>
 						</a>

@@ -64,7 +64,7 @@
 					<el-date-picker type="datetime" placeholder="选择日期" v-model="editExpense.updatedAt" style="width: 100%;"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="创建" prop="createdAt">
-					<el-date-picker type="datetime" placeholder="选择日期" v-model="editExpense.createdAt" style="width: 100%;"></el-date-picker>
+					<el-date-picker type="datetime" placeholder="选择日期" :default-value="new Date()" v-model="editExpense.createdAt" style="width: 100%;"></el-date-picker>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">

@@ -18,7 +18,10 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="status" prop="status">
-					<el-input v-model="editForm.status" placeholder="请输入"></el-input>
+					<el-select v-model="editForm.status" placeholder="选择">
+						<el-option v-for="item of ['待看','已看','连载','完结']" :key="item" :label="item" :value="item">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="link" prop="link">
 					<el-input v-model="editForm.link" placeholder="请输入"></el-input>
@@ -46,7 +49,7 @@
 			author: undefined,
 			description: undefined,
 			type: undefined,
-			status: undefined,
+			status: '待看',
 			date: undefined,
 			link: undefined,
 			note: undefined,
